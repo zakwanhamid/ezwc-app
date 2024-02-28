@@ -1,38 +1,106 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, TextInput } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH } from '../firebase';
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const [userEmail ,setUserEmail] = useState(null);
+  const handleCreatePost = () => {
+    navigation.navigate('CreatePostScreen');
+  };
 
-  useEffect(() => {
-    const currentUser = FIREBASE_AUTH.currentUser;
-    if (currentUser) {
-      setUserEmail(currentUser.email);
-    }
-  }, []);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
 
-  // useLayoutEffect(()=>{
-  //   navigation.setOptions({
-  //     headerShown: false,
-  //   });
-  // } , [])
-
+  //-----not goin to use YET, no yet retrieve data----
+  // const [userEmail ,setUserEmail] = useState(null);
+  // useEffect(() => {
+  //   const currentUser = FIREBASE_AUTH.currentUser;
+  //   if (currentUser) {
+  //     setUserEmail(currentUser.email);
+  //   }
+  // }, []);
   return (
-    <View className=" items-center">
+    <SafeAreaView style={styles.container}>
+
+      <View style={styles.header}>
+        <View style={styles.titleContainer}>
+          <Text style={{ fontSize: 20, fontWeight:"600"}}>Feed</Text> 
+        </View>
+        <TouchableOpacity onPress={handleCreatePost} style={styles.createBtn}>
+          {/* <Text style={{ fontWeight:"500"}}>+ </Text> */}
+          <AntDesign name="pluscircleo" size={24} color="#529C4E" />
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Image source={require("../assets/eZWC@USM-logo.png")} style={styles.avatar}></Image>
+        <TextInput
+          autoFocus={true}
+          multiline={true}
+          numberOfLines={4}
+          style={{ flex: 1}}
+          placeholder='Want to share something?'
+        >
+        </TextInput>
+      </View>
+
+
+    </SafeAreaView>
+    // <View style={styles.container}>
+    //   <Text>Welcome to Home Screen</Text>
       
-      <Text className="text-xl">Hi, {userEmail}  </Text>
-      <Text>Welcome to Home Screen</Text>
-      <TouchableOpacity 
-        className="rounded-lg bg-black px-4 py-2 mt-2 w-60"
-        onPress={() => FIREBASE_AUTH.signOut()} title="Logout">
-        <Text className="color-white text-xl font-bold text-center">Log Out</Text>
-      </TouchableOpacity>
-    </View>
+    // </View>
   )
 }
+
+
+const styles = StyleSheet.create({
+  container:{
+    flex:1,
+  },
+  header:{
+    flexDirection:"row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderBottomWidth:1,
+    borderBottomColor: "#D8D9DB"
+  },
+  titleContainer:{
+    flex:1,
+    justifyContent: "center",
+    alignItems:"center",
+    marginLeft: 50,
+  },
+  body:{
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  createBtn:{
+    // backgroundColor: "#529C4E",
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  inputContainer:{
+    margin: 32,
+    flexDirection: "row"
+  },
+  avatar: {
+    width:48,
+    height:48,
+    borderRadius
+  }
+})
 
 export default HomeScreen;

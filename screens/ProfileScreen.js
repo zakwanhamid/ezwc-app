@@ -1,11 +1,13 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIREBASE_AUTH } from '../firebase';
+import { useNavigation } from '@react-navigation/native';
 
 //this is profile screen that is unique for every user
 const ProfileScreen = () => {
 
   const [userEmail ,setUserEmail] = useState(null);
+  const navigation = useNavigation();
 
     useEffect(() => {
         const currentUser = FIREBASE_AUTH.currentUser;
@@ -15,7 +17,7 @@ const ProfileScreen = () => {
       }, []);
 
   return (
-    <View className="items-center">
+    <View style={styles.container}>
       <Text className="text-xl">Hi, {userEmail} </Text>
       <Text>this is your profile page</Text>
       <TouchableOpacity 
@@ -26,5 +28,13 @@ const ProfileScreen = () => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+    container:{
+      flex:1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+  })
 
 export default ProfileScreen
