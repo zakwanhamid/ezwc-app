@@ -4,18 +4,22 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 const CreatePostScreen = () => {
-  const navigation = useNavigation();
+    const navigation = useNavigation();
     useLayoutEffect(() => {
         navigation.setOptions({
-          headerShown: false,
+            headerShown: false,
         });
     }, [navigation]);
+
+    const goBack = () => {
+        navigation.goBack(); // Go back to the previous screen
+    };
       
     return (
         <SafeAreaView style={styles.container}>
             
             <View style={styles.header}>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={goBack}>
                     <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
                 </TouchableOpacity>
                 <View style={styles.titleContainer}>
