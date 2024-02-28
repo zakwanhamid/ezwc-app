@@ -1,6 +1,7 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const CreatePostScreen = () => {
   const navigation = useNavigation();
@@ -8,27 +9,38 @@ const CreatePostScreen = () => {
         navigation.setOptions({
           headerShown: false,
         });
-      }, [navigation]);
-
+    }, [navigation]);
+      
     return (
         <SafeAreaView style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.titleContainer}>
-              <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
+            
+            <View style={styles.header}>
+                <TouchableOpacity >
+                    <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                    <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
+                </View>
+                <TouchableOpacity style={styles.postBtn}>
+                    <Text  style={{ fontWeight:"700", fontSize:14}}>Post</Text>
+                </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.postBtn}>
-              <Text  style={{ fontWeight:"700", fontSize:14}}>Post</Text>
+
+            <View style={styles.inputContainer}>
+                <Image source={require("../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+                <TextInput
+                    autoFocus={true}
+                    multiline={true}
+                    numberOfLines={4}
+                    style={{ flex: 1}}
+                    placeholder='Want to share something?'
+                >
+                </TextInput>
+            </View>
+            <TouchableOpacity style={styles.photo}>
+                <Ionicons name="md-camera" size={32} color="#CBD9DB"> </Ionicons>
             </TouchableOpacity>
-          </View>
-          <View style={styles.body}>
-            <Text>This is your homepage</Text>
-            <Text>All the post will be shown here</Text>
-          </View>
         </SafeAreaView>
-        // <View style={styles.container}>
-        //   <Text>Welcome to Home Screen</Text>
-          
-        // </View>
       )
     }
     
@@ -50,12 +62,7 @@ const CreatePostScreen = () => {
         flex:1,
         justifyContent: "center",
         alignItems:"center",
-        marginLeft: 75,
-      },
-      body:{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        marginLeft: 45,
       },
       postBtn:{
         backgroundColor: "#529C4E",
@@ -70,6 +77,21 @@ const CreatePostScreen = () => {
             width: 0,
             height: 2,
         }
+      },
+      inputContainer:{
+        margin: 25,
+        flexDirection: "row"
+      },
+      avatar: {
+        width:60,
+        height:60,
+        borderRadius: 24,
+        marginRight:16,
+      },
+      photo:{
+        alignItems: "flex-end",
+        marginHorizontal: 32,
+
       }
     })
 

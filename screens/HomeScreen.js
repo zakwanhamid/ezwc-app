@@ -27,35 +27,22 @@ const HomeScreen = () => {
   // }, []);
   return (
     <SafeAreaView style={styles.container}>
-
       <View style={styles.header}>
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight:"600"}}>Feed</Text> 
         </View>
-        <TouchableOpacity onPress={handleCreatePost} style={styles.createBtn}>
-          {/* <Text style={{ fontWeight:"500"}}>+ </Text> */}
+        <TouchableOpacity onPress={handleCreatePost}>
           <AntDesign name="pluscircleo" size={24} color="#529C4E" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.inputContainer}>
-        <Image source={require("../assets/eZWC@USM-logo.png")} style={styles.avatar}></Image>
-        <TextInput
-          autoFocus={true}
-          multiline={true}
-          numberOfLines={4}
-          style={{ flex: 1}}
-          placeholder='Want to share something?'
-        >
-        </TextInput>
+      <View style={styles.body}>
+        <Text>This is HomeScreen</Text>
+        <Text>You can view all post from your following here</Text>
       </View>
 
 
     </SafeAreaView>
-    // <View style={styles.container}>
-    //   <Text>Welcome to Home Screen</Text>
-      
-    // </View>
   )
 }
 
@@ -84,23 +71,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  createBtn:{
-    // backgroundColor: "#529C4E",
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputContainer:{
-    margin: 32,
-    flexDirection: "row"
-  },
-  avatar: {
-    width:48,
-    height:48,
-    borderRadius
-  }
 })
 
 export default HomeScreen;
