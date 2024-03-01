@@ -36,8 +36,8 @@ const CreatePostScreen = () => {
             quality: 1,
         });
 
-        if (!result.cancelled) {
-            setImages([...images, result.uri]);
+        if (!result.canceled) {
+            setImages([...images, result.assets[0].uri]);
         }
     };
 
