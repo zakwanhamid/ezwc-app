@@ -1,9 +1,63 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
+import Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
+import * as ImagePicker from "expo-image-picker";
+import Fire from '../fire';
+
+const firebase = require("firebase");
+require("firebase/firestore");
+
 const CreatePostScreen = () => {
+    state = {
+        text: "",
+        image: null
+    };
+
+    useEffect(() => {
+        this.getPhotoPermission();
+    },[]);
+
+    getPhotoPermission = async () => {
+        if (Constants.platform.ios) {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+            if (status != "granted") {
+                alert("We need permission to use your camera roll if you'd like to incude a photo.");
+            }
+        }
+    };
+
+    handlePost = () => {
+        Fire.shared
+            .addPost({ text: this.state.text.trim(), localUri: this.state.image })
+            .then(ref => {
+                this.setState({ text: "", image: null });
+                this.props.navigation.goBack();
+            })
+            .catch(error => {
+                alert(error);
+            });
+    };
+
+    pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3]
+        });
+
+        if (!result.cancelled) {
+            this.setState({ image: result.uri });
+        }
+    };
+
+
+
+
     const navigation = useNavigation();
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -25,7 +79,7 @@ const CreatePostScreen = () => {
                 <View style={styles.titleContainer}>
                     <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
                 </View>
-                <TouchableOpacity style={styles.postBtn}>
+                <TouchableOpacity onPress={this.handlePost} style={styles.postBtn}>
                     <Text  style={{ fontWeight:"700", fontSize:14}}>Post</Text>
                 </TouchableOpacity>
             </View>
@@ -38,12 +92,17 @@ const CreatePostScreen = () => {
                     numberOfLines={4}
                     style={{ flex: 1}}
                     placeholder='Want to share something?'
-                >
-                </TextInput>
+                    onChangeText={text => this.setState({ text})}
+                    value={this.state.text}
+                ></TextInput>
             </View>
-            <TouchableOpacity style={styles.photo}>
+            <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
                 <Ionicons name="md-camera" size={32} color="#CBD9DB"> </Ionicons>
             </TouchableOpacity>
+
+            <View style={{ marginHorizontal: 32, marginTop: 32, height: 150 }}>
+                <Image source={{ uri: this.state.image }} style={{ width: "100%", height: "100%" }} ></Image>
+            </View>
         </SafeAreaView>
       )
     }
