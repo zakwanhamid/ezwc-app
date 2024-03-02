@@ -9,6 +9,7 @@ const CreatePostScreen = () => {
     const [text, setText] = useState('');
     const [images, setImages] = useState([]);
     const navigation = useNavigation();
+    const [charCount, setCharCount] = useState(280);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -22,6 +23,7 @@ const CreatePostScreen = () => {
 
     const handleTextChange = (text) => {
         setText(text);
+        setCharCount(280 - text.length); // Update character count
     };
 
     const pickImage = async () => {
@@ -114,12 +116,19 @@ const CreatePostScreen = () => {
                 <TextInput
                     autoFocus={true}
                     multiline={true}
-                    numberOfLines={4}
+                    numberOfLines={20}
                     style={{ flex: 1}}
                     placeholder='Want to share something?'
                     value={text}
                     onChangeText={handleTextChange}
+                    maxLength={280}
                 ></TextInput>
+                
+            </View>
+            <View>
+                <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: charCount <= 0 ? 'red' : 'grey' }}>
+                    {charCount <= 0 ? '0' : charCount} characters left
+                </Text>
             </View>
             <Text style={{ marginLeft: 25, marginTop:5, fontSize: 14, color: 'grey' }}>
                 Total images allowed: 4 | Total size: 60MB
