@@ -25,21 +25,55 @@ const CreatePostScreen = () => {
     };
 
     const pickImage = async () => {
-        if (images.length >= 4) {
-            alert("Maximum 4 images allowed. Please remove an image to upload another.");
-            return;
+        const MAX_TOTAL_SIZE_MB = 60; // Maximum total size in megabytes allowed
+        const totalSizeAllowedBytes = MAX_TOTAL_SIZE_MB * 1024 * 1024; // Convert megabytes to bytes
+    
+        let totalNewSizeBytes = 0;
+        let selectedImages = [];
+    
+        // Calculate total size of images already selected
+        for (let i = 0; i < images.length; i++) {
+            const uri = images[i];
+            const file = await uriToBlob(uri);
+            totalNewSizeBytes += file.size;
+            selectedImages.push(uri);
         }
-        let result = await ImagePicker.launchImageLibraryAsync({
+    
+        // Check if adding another image exceeds the maximum total size allowed
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-
+    
         if (!result.canceled) {
-            setImages([...images, result.assets[0].uri]);
+            const newImageSizeBytes = (await uriToBlob(result.assets[0].uri)).size;
+            totalNewSizeBytes += newImageSizeBytes;
+    
+            if (totalNewSizeBytes <= totalSizeAllowedBytes) {
+                selectedImages.push(result.assets[0].uri);
+                setImages(selectedImages);
+            } else {
+                const totalSizeUploadedMB = (totalNewSizeBytes / (1024 * 1024)).toFixed(2);
+                alert(`Your images already exceed the maximum allowed size (${MAX_TOTAL_SIZE_MB} MB). Total size uploaded: ${totalSizeUploadedMB} MB. Please choose another.`);
+            }
         }
     };
+    
+    
+    // Helper function to convert image URI to Blob
+    const uriToBlob = async (uri) => {
+        const uriParts = uri.split('.');
+        const fileType = uriParts[uriParts.length - 1];
+    
+        const response = await fetch(uri);
+        const blob = await response.blob();
+    
+        return blob;
+    };
+    
+    
 
     const handlePost = () => {
         // Save text and images to Firestore using Fire.shared.addPost method
@@ -87,6 +121,9 @@ const CreatePostScreen = () => {
                     onChangeText={handleTextChange}
                 ></TextInput>
             </View>
+            <Text style={{ marginLeft: 25, marginTop:5, fontSize: 14, color: 'grey' }}>
+                Total images allowed: 4 | Total size: 60MB
+            </Text>
             <TouchableOpacity style={styles.photo} onPress={pickImage}>
                 <Ionicons name="md-camera" size={32} color="#696969"> </Ionicons>
             </TouchableOpacity>
