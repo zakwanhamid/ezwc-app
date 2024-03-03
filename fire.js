@@ -1,43 +1,30 @@
-import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_DB } from "./firebase";
-import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore'; // Import Firestore methods
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Import Firebase Storage methods
+import { FIREBASE_APP, FIREBASE_AUTH } from "./firebase";
+import { getFirestore, collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
 
 class Fire {
     constructor() {
         // Initialize Firebase app using the exported FIREBASE_APP
         this.firebaseApp = FIREBASE_APP;
-        // Access Firestore database service using the exported FIREBASE_APP
-        this.firestore = getFirestore(this.firebaseApp); // Initialize Firestore instance
-        // Access Firebase Storage service using the exported FIREBASE_APP
-        this.storage = getStorage(this.firebaseApp); // Initialize Firebase Storage instance
+        // Access Firestore database service using the exported FIREBASE_DB
+        this.firestore = getFirestore(FIREBASE_APP); // Initialize Firestore instance
     }
 
     addPost = async ({ text, images }) => {
+        // Get the current user from Firebase Authentication service
         const user = FIREBASE_AUTH.currentUser;
         const userId = user.uid;
-    
+
         const post = {
             text: text,
+            images: images,
             userId: userId,
-            timestamp: serverTimestamp() // Use serverTimestamp from Firebase SDK directly
+            timestamp: new Date() // Use JavaScript Date object
         };
-    
+
         try {
-            // Add the post details to Firestore
+            // Add the post to the Firestore collection
             const docRef = await addDoc(collection(this.firestore, 'posts'), post);
-            
-            // Upload images to Firebase Storage
-            const imageUrls = [];
-            for (const image of images) {
-                const imageRef = ref(this.storage, `images/${docRef.id}/${image.name}`);
-                await uploadBytes(imageRef, image);
-                const imageUrl = await getDownloadURL(imageRef);
-                imageUrls.push(imageUrl);
-            }
-    
-            // Update the post with image URLs
-            await docRef.update({ images: imageUrls });
-    
+            console.log("Document written with ID: ", docRef.id);
             return true;
         } catch (error) {
             console.error("Error adding post: ", error);
