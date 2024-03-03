@@ -3,6 +3,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import fire from '../fire';
 
 
 const CreatePostScreen = () => {
@@ -79,7 +80,7 @@ const CreatePostScreen = () => {
 
     const handlePost = () => {
         // Save text and images to Firestore using Fire.shared.addPost method
-        Fire.shared.addPost({ text, images })
+        fire.addPost({ text, images })
             .then(() => {
                 // Reset text and images state
                 setText('');
