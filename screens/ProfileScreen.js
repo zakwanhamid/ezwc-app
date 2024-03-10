@@ -56,7 +56,7 @@ const ProfileScreen = () => {
             </View>
         </View>
 
-        {/* <View style={styles.tabBar}>
+        <View style={styles.tabBar}>
             <View style={{
                 flexDirection: "row"}}>
                 <TouchableOpacity style={{width: "50%", alignItems: "center"}}>
@@ -66,7 +66,7 @@ const ProfileScreen = () => {
                     <Text style={{ fontSize: 17}}>Listing</Text>
                 </TouchableOpacity>
             </View> 
-        </View> */}
+        </View>
     </SafeAreaView>
 
 
