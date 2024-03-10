@@ -9,6 +9,11 @@ const ProfileScreen = () => {
 
   const [userEmail ,setUserEmail] = useState(null);
   const navigation = useNavigation();
+  const [active,setActive] = useState(0);
+  const handleCreatePost = () => {
+    navigation.navigate('CreatePostScreen');
+  };
+
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     };
@@ -57,15 +62,26 @@ const ProfileScreen = () => {
         </View>
 
         <View style={styles.tabBar}>
-            <View style={{
-                flexDirection: "row"}}>
-                <TouchableOpacity style={{width: "50%", alignItems: "center"}}>
-                    <Text style={{alignItems:"center", justifyContent: "center", fontSize: 17}}>Post</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={{width: "50%", alignItems: "center"}}>
-                    <Text style={{ fontSize: 17}}>Listing</Text>
-                </TouchableOpacity>
-            </View> 
+            <TouchableOpacity onPress={() => setActive(0)}
+            style={{
+                width: "50%", 
+                alignItems: "center",
+                padding: 10,
+                borderBottomWidth: active === 0 ? 2 : 0,
+                borderBottomColor: "#529C4E"
+                }}>
+                <Text style={{fontSize: 17,}}>Post</Text>
+            </TouchableOpacity >
+            <TouchableOpacity onPress={() => setActive(1)} 
+            style={{
+                width: "50%", 
+                alignItems: "center",
+                padding: 10,
+                borderBottomWidth: active === 1 ? 2 : 0,
+                borderBottomColor: "#529C4E"
+                }}>
+                <Text style={{fontSize: 17}}>Listing</Text>
+            </TouchableOpacity>
         </View>
     </SafeAreaView>
 
@@ -131,7 +147,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         borderBottomWidth: 1,
         borderBottomColor: "#D8D9DB",
-        padding: 15,
         justifyContent: "space-between",
     }
 })
