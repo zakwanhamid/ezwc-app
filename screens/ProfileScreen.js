@@ -10,8 +10,8 @@ const ProfileScreen = () => {
   const [userEmail ,setUserEmail] = useState(null);
   const navigation = useNavigation();
   const [active,setActive] = useState(0);
-  const handleCreatePost = () => {
-    navigation.navigate('CreatePostScreen');
+  const handleEditProfile = () => {
+    navigation.navigate('EditProfileScreen');
   };
 
   const goBack = () => {
@@ -41,7 +41,7 @@ const ProfileScreen = () => {
         <View style={styles.avatarBtn}>
             <Image source={require("../assets/profilePic.jpeg")} style={styles.avatar}></Image>
             <TouchableOpacity style={styles.editBtn}>
-                <Text style={{ fontWeight:"700", fontSize:14}}>Edit</Text>
+                <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>
             </TouchableOpacity>
         </View>
 

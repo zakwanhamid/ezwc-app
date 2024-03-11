@@ -16,6 +16,7 @@ import ModuleScreen from './screens/ModuleScreen';
 import BinFinderScreen from './screens/BinFinderScreen';
 import ThriftScreen from './screens/ThriftScreen';
 import CreatePostScreen from './screens/CreatePostScreen';
+import EditProfileScreen from './screens/EditProfileScreen';
 
 
 
@@ -48,6 +49,7 @@ function InsideLayout(){
       <InsideStack.Screen name="BinFinderScreen" component={BinFinderScreen}/>
       <InsideStack.Screen name="ThriftScreen" component={ThriftScreen}/>
       <InsideStack.Screen name="CreatePostScreen" component={CreatePostScreen} />
+      <InsideStack.Screen name="EditProfileScreen" component={EditProfileScreen} />
     </InsideStack.Navigator>
   );
 }

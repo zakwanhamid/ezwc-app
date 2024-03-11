@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import fire from '../fire';
@@ -10,6 +10,7 @@ const CreatePostScreen = () => {
     const [text, setText] = useState('');
     const [images, setImages] = useState([]);
     const navigation = useNavigation();
+
     const [charCount, setCharCount] = useState(280);
 
     useLayoutEffect(() => {
