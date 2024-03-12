@@ -1,6 +1,6 @@
-import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_DB } from "./firebase";
+import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from "./firebase";
 import { getFirestore, collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
-import { getStorage } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 
 class Fire {
     constructor() {
@@ -8,6 +8,8 @@ class Fire {
         this.firebaseApp = FIREBASE_APP;
         // Access Firestore database service using the exported FIREBASE_DB
         this.firestore = FIREBASE_DB; // Initialize Firestore instance
+
+        this.storage = FIREBASE_STORAGE;
     }
 
     addPost = async ({ text, images }) => {
@@ -26,13 +28,15 @@ class Fire {
             console.log("Document written with ID: ",docRef.id)
             
             // Upload images to Firebase Storage
-            // const imageUrls = [];
-            // for (const image of images) {
-            //     const imageRef = getStorage(FIREBASE_APP).ref().child(`images/${docRef.id}/${image.name}`);
-            //     await imageRef.put(image);
-            //     const imageUrl = await imageRef.getDownloadURL();
-            //     imageUrls.push(imageUrl);
-            // }
+            const imageUrls = [];
+            for (const image of images) {
+                const imageRef = ref(this.storage,`images/${docRef.id}/${image.name}`);
+                uploadBytes(imageRef,image ).then(() => {
+                    console.log('image uploaded!');
+                });
+                // const imageUrl = await imageRef.getDownloadURL();
+                // imageUrls.push(imageUrl);
+            }
     
             // // Update the post with image URLs
             // await docRef.update({ images: imageUrls });
