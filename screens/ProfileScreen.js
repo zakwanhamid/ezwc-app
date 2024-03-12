@@ -18,12 +18,12 @@ const ProfileScreen = () => {
     navigation.goBack(); // Go back to the previous screen
     };
 
-    useEffect(() => {
-        const currentUser = FIREBASE_AUTH.currentUser;
-        if (currentUser) {
-            setUserEmail(currentUser.email);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const currentUser = FIREBASE_AUTH.currentUser;
+    //     if (currentUser) {
+    //         setUserEmail(currentUser.email);
+    //     }
+    // }, []);
 
   return (
     <SafeAreaView>
@@ -48,7 +48,7 @@ const ProfileScreen = () => {
         {/* name, email, bio, following, followers */}
         <View style={{marginTop:10,marginHorizontal: 17}}>
             <Text style={{fontSize:17, fontWeight :900}}>SpongeBob SquarePants</Text>
-            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>spongesquarepant@student.usm.my</Text>
+            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>{userEmail}</Text>
             <Text style={{fontSize:15, marginTop:6}}>
                 Lorem Ipsum is simply dummy text of the printing and 
                 typesetting industry. Lorem Ipsum has been the.
@@ -82,6 +82,13 @@ const ProfileScreen = () => {
                 }}>
                 <Text style={{fontSize: 17}}>Listing</Text>
             </TouchableOpacity>
+        </View>
+        <View>
+            <TouchableOpacity 
+            className="rounded-lg bg-black px-4 py-1 mt-2 w-60"
+            onPress={() => FIREBASE_AUTH.signOut()} title="Logout">
+            <Text className="color-white text-lg font-bold text-center">Log Out</Text>
+        </TouchableOpacity>
         </View>
     </SafeAreaView>
 

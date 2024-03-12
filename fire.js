@@ -1,6 +1,7 @@
 import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from "./firebase";
 import { getFirestore, collection, addDoc } from 'firebase/firestore'; // Import Firestore methods
-import { ref, uploadBytes } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useState } from "react";
 
 class Fire {
     constructor() {
@@ -19,8 +20,10 @@ class Fire {
         const post = {
             text: text,
             userId: userId,
-            timestamp: new Date()
+            timestamp: new Date(),
+            images: [],
         };
+        
     
         try {
             // Add the post details to Firestore
@@ -29,12 +32,12 @@ class Fire {
             
             // Upload images to Firebase Storage
             const imageUrls = [];
+            
             for (const image of images) {
                 const imageRef = ref(this.storage,`images/${docRef.id}/${image.name}`);
-                uploadBytes(imageRef,image ).then(() => {
-                    console.log('image uploaded!');
-                });
-                // const imageUrl = await imageRef.getDownloadURL();
+                await uploadBytes(imageRef,image );
+                console.log('Image uploaded');
+                // const imageUrl = await getDownloadURL(imageRef);
                 // imageUrls.push(imageUrl);
             }
     

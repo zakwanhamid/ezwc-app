@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import React,{ useState } from "react";
 import { Button, Image, KeyboardAvoidingView, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { FIREBASE_AUTH, auth } from "../firebase";
+import { FIREBASE_AUTH, FIREBASE_DB, auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 
 //this is login screen
 const Login = () => {
@@ -11,6 +12,24 @@ const Login = () => {
     const [password, setPassword] = useState ('');
     const [loading,setLoading] =useState(false);
     const auth = FIREBASE_AUTH;
+
+    const createUserProfile = async (userId, email) => {
+        try {
+            const userRef = doc(FIREBASE_DB, 'users', userId);
+            await setDoc(userRef, {
+                email: email,
+                name: '', // Set to empty initially, user can edit later
+                bio: '', // Set to empty initially, user can edit later
+                following: [],
+                followers: [],
+                listings: [],
+                posts: []
+            });
+            console.log('User profile created successfully!');
+        } catch (error) {
+            console.error('Error creating user profile:', error);
+        }
+    };
 
     const signIn = async () => {
         setLoading(true);
@@ -30,7 +49,10 @@ const Login = () => {
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
             console.log(response);
+            const user = response.user;
             alert('Check you emails!');
+
+            await createUserProfile(user.uid, email);
         } catch (error) {
             console.log(error);
             alert('Sign in failed:' + error.message);
