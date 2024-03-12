@@ -1,22 +1,65 @@
 import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { FIREBASE_AUTH } from '../firebase';
+import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
 
 //this is profile screen that is unique for every user
 const ProfileScreen = () => {
 
-  const [userEmail ,setUserEmail] = useState(null);
+  const [user ,setUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [active,setActive] = useState(0);
   const handleEditProfile = () => {
     navigation.navigate('EditProfileScreen');
   };
-
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     };
+
+    const fetchUserInfo = async () => {
+        const { uid } = FIREBASE_AUTH.currentUser;
+        // Discard fetch when user ID not defined
+        if (!uid) return;
+        const userRef = doc(collection(FIREBASE_DB,"users"), uid);
+        const docSnapshot = await getDoc(userRef);
+        const userData = docSnapshot.data();
+        setUser(userData);
+    };
+
+    useEffect(() => {
+        fetchUserInfo();
+      }, []);
+
+    console.log(FIREBASE_AUTH.currentUser.email);
+
+    // useEffect(() => {
+    //     const currentUser = FIREBASE_AUTH.currentUser.uid;
+    //     const subscriber = onSnapshot(collection(FIREBASE_DB,'users'), where('userId', '==', currentUser),
+    //     querySnapshot => {
+    //         const user = [];
+      
+    //         querySnapshot.forEach(documentSnapshot => {
+    //           user.push({
+    //             ...documentSnapshot.data(),
+    //             key: documentSnapshot.id,
+    //           });
+    //         });
+      
+    //         setCurrentUser(currentUser);
+    //         setLoading(false);
+    //     });
+      
+    //     // Unsubscribe from events when no longer in use
+    //     return () => subscriber();
+    // }, []);
+
+    // console.log(currentUser.email);
+
+
+
 
     // useEffect(() => {
     //     const currentUser = FIREBASE_AUTH.currentUser;
@@ -47,11 +90,10 @@ const ProfileScreen = () => {
 
         {/* name, email, bio, following, followers */}
         <View style={{marginTop:10,marginHorizontal: 17}}>
-            <Text style={{fontSize:17, fontWeight :900}}>SpongeBob SquarePants</Text>
-            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>{userEmail}</Text>
+            <Text style={{fontSize:17, fontWeight :900}}>{FIREBASE_AUTH.currentUser.name}</Text>
+            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>{FIREBASE_AUTH.currentUser.email}</Text>
             <Text style={{fontSize:15, marginTop:6}}>
-                Lorem Ipsum is simply dummy text of the printing and 
-                typesetting industry. Lorem Ipsum has been the.
+                {FIREBASE_AUTH.currentUser.bio}
             </Text>
             <View style={{ flexDirection: "row", marginTop: 10}}>
                 <Text style={{fontSize:15, fontWeight :700}}>199</Text>
