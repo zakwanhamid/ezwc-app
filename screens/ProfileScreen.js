@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../firebase';
 import { useNavigation } from '@react-navigation/native';
@@ -9,9 +9,11 @@ import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
 const ProfileScreen = () => {
 
   const [currentUser ,setCurrentUser] = useState([]);
+  const [userPosts ,setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [active,setActive] = useState(0);
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
   const handleEditProfile = () => {
     navigation.navigate('EditProfileScreen');
   };
@@ -20,35 +22,62 @@ const ProfileScreen = () => {
     navigation.goBack(); // Go back to the previous screen
     };
 
-    // const fetchUserInfo = async () => {
-    //     const { uid } = FIREBASE_AUTH.currentUser;
-    //     // Discard fetch when user ID not defined
-    //     if (!uid) return;
-        
-    //     const userRef = doc(collection(FIREBASE_DB, "users"), uid);
-        
-    //     // Set up a real-time listener for changes to the user document
-    //     const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
-    //         if (docSnapshot.exists()) {
-    //             const userData = docSnapshot.data();
-    //             setUser(userData);
-    //         } else {
-    //             // Handle case where document doesn't exist
-    //             console.log("User document does not exist");
-    //         }
-    //     });
-    
-    //     // Return the unsubscribe function to be used when necessary (e.g., component unmount)
-    //     return unsubscribe;
-    // };
-    
-    // Example usage:
-    // Call fetchUserInfo to start listening for updates
-    // const unsubscribe = fetchUserInfo();
+    const renderPostContent = () => {
+        return (
+            <View style={{paddingBottom:200}}>
+                <ScrollView>
+                {/* Display currentUser and userPosts data */}
+                {userPosts.slice().reverse().map((post, index) => (
+                <View key={index} style={styles.postItem}>
+                    <View style={{width:'15%', marginRight: '5%'}}>
+                        <Image source={require("../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+                    </View>
+                    <View style={{width:'80%', marginTop: 8}}>
+                        <View >
+                            <Text style={{fontSize: 15, fontWeight: 600}}>{currentUser.name}</Text>
+                            <Text style={{fontSize: 13, fontWeight: 200}}>{currentUser.email}</Text>
+                            <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
+                        </View>
+                        <View style={{marginTop:5}}>
+                            <Text >{post.text}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Like</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.button}>
+                                <Text style={styles.buttonText}>Comment</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                ))}
+                </ScrollView>
+            </View>
+            
+        );
+      };
+      
+      const renderListingContent = () => {
+        return (
+          <ScrollView>
+            {/* Dummy listing data */}
+            {[
+              { title: "Listing 1", description: "Description for Listing 1" },
+              { title: "Listing 2", description: "Description for Listing 2" },
+              { title: "Listing 3", description: "Description for Listing 3" },
+              { title: "Listing 4", description: "Description for Listing 4" }
+            ].map((listing, index) => (
+              <View key={index} style={styles.listingItem}>
+                <Text style={styles.listingText}>{listing.title}</Text>
+                <Text style={styles.listingDescription}>{listing.description}</Text>
+                {/* Add any other listing-related information here */}
+              </View>
+            ))}
+          </ScrollView>
+        );
+      };
 
-    // useEffect(() => {
-    //     fetchUserInfo();
-    //   }, []);
 
     useEffect(() => {
         const currentUserUid = FIREBASE_AUTH.currentUser.uid;
@@ -68,17 +97,30 @@ const ProfileScreen = () => {
         return () => unsubscribe();
     }, []);
 
-    console.log(currentUser);
+    useEffect(() => {
+        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+        const postsRef = collection(FIREBASE_DB, 'posts');
+        
+        const unsubscribe = onSnapshot(postsRef, querySnapshot => {
+          const userPosts = [];
+          querySnapshot.forEach(doc => {
+            const postData = doc.data();
+            // Check if the post belongs to the currentUser
+            if (postData.userId === currentUserUid) {
+              userPosts.push({
+                id: doc.id,
+                ...postData
+              });
+            }
+          });
+          setUserPosts(userPosts);
+          setLoading(false);
+        });
+        
+        return () => unsubscribe();
+      }, []);
 
-
-
-
-    // useEffect(() => {
-    //     const currentUser = FIREBASE_AUTH.currentUser;
-    //     if (currentUser) {
-    //         setUserEmail(currentUser.email);
-    //     }
-    // }, []);
+    //   console.log(userPosts[0].id);
 
   return (
     <SafeAreaView>
@@ -95,6 +137,11 @@ const ProfileScreen = () => {
         {/* avatar and button */}
         <View style={styles.avatarBtn}>
             <Image source={require("../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+            <TouchableOpacity
+                onPress={() => FIREBASE_AUTH.signOut()} title="Logout"
+                style={styles.editBtn}>
+                <Text style={{ fontWeight:"700", fontSize:14}}>Log Out</Text>
+            </TouchableOpacity>     
             <TouchableOpacity style={styles.editBtn}>
                 <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>
             </TouchableOpacity>
@@ -137,13 +184,8 @@ const ProfileScreen = () => {
                 <Text style={{fontSize: 17}}>Listing</Text>
             </TouchableOpacity>
         </View>
-        <View>
-            <TouchableOpacity 
-            className="rounded-lg bg-black px-4 py-1 mt-2 w-60"
-            onPress={() => FIREBASE_AUTH.signOut()} title="Logout">
-            <Text className="color-white text-lg font-bold text-center">Log Out</Text>
-        </TouchableOpacity>
-        </View>
+            {active === 0 && renderPostContent()}
+            {active === 1 && renderListingContent()}    
     </SafeAreaView>
 
 
@@ -209,7 +251,37 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: "#D8D9DB",
         justifyContent: "space-between",
-    }
+    },
+
+    postItem: {
+        flexDirection: "row",
+        paddingTop: 7,
+        paddingHorizontal: 7,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D8D9DB",
+    },
+
+    postAvatar: {
+        width: 60,
+        height:60,
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 2,
+    },
+
+    button: {
+        width: "50%", 
+        alignItems: "center",
+        padding: 10,
+        borderBottomColor: "#529C4E"
+    },
+
+    buttonText: {
+        fontSize: 16,
+        marginLeft: 8,
+    },
+
+    
 })
 
 export default ProfileScreen
