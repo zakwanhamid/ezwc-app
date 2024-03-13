@@ -8,55 +8,67 @@ import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
 //this is profile screen that is unique for every user
 const ProfileScreen = () => {
 
-  const [user ,setUser] = useState([]);
+  const [currentUser ,setCurrentUser] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [active,setActive] = useState(0);
   const handleEditProfile = () => {
     navigation.navigate('EditProfileScreen');
   };
+
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     };
 
-    const fetchUserInfo = async () => {
-        const { uid } = FIREBASE_AUTH.currentUser;
-        // Discard fetch when user ID not defined
-        if (!uid) return;
-        const userRef = doc(collection(FIREBASE_DB,"users"), uid);
-        const docSnapshot = await getDoc(userRef);
-        const userData = docSnapshot.data();
-        setUser(userData);
-    };
-
-    useEffect(() => {
-        fetchUserInfo();
-      }, []);
-
-    console.log(FIREBASE_AUTH.currentUser.email);
+    // const fetchUserInfo = async () => {
+    //     const { uid } = FIREBASE_AUTH.currentUser;
+    //     // Discard fetch when user ID not defined
+    //     if (!uid) return;
+        
+    //     const userRef = doc(collection(FIREBASE_DB, "users"), uid);
+        
+    //     // Set up a real-time listener for changes to the user document
+    //     const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
+    //         if (docSnapshot.exists()) {
+    //             const userData = docSnapshot.data();
+    //             setUser(userData);
+    //         } else {
+    //             // Handle case where document doesn't exist
+    //             console.log("User document does not exist");
+    //         }
+    //     });
+    
+    //     // Return the unsubscribe function to be used when necessary (e.g., component unmount)
+    //     return unsubscribe;
+    // };
+    
+    // Example usage:
+    // Call fetchUserInfo to start listening for updates
+    // const unsubscribe = fetchUserInfo();
 
     // useEffect(() => {
-    //     const currentUser = FIREBASE_AUTH.currentUser.uid;
-    //     const subscriber = onSnapshot(collection(FIREBASE_DB,'users'), where('userId', '==', currentUser),
-    //     querySnapshot => {
-    //         const user = [];
-      
-    //         querySnapshot.forEach(documentSnapshot => {
-    //           user.push({
-    //             ...documentSnapshot.data(),
-    //             key: documentSnapshot.id,
-    //           });
-    //         });
-      
-    //         setCurrentUser(currentUser);
-    //         setLoading(false);
-    //     });
-      
-    //     // Unsubscribe from events when no longer in use
-    //     return () => subscriber();
-    // }, []);
+    //     fetchUserInfo();
+    //   }, []);
 
-    // console.log(currentUser.email);
+    useEffect(() => {
+        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+        const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+    
+        const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+            if (documentSnapshot.exists()) {
+                const userData = documentSnapshot.data(); // Get user data directly
+                setCurrentUser(userData);
+                setLoading(false);
+            } else {
+                // Handle case where user document doesn't exist
+                console.log("User document does not exist");
+            }
+        });
+    
+        return () => unsubscribe();
+    }, []);
+
+    console.log(currentUser);
 
 
 
@@ -90,10 +102,10 @@ const ProfileScreen = () => {
 
         {/* name, email, bio, following, followers */}
         <View style={{marginTop:10,marginHorizontal: 17}}>
-            <Text style={{fontSize:17, fontWeight :900}}>{FIREBASE_AUTH.currentUser.name}</Text>
-            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>{FIREBASE_AUTH.currentUser.email}</Text>
+            <Text style={{fontSize:17, fontWeight :900}}>{currentUser.name}</Text>
+            <Text style={{fontSize:15, fontWeight :200, marginTop:3}}>{currentUser.email}</Text>
             <Text style={{fontSize:15, marginTop:6}}>
-                {FIREBASE_AUTH.currentUser.bio}
+                {currentUser.bio}
             </Text>
             <View style={{ flexDirection: "row", marginTop: 10}}>
                 <Text style={{fontSize:15, fontWeight :700}}>199</Text>
