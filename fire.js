@@ -16,6 +16,8 @@ class Fire {
     addPost = async ({ text, images }) => {
         const user = FIREBASE_AUTH.currentUser;
         const userId = user.uid;
+        console.log('text in fire.js', text);
+        console.log('image in fire.js', images);
     
         const post = {
             text: text,
@@ -39,7 +41,7 @@ class Fire {
                 console.log('Image uploaded');
                 console.log(image);
                 console.log('image name:', image.name);
-                console.log('image path:', imageRef.path);
+                console.log('image path:', imageRef._path);
                 // const imageUrl = await getDownloadURL(imageRef);
                 // imageUrls.push(imageUrl);
             }

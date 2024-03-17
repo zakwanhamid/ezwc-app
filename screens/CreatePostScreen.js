@@ -58,6 +58,8 @@ const CreatePostScreen = () => {
             if (totalNewSizeBytes <= totalSizeAllowedBytes) {
                 selectedImages.push(result.assets[0].uri);
                 setImages(selectedImages);
+                console.log(selectedImages);
+
             } else {
                 const totalSizeUploadedMB = (totalNewSizeBytes / (1024 * 1024)).toFixed(2);
                 alert(`Your images already exceed the maximum allowed size (${MAX_TOTAL_SIZE_MB} MB). Total size uploaded: ${totalSizeUploadedMB} MB. Please choose another.`);

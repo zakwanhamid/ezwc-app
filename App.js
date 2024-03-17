@@ -68,7 +68,7 @@ export default function App() {
     //bottom navbar
   <NavigationContainer>
     {user ? (
-      <Tab.Navigator initialRouteName='Home' screenOptions={screenOptions} >
+      <Tab.Navigator initialRouteName='Module' screenOptions={screenOptions} >
         <Tab.Screen 
           name="Home" 
           component={InsideLayout}
