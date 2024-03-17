@@ -41,6 +41,7 @@ const CreatePostScreen = () => {
             const file = await uriToBlob(uri);
             totalNewSizeBytes += file.size;
             selectedImages.push(uri);
+            console.log('image uri',uri);
         }
     
         // Check if adding another image exceeds the maximum total size allowed
@@ -58,7 +59,8 @@ const CreatePostScreen = () => {
             if (totalNewSizeBytes <= totalSizeAllowedBytes) {
                 selectedImages.push(result.assets[0].uri);
                 setImages(selectedImages);
-                console.log(selectedImages);
+                console.log(result.assets[0].uri);
+                console.log('selected images:',selectedImages);
 
             } else {
                 const totalSizeUploadedMB = (totalNewSizeBytes / (1024 * 1024)).toFixed(2);
@@ -81,19 +83,39 @@ const CreatePostScreen = () => {
     
     
 
-    const handlePost = () => {
+    const handlePost = async() => {
         // Save text and images to Firestore using Fire.shared.addPost method
-        fire.addPost({ text, images })
+
+        const blobImages = [];
+        for (const uri of images) {
+            const blob = await uriToBlob(uri);
+            blobImages.push(blob);
+        }
+
+  // Save text and Blob images to Firestore using Fire.shared.addPost method
+        fire.addPost({ text, images: blobImages })
             .then(() => {
-                // Reset text and images state
-                setText('');
-                setImages([]);
-                // Navigate back to the previous screen
-                goBack();
+            // Reset text and images state
+            setText('');
+            setImages([]);
+            // Navigate back to the previous screen
+            goBack();
             })
             .catch(error => {
-                console.log('Error:', error);
+            console.log('Error:', error);
             });
+
+        // fire.addPost({ text, images })
+        //     .then(() => {
+        //         // Reset text and images state
+        //         setText('');
+        //         setImages([]);
+        //         // Navigate back to the previous screen
+        //         goBack();
+        //     })
+        //     .catch(error => {
+        //         console.log('Error:', error);
+        //     });
     };
 
     const removeImage = (index) => {

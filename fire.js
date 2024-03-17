@@ -36,12 +36,12 @@ class Fire {
             const imageUrls = [];
             
             for (const image of images) {
+                // console.log('imageObject',image);
+                // console.log('image name:', image.name);
                 const imageRef = ref(this.storage,`images/${docRef.id}/${image.name}`);
                 await uploadBytes(imageRef,image );
-                console.log('Image uploaded');
-                console.log(image);
-                console.log('image name:', image.name);
-                console.log('image path:', imageRef._path);
+                // console.log('Image uploaded');
+                // console.log('image path:', imageRef.fullPath);
                 // const imageUrl = await getDownloadURL(imageRef);
                 // imageUrls.push(imageUrl);
             }
