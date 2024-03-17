@@ -38,7 +38,7 @@ class Fire {
             for (const image of images) {
                 // console.log('imageObject',image);
                 // console.log('image name:', image.name);
-                const imageRef = ref(this.storage,`images/${docRef.id}/${image.name}`);
+                const imageRef = ref(this.storage,`images/${docRef.id}/${image}`);
                 await uploadBytes(imageRef,image );
                 // console.log('Image uploaded');
                 // console.log('image path:', imageRef.fullPath);

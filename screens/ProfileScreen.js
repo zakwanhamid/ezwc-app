@@ -24,10 +24,10 @@ const ProfileScreen = () => {
 
     const renderPostContent = () => {
         return (
-            <View style={{paddingBottom:200}}>
+            <View style={{paddingBottom:670}}>
                 <ScrollView>
                 {/* Display currentUser and userPosts data */}
-                {userPosts.slice().reverse().map((post, index) => (
+                {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
                 <View key={index} style={styles.postItem}>
                     <View style={{width:'15%', marginRight: '5%'}}>
                         <Image source={require("../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>

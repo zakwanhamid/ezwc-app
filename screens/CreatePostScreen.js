@@ -90,10 +90,12 @@ const CreatePostScreen = () => {
         for (const uri of images) {
             const blob = await uriToBlob(uri);
             blobImages.push(blob);
+            
         }
 
   // Save text and Blob images to Firestore using Fire.shared.addPost method
         fire.addPost({ text, images: blobImages })
+
             .then(() => {
             // Reset text and images state
             setText('');
