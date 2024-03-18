@@ -17,7 +17,7 @@ class Fire {
         const user = FIREBASE_AUTH.currentUser;
         const userId = user.uid;
         console.log('text in fire.js', text);
-        console.log('image in fire.js', images);
+        console.log('image in fire.js', images[0]._data.name);
     
         const post = {
             text: text,
@@ -38,7 +38,7 @@ class Fire {
             for (const image of images) {
                 // console.log('imageObject',image);
                 // console.log('image name:', image.name);
-                const imageRef = ref(this.storage,`images/${docRef.id}/${image}`);
+                const imageRef = ref(this.storage,`images/${docRef.id}/${image._data.name}`);
                 await uploadBytes(imageRef,image );
                 // console.log('Image uploaded');
                 // console.log('image path:', imageRef.fullPath);
