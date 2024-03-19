@@ -3,7 +3,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import fire from '../fire';
+import fire from '../../fire';
 
 
 const CreatePostScreen = () => {
@@ -140,7 +140,7 @@ const CreatePostScreen = () => {
             </View>
 
             <View style={styles.inputContainer}>
-                <Image source={require("../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+                <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
                 <TextInput
                     autoFocus={true}
                     multiline={true}
@@ -192,9 +192,7 @@ const CreatePostScreen = () => {
         paddingHorizontal: 15,
         paddingVertical: 12,
         borderBottomWidth:1,
-        borderBottomColor: "#D8D9DB",
-        marginTop:50,
-
+        borderBottomColor: "#D8D9DB"
       },
       titleContainer:{
         flex:1,

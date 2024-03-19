@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../firebase';
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
@@ -18,6 +18,12 @@ const ProfileScreen = () => {
     navigation.navigate('EditProfileScreen');
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+        headerShown: false,
+    });
+  }, [navigation]);
+
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     };
@@ -30,7 +36,7 @@ const ProfileScreen = () => {
                 {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
                 <View key={index} style={styles.postItem}>
                     <View style={{width:'15%', marginRight: '5%'}}>
-                        <Image source={require("../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+                        <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
                     </View>
                     <View style={{width:'80%', marginTop: 8}}>
                         <View >
@@ -131,12 +137,12 @@ const ProfileScreen = () => {
         </View> */}
         {/* backgrounf image */}
         <View style={{width:"100%"}}>
-            <Image source={require("../assets/bg-image.jpeg")} style={styles.bgImage}></Image>
+            <Image source={require("../../assets/bg-image.jpeg")} style={styles.bgImage}></Image>
         </View>
 
         {/* avatar and button */}
         <View style={styles.avatarBtn}>
-            <Image source={require("../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+            <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
             <TouchableOpacity
                 onPress={() => FIREBASE_AUTH.signOut()} title="Logout"
                 style={styles.editBtn}>

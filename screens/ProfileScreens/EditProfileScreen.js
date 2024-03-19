@@ -2,7 +2,7 @@ import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInpu
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../firebase';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 
 const EditProfileScreen = () => {
@@ -72,7 +72,7 @@ const EditProfileScreen = () => {
             {/* Touchable opacity for image */}
             <TouchableOpacity style={styles.imageContainer}>
                 <Image
-                    source={require("../assets/profilePic.jpeg")}
+                    source={require("../../assets/profilePic.jpeg")}
                     style={styles.image}
                 />
                 <Text style={styles.replaceText}>Replace</Text>

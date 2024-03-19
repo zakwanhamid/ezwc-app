@@ -10,13 +10,14 @@ import { EvilIcons, Feather, FontAwesome5, Ionicons, MaterialCommunityIcons, Oct
 
 //screens
 import Login from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import ModuleScreen from './screens/ModuleScreen';
-import BinFinderScreen from './screens/BinFinderScreen';
-import ThriftScreen from './screens/ThriftScreen';
-import CreatePostScreen from './screens/CreatePostScreen';
-import EditProfileScreen from './screens/EditProfileScreen';
+import HomeScreen from './screens/FeedScreens/HomeScreen';
+import ProfileScreen from './screens/ProfileScreens/ProfileScreen';
+import ModuleScreen from './screens/ModuleScreens/ModuleScreen';
+import BinFinderScreen from './screens/BinFinderScreens/BinFinderScreen';
+import ThriftScreen from './screens/ThriftScreens/ThriftScreen';
+import CreatePostScreen from './screens/FeedScreens/CreatePostScreen';
+import EditProfileScreen from './screens/ProfileScreens/EditProfileScreen';
+import ModuleBgScreen from './screens/ModuleScreens/ModuleBgScreen';
 
 
 
@@ -40,19 +41,49 @@ const screenOptions = {
 
 const InsideStack = createNativeStackNavigator();
 
-function InsideLayout(){
+function HomeLayout(){
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="HomeScreen" component={HomeScreen} />
-      <InsideStack.Screen name="ProfileScreen" component={ProfileScreen}/>
-      <InsideStack.Screen name="ModuleScreen" component={ModuleScreen}/>
-      <InsideStack.Screen name="BinFinderScreen" component={BinFinderScreen}/>
-      <InsideStack.Screen name="ThriftScreen" component={ThriftScreen}/>
       <InsideStack.Screen name="CreatePostScreen" component={CreatePostScreen} />
+    </InsideStack.Navigator>
+  );
+}
+
+function ProfileLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="ProfileScreen" component={ProfileScreen}/>
       <InsideStack.Screen name="EditProfileScreen" component={EditProfileScreen} />
     </InsideStack.Navigator>
   );
 }
+
+function ModuleLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="ModuleScreen" component={ModuleScreen}/>
+      <InsideStack.Screen name="ModuleBgScreen" component={ModuleBgScreen} />
+    </InsideStack.Navigator>
+  );
+}
+
+function BinFinderLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="BinFinderScreen" component={BinFinderScreen}/>
+    </InsideStack.Navigator>
+  );
+}
+function ThriftLayout(){
+  return (
+    <InsideStack.Navigator>
+      <InsideStack.Screen name="ThriftScreen" component={ThriftScreen}/>
+    </InsideStack.Navigator>
+  );
+}
+
+
 
 export default function App() {
   // const [user, setUser] = useState<User | null>(null);
@@ -68,14 +99,14 @@ export default function App() {
     //bottom navbar
   <NavigationContainer>
     {user ? (
-      <Tab.Navigator initialRouteName='Module' screenOptions={screenOptions} >
+      <Tab.Navigator initialRouteName='Home' screenOptions={screenOptions} >
         <Tab.Screen 
           name="Home" 
-          component={InsideLayout}
+          component={HomeLayout}
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop: 24}}>
                   <Feather name="home" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, color: focused ? "#529c4e" : "black", marginTop:2,}}>Home</Text>
                 </View>
@@ -84,11 +115,11 @@ export default function App() {
           }} />
         <Tab.Screen 
           name="Module" 
-          component={ModuleScreen}
+          component={ModuleLayout}
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop: 24}}>
                   <Feather name="book-open" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, color: focused ? "#529c4e" : "black", marginTop:2,}}>Module</Text>
                 </View>
@@ -97,7 +128,7 @@ export default function App() {
           }} />
         <Tab.Screen 
           name="BinFinder" 
-          component={BinFinderScreen} 
+          component={BinFinderLayout} 
           options={{
             tabBarIcon:({focused})=>{
               return(
@@ -113,6 +144,7 @@ export default function App() {
                     borderColor: focused ? "#529c4e" :"white",
                     shadowColor: "#000",
                     shadowOpacity: 0.9,
+                    marginTop: 24,
                     shadowOffset:{
                         width: 0,
                         height: 2,
@@ -126,11 +158,11 @@ export default function App() {
           }}/>
         <Tab.Screen 
           name="Thrift" 
-          component={ThriftScreen} 
+          component={ThriftLayout} 
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop: 24}}>
                   <Ionicons name="shirt-outline" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, color:focused ? "#529c4e" : "black", marginTop:2,}}>Thrift</Text>
                 </View>
@@ -139,11 +171,11 @@ export default function App() {
           }}/>
         <Tab.Screen 
           name="Profile" 
-          component={ProfileScreen}
+          component={ProfileLayout}
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop: 24}}>
                   <Octicons name="person" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, color:focused ? "#529c4e" : "black", marginTop:2,}}>Profile</Text>
                 </View>

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, TextInput } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
-import { FIREBASE_AUTH } from '../firebase';
+import { FIREBASE_AUTH } from '../../firebase';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 
 //this is the feed screen that will show all posts
@@ -58,8 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderBottomWidth:1,
-    borderBottomColor: "#D8D9DB",
-    marginTop:50,
+    borderBottomColor: "#D8D9DB"
   },
   titleContainer:{
     flex:1,
