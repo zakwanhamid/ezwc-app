@@ -1,32 +1,34 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
-const ModuleBgScreen = () => {
+const ModuleObjScreen = () => {
   const navigation = useNavigation();
-  const goBack = () => {
-    navigation.goBack(); // Go back to the previous screen
+    const goBack = () => {
+        navigation.goBack(); // Go back to the previous screen
     };
-
-    const handleModuleObj = () => {
-        navigation.navigate('ModuleObjScreen');
-      };
-
+    
+    const handleModuleInstruc = () => {
+        navigation.navigate('ModuleInstrucScreen');
+    };
+    
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
         });
     }, [navigation]);
 
+
   return (
+
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, fontWeight:"600"}}>Background</Text> 
+                <Text style={{ fontSize: 20, fontWeight:"600"}}>Objectives</Text> 
             </View>
             <TouchableOpacity style={styles.mapBtn}>
                 <FontAwesome name="map-o" size={20} color="black" />
@@ -42,32 +44,28 @@ const ModuleBgScreen = () => {
             Zero Waste Campus Digital Module
           </Text>
           <Text style={{fontSize: 20, fontWeight: 400, textAlign: "center", marginBottom:20}}>
-            Module Background
+            Module Objectives
           </Text>
           <Text style={styles.textBg}>
-          A series of data collections involving focus group discussion, 
-          in-depth interviews, and a survey with 393 respondents from USM, 
-          UKM, and UPM comprised of staff and students had been carried out from 2020-2022.
+          1.     To highlight the ten relevant factors shaping the university campus community's 
+          sustainable pro-environmental behaviour towards Zero-Waste Campus.
           </Text>
           <Text style={styles.textBg}>
-          The ten relevant factors shaping the university campus community's
-          sustainable pro-environmental behaviour towards Zero-Waste Campus 
-          have been identified, and a Zero-Waste Campus Framework has been proposed.
-          </Text>
-          <Text style={styles.textBg}>
-          This module was developed to publicise the research 
-          finding to increase public awareness and participation 
-          in promoting environmentally friendly behaviour toward a zero-waste goal.
+          2.     To enhance university campus community awareness and participation in sustainable 
+          waste management towards Zero-Waste Campus.
           </Text>
         </View>
         <View style={styles.btnContainer}>
-          <TouchableOpacity style={styles.btn} onPress={handleModuleObj}>
-            <Text style={{fontSize: 16, fontWeight:600}} > GOT IT ! </Text>
+          <TouchableOpacity style={styles.btn} onPress={handleModuleInstruc}>
+            <Text style={{fontSize: 16, fontWeight:600}} > How can I take part ? </Text>
           </TouchableOpacity>
         </View>
-    </SafeAreaView> 
+    </SafeAreaView>
+    
   )
 }
+
+export default ModuleObjScreen
 
 const styles = StyleSheet.create({
     container:{
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
     textBg:{
         fontSize: 15, 
         fontWeight: 400, 
-        textAlign: "center", 
+        textAlign: "left", 
         marginHorizontal: 20,
         marginTop: 10
       },
@@ -118,7 +116,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#529C4E",
         alignItems: "center",
         justifyContent: "center",
-        width: 150,
+        width: 200,
         height: 40,
         borderRadius: 15,
         shadowColor: "#000",
@@ -129,5 +127,3 @@ const styles = StyleSheet.create({
         }
     }
 })
-
-export default ModuleBgScreen

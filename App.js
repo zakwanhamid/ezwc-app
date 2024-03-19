@@ -18,6 +18,8 @@ import ThriftScreen from './screens/ThriftScreens/ThriftScreen';
 import CreatePostScreen from './screens/FeedScreens/CreatePostScreen';
 import EditProfileScreen from './screens/ProfileScreens/EditProfileScreen';
 import ModuleBgScreen from './screens/ModuleScreens/ModuleBgScreen';
+import ModuleObjScreen from './screens/ModuleScreens/ModuleObjScreen';
+import ModuleInstrucScreen from './screens/ModuleScreens/ModuleInstrucScreen';
 
 
 
@@ -64,6 +66,8 @@ function ModuleLayout(){
     <InsideStack.Navigator>
       <InsideStack.Screen name="ModuleScreen" component={ModuleScreen}/>
       <InsideStack.Screen name="ModuleBgScreen" component={ModuleBgScreen} />
+      <InsideStack.Screen name="ModuleObjScreen" component={ModuleObjScreen} />
+      <InsideStack.Screen name="ModuleInstrucScreen" component={ModuleInstrucScreen} />
     </InsideStack.Navigator>
   );
 }
