@@ -72,14 +72,10 @@ const Login = () => {
     //   }
 
     return(
-        <KeyboardAvoidingView
-            style = {styles.container}
-            behavior="padding"
-        >
-        <SafeAreaView className="bg-white">
+        <SafeAreaView className="bg-white" style = {styles.container}>
             <View className="justify-center items-center">
                 <Image source={require('./../assets/usmLogo.png')}
-                style={{marginTop: 40, marginBottom: 35}}/>
+                style={{marginTop: 100, marginBottom: 35}}/>
                 <Text className="text-3xl font-extrabold">eZWC</Text>
                 <Text className="text-xl font-medium mb-2">Educational Zero Waste Campus</Text>
                 <Image  resizeMode="cover" source={require('./../assets/loginPageIcon.png')}
@@ -131,7 +127,6 @@ const Login = () => {
             
             
         </SafeAreaView>
-        </KeyboardAvoidingView>
     );
 }
 

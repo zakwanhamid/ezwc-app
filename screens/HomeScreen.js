@@ -58,7 +58,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderBottomWidth:1,
-    borderBottomColor: "#D8D9DB"
+    borderBottomColor: "#D8D9DB",
+    marginTop:50,
   },
   titleContainer:{
     flex:1,
