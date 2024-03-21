@@ -156,6 +156,14 @@ const styles = StyleSheet.create({
         height: 50,
         width: 300,
         borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'white',
+        shadowColor: "#000",
+        shadowOpacity: 0.5,
+        shadowOffset:{
+            width: 0,
+            height: 2,
+        }
     },
     CPTitle:{
         fontSize:20,
