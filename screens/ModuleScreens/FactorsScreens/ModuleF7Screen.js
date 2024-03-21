@@ -8,8 +8,8 @@ const ModuleF7Screen = () => {
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
-  const handleModuleRM = () => {
-    navigation.navigate('ModuleRMScreen');
+  const handleModuleFacList = () => {
+    navigation.navigate('ModuleFacListScreen');
   };
 
   const handleModuleF8 = () => {
@@ -31,8 +31,8 @@ const ModuleF7Screen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 7</Text>
             </View>
-            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
-                <FontAwesome name="map-o" size={20} color="black"/>
+            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleFacList}>
+                <Entypo name="list" size={20} color="black"/>
             </TouchableOpacity>
         </View>
 

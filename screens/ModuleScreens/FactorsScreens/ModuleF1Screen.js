@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect } from 'react'
-import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 
 const ModuleF1Screen = () => {
@@ -8,8 +8,8 @@ const ModuleF1Screen = () => {
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
-  const handleModuleRM = () => {
-    navigation.navigate('ModuleRMScreen');
+  const handleModuleFacList = () => {
+    navigation.navigate('ModuleFacListScreen');
   };
 
   const handleModuleF2 = () => {
@@ -31,8 +31,8 @@ const ModuleF1Screen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 1</Text>
             </View>
-            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
-                <FontAwesome name="map-o" size={20} color="black"/>
+            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleFacList}>
+                <Entypo name="list" size={20} color="black"/>
             </TouchableOpacity>
         </View>
 
