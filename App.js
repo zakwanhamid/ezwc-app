@@ -86,6 +86,7 @@ function ModuleLayout(){
       <InsideStack.Screen name="ModuleF5Screen" component={ModuleF5Screen} />
       <InsideStack.Screen name="ModuleF6Screen" component={ModuleF6Screen} />
       <InsideStack.Screen name="ModuleF7Screen" component={ModuleF7Screen} />
+      <InsideStack.Screen name="ModuleF8Screen" component={ModuleF8Screen} />
 
     </InsideStack.Navigator>
   );
