@@ -29,6 +29,8 @@ import ModuleF4Screen from './screens/ModuleScreens/FactorsScreens/ModuleF4Scree
 import ModuleF5Screen from './screens/ModuleScreens/FactorsScreens/ModuleF5Screen';
 import ModuleF6Screen from './screens/ModuleScreens/FactorsScreens/ModuleF6Screen';
 import ModuleF7Screen from './screens/ModuleScreens/FactorsScreens/ModuleF7Screen';
+import ModuleF8Screen from './screens/ModuleScreens/FactorsScreens/ModuleF8Screen';
+import ModuleF9Screen from './screens/ModuleScreens/FactorsScreens/ModuleF9Screen';
 
 
 
@@ -87,6 +89,7 @@ function ModuleLayout(){
       <InsideStack.Screen name="ModuleF6Screen" component={ModuleF6Screen} />
       <InsideStack.Screen name="ModuleF7Screen" component={ModuleF7Screen} />
       <InsideStack.Screen name="ModuleF8Screen" component={ModuleF8Screen} />
+      <InsideStack.Screen name="ModuleF9Screen" component={ModuleF9Screen} />
 
     </InsideStack.Navigator>
   );
