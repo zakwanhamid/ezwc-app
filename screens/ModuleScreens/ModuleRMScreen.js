@@ -20,9 +20,9 @@ const ModuleRMScreen = () => {
     const handleModuleInstruc = () => {
         navigation.navigate('ModuleInstrucScreen');
     };
-    // const handleModuleFactors = () => {
-    //     navigation.navigate('ModuleBgScreen');
-    // };
+    const handleModuleFactorList = () => {
+        navigation.navigate('ModuleFacListScreen');
+    };
     // const handleModuleSummary = () => {
     //     navigation.navigate('ModuleBgScreen');
     // };
@@ -40,7 +40,7 @@ const ModuleRMScreen = () => {
     }, [navigation]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
@@ -79,7 +79,7 @@ const ModuleRMScreen = () => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleModuleFactorList}>
                 <View style={styles.CPContainer}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         10 Factors
