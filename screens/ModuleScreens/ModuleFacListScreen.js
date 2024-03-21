@@ -12,6 +12,37 @@ const ModuleFacListScreen = () => {
     navigation.navigate('ModuleRMScreen');
   };
 
+  const handleModuleF1 = () => {
+    navigation.navigate('ModuleF1Screen');
+  };
+  const handleModuleF2 = () => {
+    navigation.navigate('ModuleF2Screen');
+  };
+  const handleModuleF3 = () => {
+    navigation.navigate('ModuleF3Screen');
+  };
+  const handleModuleF4 = () => {
+    navigation.navigate('ModuleF4Screen');
+  };
+  const handleModuleF5 = () => {
+    navigation.navigate('ModuleF5Screen');
+  };
+  const handleModuleF6 = () => {
+    navigation.navigate('ModuleF6Screen');
+  };
+  const handleModuleF7 = () => {
+    navigation.navigate('ModuleF7Screen');
+  };
+  const handleModuleF8 = () => {
+    navigation.navigate('ModuleF8Screen');
+  };
+  const handleModuleF9 = () => {
+    navigation.navigate('ModuleF9Screen');
+  };
+  const handleModuleF10 = () => {
+    navigation.navigate('ModuleF10Screen');
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
         headerShown: false,
@@ -30,86 +61,86 @@ const ModuleFacListScreen = () => {
             <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
                 <FontAwesome name="map-o" size={20} color="black" />
             </TouchableOpacity>
+      </View>
+
+      <View style={styles.factorContainer}>
+        <View style={styles.row} >
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF1}>
+            <Text style={styles.factorTitle}>Factor 1</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Environmental Education
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF2}>
+            <Text style={styles.factorTitle}>Factor 2</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Environmental Goal
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.factorContainer}>
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 1</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Environmental Education
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 2</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Environmental Goal
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 3</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Personal Experience on Waste Management
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 4</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Environmental{'\n'} Self-Awareness
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 5</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Social Responsibilities
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 6</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Environmental Policy
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 7</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Examplary Leadership
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 8</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Reinforcement Contigencies
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.row}>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 9</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Community Engagement
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.factorBox}>
-              <Text style={styles.factorTitle}>Factor 10</Text>
-              <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
-                Social {'\n'}Technology
-              </Text>
-            </TouchableOpacity>
-          </View>
-          
-
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF3}>
+            <Text style={styles.factorTitle}>Factor 3</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Personal Experience on Waste Management
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF4}>
+            <Text style={styles.factorTitle}>Factor 4</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Environmental{'\n'} Self-Awareness
+            </Text>
+          </TouchableOpacity>
         </View>
+
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF5}>
+            <Text style={styles.factorTitle}>Factor 5</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Social Responsibilities
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF6}>
+            <Text style={styles.factorTitle}>Factor 6</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Environmental Policy
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF7}>
+            <Text style={styles.factorTitle}>Factor 7</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Examplary Leadership
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF8}>
+            <Text style={styles.factorTitle}>Factor 8</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Reinforcement Contigencies
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF9}>
+            <Text style={styles.factorTitle}>Factor 9</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Community Engagement
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF10}>
+            <Text style={styles.factorTitle}>Factor 10</Text>
+            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+              Social {'\n'}Technology
+            </Text>
+          </TouchableOpacity>
+        </View>
+        
+
+      </View>
 
     </SafeAreaView>
   )
@@ -119,24 +150,24 @@ export default ModuleFacListScreen
 
 const styles = StyleSheet.create({
   container:{
-    flex:1
-},
-header:{
-    flexDirection:"row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderBottomWidth:1,
-    borderBottomColor: "#D8D9DB"
+      flex:1
   },
-titleContainer:{
-    flex:1,
-    justifyContent: "center",
-    alignItems:"center",
-    marginLeft: 45,
-  },
-mapBtn:{
+  header:{
+      flexDirection:"row",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 15,
+      paddingVertical: 12,
+      borderBottomWidth:1,
+      borderBottomColor: "#D8D9DB"
+    },
+  titleContainer:{
+      flex:1,
+      justifyContent: "center",
+      alignItems:"center",
+      marginLeft: 45,
+    },
+  mapBtn:{
     backgroundColor: "#529C4E",
     width: 70,
     height: 30,
