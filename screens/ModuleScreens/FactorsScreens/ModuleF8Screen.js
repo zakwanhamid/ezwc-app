@@ -29,7 +29,7 @@ const ModuleF8Screen = () => {
                 <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 1</Text>
+                <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 8</Text>
             </View>
             <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
                 <FontAwesome name="map-o" size={20} color="black"/>
