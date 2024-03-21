@@ -13,6 +13,10 @@ const ModuleBgScreen = () => {
         navigation.navigate('ModuleObjScreen');
       };
 
+    const handleModuleRM = () => {
+        navigation.navigate('ModuleRMScreen');
+    };
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -28,7 +32,7 @@ const ModuleBgScreen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Background</Text> 
             </View>
-            <TouchableOpacity style={styles.mapBtn}>
+            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
                 <FontAwesome name="map-o" size={20} color="black" />
             </TouchableOpacity>
         </View>

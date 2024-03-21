@@ -9,9 +9,9 @@ const ModuleInstrucScreen = () => {
         navigation.goBack(); // Go back to the previous screen
     };
     
-    // const handleModuleInstruc = () => {
-    //     navigation.navigate('ModuleInstrucScreen');
-    // };
+    const handleModuleRM = () => {
+        navigation.navigate('ModuleRMScreen');
+    };
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -28,7 +28,7 @@ const ModuleInstrucScreen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Instructions</Text> 
             </View>
-            <TouchableOpacity style={styles.mapBtn}>
+            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
                 <FontAwesome name="map-o" size={20} color="black" />
             </TouchableOpacity>
         </View>
@@ -92,7 +92,7 @@ const ModuleInstrucScreen = () => {
                 Extra learning materials will be available once you finish this module.
             </Text>
             <View style={styles.btnContainer}>
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={handleModuleRM}>
                     <Text style={{fontSize: 16, fontWeight:600}} > I'm ready ! </Text>
                 </TouchableOpacity>
             </View>

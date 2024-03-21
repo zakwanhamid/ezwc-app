@@ -20,6 +20,7 @@ import EditProfileScreen from './screens/ProfileScreens/EditProfileScreen';
 import ModuleBgScreen from './screens/ModuleScreens/ModuleBgScreen';
 import ModuleObjScreen from './screens/ModuleScreens/ModuleObjScreen';
 import ModuleInstrucScreen from './screens/ModuleScreens/ModuleInstrucScreen';
+import ModuleRMScreen from './screens/ModuleScreens/ModuleRMScreen';
 
 
 
@@ -68,6 +69,7 @@ function ModuleLayout(){
       <InsideStack.Screen name="ModuleBgScreen" component={ModuleBgScreen} />
       <InsideStack.Screen name="ModuleObjScreen" component={ModuleObjScreen} />
       <InsideStack.Screen name="ModuleInstrucScreen" component={ModuleInstrucScreen} />
+      <InsideStack.Screen name="ModuleRMScreen" component={ModuleRMScreen} />
     </InsideStack.Navigator>
   );
 }

@@ -29,7 +29,7 @@ const CreatePostScreen = () => {
     };
 
     const pickImage = async () => {
-        const MAX_TOTAL_SIZE_MB = 60; // Maximum total size in megabytes allowed
+        const MAX_TOTAL_SIZE_MB = 20; // Maximum total size in megabytes allowed
         const totalSizeAllowedBytes = MAX_TOTAL_SIZE_MB * 1024 * 1024; // Convert megabytes to bytes
     
         let totalNewSizeBytes = 0;

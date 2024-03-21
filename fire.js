@@ -39,16 +39,11 @@ class Fire {
                 // console.log('imageObject',image);
                 // console.log('image name:', image.name);
                 const imageRef = ref(this.storage,`images/${userId}/${docRef.id}/${image._data.name}`);
+                await uploadBytes(imageRef,image );
                 console.log('Image uploaded');
                 // console.log('image path:', imageRef.fullPath);
                 // const imageUrl = await getDownloadURL(imageRef);
                 // imageUrls.push(imageUrl);
-
-                try {
-                    await uploadBytes(imageRef,image );
-                } catch (error){
-                    console.error("Error adding post: ", error);
-                }
             }
     
             // // Update the post with image URLs
