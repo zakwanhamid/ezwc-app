@@ -13,7 +13,7 @@ const ModuleF8Screen = () => {
   };
 
   const handleModuleF9 = () => {
-    navigation.navigate('ModuleF2Screen');
+    navigation.navigate('ModuleF9Screen');
   };
 
   useLayoutEffect(() => {

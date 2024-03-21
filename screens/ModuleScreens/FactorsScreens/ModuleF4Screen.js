@@ -13,7 +13,7 @@ const ModuleF4Screen = () => {
   };
 
   const handleModuleF5 = () => {
-    navigation.navigate('ModuleF2Screen');
+    navigation.navigate('ModuleF5Screen');
   };
 
   useLayoutEffect(() => {
