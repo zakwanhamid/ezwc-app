@@ -12,37 +12,6 @@ const ModuleFacSummScreen = () => {
     navigation.navigate('ModuleRMScreen');
   };
 
-  const handleModuleF1 = () => {
-    navigation.navigate('ModuleF1Screen');
-  };
-  const handleModuleF2 = () => {
-    navigation.navigate('ModuleF2Screen');
-  };
-  const handleModuleF3 = () => {
-    navigation.navigate('ModuleF3Screen');
-  };
-  const handleModuleF4 = () => {
-    navigation.navigate('ModuleF4Screen');
-  };
-  const handleModuleF5 = () => {
-    navigation.navigate('ModuleF5Screen');
-  };
-  const handleModuleF6 = () => {
-    navigation.navigate('ModuleF6Screen');
-  };
-  const handleModuleF7 = () => {
-    navigation.navigate('ModuleF7Screen');
-  };
-  const handleModuleF8 = () => {
-    navigation.navigate('ModuleF8Screen');
-  };
-  const handleModuleF9 = () => {
-    navigation.navigate('ModuleF9Screen');
-  };
-  const handleModuleF10 = () => {
-    navigation.navigate('ModuleF10Screen');
-  };
-
   useLayoutEffect(() => {
     navigation.setOptions({
         headerShown: false,
@@ -56,7 +25,7 @@ const ModuleFacSummScreen = () => {
                 <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, fontWeight:"600"}}>10 Factors</Text>
+                <Text style={{ fontSize: 20, fontWeight:"600"}}>Summary</Text>
             </View>
             <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
                 <FontAwesome name="map-o" size={20} color="black" />
@@ -65,13 +34,13 @@ const ModuleFacSummScreen = () => {
 
       <View style={styles.factorContainer}>
         <View style={styles.row} >
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF1}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 1</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Education
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF2}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 2</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Goal
@@ -80,13 +49,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF3}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 3</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Personal Experience on Waste Management
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF4}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 4</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental{'\n'} Self-Awareness
@@ -95,13 +64,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF5}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 5</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social Responsibilities
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF6}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 6</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Policy
@@ -110,13 +79,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF7}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 7</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Examplary Leadership
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF8}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 8</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Reinforcement Contigencies
@@ -125,13 +94,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF9}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 9</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Community Engagement
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF10}>
+          <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 10</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social {'\n'}Technology

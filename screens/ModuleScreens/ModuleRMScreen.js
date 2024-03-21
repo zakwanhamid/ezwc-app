@@ -23,9 +23,9 @@ const ModuleRMScreen = () => {
     const handleModuleFactorList = () => {
         navigation.navigate('ModuleFacListScreen');
     };
-    // const handleModuleSummary = () => {
-    //     navigation.navigate('ModuleBgScreen');
-    // };
+    const handleModuleFacSumm = () => {
+        navigation.navigate('ModuleFacSummScreen');
+    };
     // const handleModuleQuiz = () => {
     //     navigation.navigate('ModuleBgScreen');
     // };
@@ -86,7 +86,7 @@ const ModuleRMScreen = () => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleModuleFacSumm}>
                 <View style={styles.CPContainer}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Summary
