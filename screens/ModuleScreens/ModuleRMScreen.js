@@ -26,12 +26,12 @@ const ModuleRMScreen = () => {
     const handleModuleFacSumm = () => {
         navigation.navigate('ModuleFacSummScreen');
     };
-    // const handleModuleQuiz = () => {
-    //     navigation.navigate('ModuleBgScreen');
-    // };
-    // const handleModuleFeeback = () => {
-    //     navigation.navigate('ModuleBgScreen');
-    // };
+    const handleModuleQuiz = () => {
+        navigation.navigate('ModuleQuizScreen');
+    };
+    const handleModuleFeeback = () => {
+        navigation.navigate('ModuleFeedbackScreen');
+    };
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -93,14 +93,14 @@ const ModuleRMScreen = () => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleModuleQuiz}>
                 <View style={styles.CPContainer}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Quiz
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleModuleFeeback}>
                 <View style={styles.CPContainer}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Feedback
