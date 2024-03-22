@@ -164,8 +164,7 @@ const ModuleFacListScreen = () => {
 
         <View style={styles.progressBar}>
           <Text style={styles.progressText}>
-            PROGRESS BAR HERE !!
-            {progressPercentage}
+            YOUR PROGRESS : {progressPercentage}
           </Text>
         </View>
         
