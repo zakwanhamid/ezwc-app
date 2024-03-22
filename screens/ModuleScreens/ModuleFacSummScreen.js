@@ -12,6 +12,8 @@ const ModuleFacSummScreen = () => {
     navigation.navigate('ModuleRMScreen');
   };
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [isModalVisible3, setIsModalVisible3] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,7 +43,7 @@ const ModuleFacSummScreen = () => {
               Environmental Education
             </Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible2(true)}>
             <Text style={styles.factorTitle}>Factor 2</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Goal
@@ -50,7 +52,7 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible3(true)}>
             <Text style={styles.factorTitle}>Factor 3</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Personal Experience on Waste Management
@@ -137,6 +139,204 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible3} 
+        onRequestClose={() => setIsModalVisible3(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 3</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible3(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal 
+        visible={isModalVisible2} 
+        onRequestClose={() => setIsModalVisible2(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
               <Text> Close </Text>
             </TouchableOpacity>
           </View>
