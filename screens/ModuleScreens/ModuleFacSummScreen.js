@@ -14,6 +14,13 @@ const ModuleFacSummScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isModalVisible3, setIsModalVisible3] = useState(false);
+  const [isModalVisible4, setIsModalVisible4] = useState(false);
+  const [isModalVisible5, setIsModalVisible5] = useState(false);
+  const [isModalVisible6, setIsModalVisible6] = useState(false);
+  const [isModalVisible7, setIsModalVisible7] = useState(false);
+  const [isModalVisible8, setIsModalVisible8] = useState(false);
+  const [isModalVisible9, setIsModalVisible9] = useState(false);
+  const [isModalVisible10, setIsModalVisible10] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
