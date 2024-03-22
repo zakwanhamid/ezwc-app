@@ -65,7 +65,7 @@ const ModuleFacSummScreen = () => {
               Personal Experience on Waste Management
             </Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible4(true)}>
             <Text style={styles.factorTitle}>Factor 4</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental{'\n'} Self-Awareness
@@ -74,13 +74,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible5(true)}>
             <Text style={styles.factorTitle}>Factor 5</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social Responsibilities
             </Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible6(true)}>
             <Text style={styles.factorTitle}>Factor 6</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Policy
@@ -89,13 +89,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible7(true)}>
             <Text style={styles.factorTitle}>Factor 7</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Examplary Leadership
             </Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible8(true)}>
             <Text style={styles.factorTitle}>Factor 8</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Reinforcement Contigencies
@@ -104,13 +104,13 @@ const ModuleFacSummScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible9(true)}>
             <Text style={styles.factorTitle}>Factor 9</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Community Engagement
             </Text> */}
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox}onPress={() => setIsModalVisible10(true)}>
             <Text style={styles.factorTitle}>Factor 10</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social {'\n'}Technology
