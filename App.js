@@ -33,6 +33,8 @@ import ModuleF8Screen from './screens/ModuleScreens/FactorsScreens/ModuleF8Scree
 import ModuleF9Screen from './screens/ModuleScreens/FactorsScreens/ModuleF9Screen';
 import ModuleF10Screen from './screens/ModuleScreens/FactorsScreens/ModuleF10Screen';
 import ModuleFacSummScreen from './screens/ModuleScreens/ModuleFacSummScreen';
+import ModuleQuizScreen from './screens/ModuleScreens/ModuleQuizScreen';
+import ModuleFeedbackScreen from './screens/ModuleScreens/ModuleFeedbackScreen';
 
 
 
@@ -94,6 +96,8 @@ function ModuleLayout(){
       <InsideStack.Screen name="ModuleF9Screen" component={ModuleF9Screen} />
       <InsideStack.Screen name="ModuleF10Screen" component={ModuleF10Screen} />
       <InsideStack.Screen name="ModuleFacSummScreen" component={ModuleFacSummScreen} />
+      <InsideStack.Screen name="ModuleQuizScreen" component={ModuleQuizScreen} />
+      <InsideStack.Screen name="ModuleFeedbackScreen" component={ModuleFeedbackScreen} />
 
     </InsideStack.Navigator>
   );
