@@ -42,11 +42,17 @@ const ModuleScreen = () => {
       
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBar}>
+            <TouchableOpacity>
             <Text style={{
               fontSize:14, 
               textAlign:'center', 
               fontWeight: 700,
               }}>Progress: {progressPercentage}</Text>
+              <View style={{alignItems:'center'}}>
+                <Text style={{color: "gray"}}>
+                  Click here to continue your progress
+                </Text>
+              </View>
             {/* <Progress.Bar
               animated={true}
               size={40}
@@ -55,10 +61,11 @@ const ModuleScreen = () => {
               color="#529C4E"
               borderWidth={2}
             /> */}
+            </TouchableOpacity> 
           </View>
         </View>
 
-        <View style={{alignItems: "center", marginTop: 20}}>
+        <View style={{alignItems: "center", marginTop: 30}}>
           <Image source={require('../../assets/modulePageImage.png')}/>
         </View>
         <View style={{justifyContent: "center", alignItems:"center"}}>
@@ -77,13 +84,7 @@ const ModuleScreen = () => {
             <Text style={{fontSize: 16, fontWeight:600}} > ENTER </Text>
           </TouchableOpacity>
         </View>
-        <View style={{alignItems:'center', marginTop: 20}}>
-          <TouchableOpacity>
-            <Text style={{color: "gray"}}>
-              Click the here to continue your progress
-            </Text>
-          </TouchableOpacity>
-        </View>
+        
 
     </SafeAreaView>
   )
@@ -117,6 +118,7 @@ const styles = StyleSheet.create({
     },
     progressBar:{
       position: 'absolute',
+      marginTop: 2,
     }
 
 
