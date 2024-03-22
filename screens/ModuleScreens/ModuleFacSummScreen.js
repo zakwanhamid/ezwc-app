@@ -11,6 +11,9 @@ const ModuleFacSummScreen = () => {
   const handleModuleRM = () => {
     navigation.navigate('ModuleRMScreen');
   };
+  const handleModuleQuiz = () => {
+    navigation.navigate('ModuleQuizScreen')
+  };
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [isModalVisible3, setIsModalVisible3] = useState(false);
@@ -119,7 +122,7 @@ const ModuleFacSummScreen = () => {
         </View>
       </View>
       <View style={{alignItems:'center', justifyContent: 'center', marginTop:20 }}>
-        <TouchableOpacity style={styles.NextBtn}>
+        <TouchableOpacity style={styles.NextBtn} onPress={handleModuleQuiz}>
             <Text style={{
                 fontSize: 15,
                 fontWeight: 600,
