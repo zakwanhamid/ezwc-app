@@ -12,6 +12,9 @@ const ModuleF10Screen = () => {
   const handleModuleFacList = () => {
     navigation.navigate('ModuleFacListScreen');
   };
+  const handleModuleFacSumm = () => {
+    navigation.navigate('ModuleFacSummScreen');
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,12 +37,12 @@ const ModuleF10Screen = () => {
         </View>
 
         <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFacList}>
+            <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFacSumm}>
                 <Text style={{
                     fontSize: 15,
                     fontWeight: 600,
                 }}>
-                    Next Factor
+                    Summary
                 </Text>
             </TouchableOpacity>
         </View>

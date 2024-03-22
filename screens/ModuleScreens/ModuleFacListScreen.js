@@ -138,6 +138,12 @@ const ModuleFacListScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
+
+        <View style={styles.progressBar}>
+          <Text style={styles.progressText}>
+            PROGRESS BAR HERE !!
+          </Text>
+        </View>
         
 
       </View>
@@ -211,4 +217,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold'
   },
+  progressBar:{
+    marginTop: 20,
+  },
+  progressText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+  }
+
 })

@@ -1,5 +1,5 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useLayoutEffect, useState } from 'react'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 
@@ -11,6 +11,7 @@ const ModuleFacSummScreen = () => {
   const handleModuleRM = () => {
     navigation.navigate('ModuleRMScreen');
   };
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,82 +35,114 @@ const ModuleFacSummScreen = () => {
 
       <View style={styles.factorContainer}>
         <View style={styles.row} >
-          <TouchableOpacity style={styles.factorBox}>
+          <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.factorTitle}>Factor 1</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Education
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 2</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Goal
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 3</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Personal Experience on Waste Management
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 4</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental{'\n'} Self-Awareness
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 5</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social Responsibilities
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 6</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Policy
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 7</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Examplary Leadership
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 8</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Reinforcement Contigencies
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         </View>
 
         <View style={styles.row}>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 9</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Community Engagement
-            </Text>
+            </Text> */}
           </TouchableOpacity>
           <TouchableOpacity style={styles.factorBox}>
             <Text style={styles.factorTitle}>Factor 10</Text>
-            <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
+            {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social {'\n'}Technology
-            </Text>
+            </Text> */}
           </TouchableOpacity>
         </View>
-        
-
       </View>
+      <View style={{alignItems:'center', justifyContent: 'center', marginTop:20 }}>
+        <TouchableOpacity style={styles.NextBtn}>
+            <Text style={{
+                fontSize: 15,
+                fontWeight: 600,
+            }}>
+                Quiz!
+            </Text>
+        </TouchableOpacity>
+      </View>
+
+      
+      <Modal 
+        visible={isModalVisible} 
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 1</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalSumm, {textAlign:'center'}]}>
+              Environmental education is a process that allows individuals to explore
+              environmental issues, engage in problem-solving, and take steps to protect the 
+              environment to gain a better understanding of the issues and make more informed decisions.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible(false)}>
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+      
 
     </SafeAreaView>
   )
@@ -179,5 +212,47 @@ const styles = StyleSheet.create({
   factorTitle: {
     fontSize: 18,
     fontWeight: 'bold'
+  },
+  NextBtn:{
+    backgroundColor: "#529C4E",
+    width: 100,
+    height: 40,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOpacity: 0.5,
+    shadowOffset:{
+        width: 0,
+        height: 2,
+    }
+  },
+  modalBg: {
+    flex: 1, 
+    backgroundColor: 'rgba(0,0,0,0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  modalContainer:{
+    width: '80%',
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+    alignItems:'center'
+  },
+  modalHeader:{
+    fontSize: 20,
+  },
+  modalTitle:{
+    fontSize: 18,
+  },
+  modalSumm:{
+    fontSize: 16,
+    marginTop: 20,
+  },
+  CloseBtn:{
+    
   },
 })
