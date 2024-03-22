@@ -23,7 +23,8 @@ const Login = () => {
                 following: [],
                 followers: [],
                 listings: [],
-                posts: []
+                posts: [],
+                module: 0,
             });
             console.log('User profile created successfully!');
         } catch (error) {

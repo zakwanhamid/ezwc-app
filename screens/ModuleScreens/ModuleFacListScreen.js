@@ -49,6 +49,8 @@ const ModuleFacListScreen = () => {
     });
   }, [navigation]);
 
+  
+
   return (
     <SafeAreaView>
       <View style={styles.header}>
