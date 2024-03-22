@@ -1,10 +1,15 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
 const ModuleFacListScreen = () => {
   const navigation = useNavigation();
+  const [currentUser ,setCurrentUser] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const progressPercentage = (currentUser.module / 10 * 100) + '%';
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
@@ -49,7 +54,23 @@ const ModuleFacListScreen = () => {
     });
   }, [navigation]);
 
-  
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+
+    const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+        if (documentSnapshot.exists()) {
+            const userData = documentSnapshot.data(); // Get user data directly
+            setCurrentUser(userData);
+            setLoading(false);
+        } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+        }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <SafeAreaView>
@@ -144,6 +165,7 @@ const ModuleFacListScreen = () => {
         <View style={styles.progressBar}>
           <Text style={styles.progressText}>
             PROGRESS BAR HERE !!
+            {progressPercentage}
           </Text>
         </View>
         
