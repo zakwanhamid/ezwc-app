@@ -47,6 +47,8 @@ const EditProfileScreen = () => {
                 bio: bio,
             });
             alert('Profile updated successfully!');
+            navigation.navigate('ProfileScreen');
+
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile. Please try again.');

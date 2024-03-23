@@ -44,7 +44,7 @@ const ModuleScreen = () => {
         navigation.navigate('ModuleF10Screen');
         break;
       case 10:
-        alert('You have completed this module!');
+        alert('You have completed this module! Proceed to quiz section');
         break;
       default:
         // Navigate to a default screen if module value doesn't match any case

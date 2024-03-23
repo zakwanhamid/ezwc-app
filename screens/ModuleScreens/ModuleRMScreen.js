@@ -1,16 +1,20 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { collection, doc, onSnapshot } from 'firebase/firestore';
 
 const ModuleRMScreen = () => {
     const navigation = useNavigation();
+    const [currentUser ,setCurrentUser] = useState([]);
+    const [loading, setLoading] = useState(true);
     const goBack = () => {
         navigation.goBack(); // Go back to the previous screen
     };
     const handleModuleMP = () => {
         navigation.navigate('ModuleScreen');
-      };
+    };
     const handleModuleBg = () => {
         navigation.navigate('ModuleBgScreen');
     };
@@ -32,6 +36,25 @@ const ModuleRMScreen = () => {
     const handleModuleFeeback = () => {
         navigation.navigate('ModuleFeedbackScreen');
     };
+
+
+    useEffect(() => {
+        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+        const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+    
+        const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+            if (documentSnapshot.exists()) {
+                const userData = documentSnapshot.data(); // Get user data directly
+                setCurrentUser(userData);
+                setLoading(false);
+            } else {
+                // Handle case where user document doesn't exist
+                console.log("User document does not exist");
+            }
+        });
+    
+        return () => unsubscribe();
+      }, []);
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -86,22 +109,22 @@ const ModuleRMScreen = () => {
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleModuleFacSumm}>
-                <View style={styles.CPContainer}>
+            <TouchableOpacity onPress={handleModuleFacSumm} disabled={currentUser.module < 10}>
+                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Summary
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleModuleQuiz}>
-                <View style={styles.CPContainer}>
+            <TouchableOpacity onPress={handleModuleQuiz} disabled={currentUser.module < 10}>
+                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Quiz
                     </Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleModuleFeeback}>
-                <View style={styles.CPContainer}>
+            <TouchableOpacity onPress={handleModuleFeeback} disabled={currentUser.module < 10}>
+                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
                     <Text style={{...styles.CPTitle, fontWeight:500}}>
                         Feedback
                     </Text>
@@ -153,6 +176,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 20,
         backgroundColor: "#529C4E",
+        height: 50,
+        width: 300,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'white',
+        shadowColor: "#000",
+        shadowOpacity: 0.5,
+        shadowOffset:{
+            width: 0,
+            height: 2,
+        }
+    },
+    disabledCP:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        backgroundColor: "lightblue",
         height: 50,
         width: 300,
         borderRadius: 10,

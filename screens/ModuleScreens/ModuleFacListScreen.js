@@ -81,7 +81,7 @@ const ModuleFacListScreen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>10 Factors</Text>
             </View>
-            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
+            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM} >
                 <FontAwesome name="map-o" size={20} color="black" />
             </TouchableOpacity>
       </View>
@@ -94,7 +94,8 @@ const ModuleFacListScreen = () => {
               Environmental Education
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF2}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 1 && styles.disabledFactorBox]} 
+          onPress={handleModuleF2} disabled={currentUser.module < 1}>
             <Text style={styles.factorTitle}>Factor 2</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Goal
@@ -103,13 +104,15 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF3}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 2 && styles.disabledFactorBox]}  
+          onPress={handleModuleF3} disabled={currentUser.module < 2}>
             <Text style={styles.factorTitle}>Factor 3</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Personal Experience on Waste Management
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF4}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 3 && styles.disabledFactorBox]}  
+          onPress={handleModuleF4} disabled={currentUser.module < 3}>
             <Text style={styles.factorTitle}>Factor 4</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental{'\n'} Self-Awareness
@@ -118,13 +121,15 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF5}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 4 && styles.disabledFactorBox]} 
+          onPress={handleModuleF5} disabled={currentUser.module < 4}>
             <Text style={styles.factorTitle}>Factor 5</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social Responsibilities
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF6}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 5 && styles.disabledFactorBox]} 
+          onPress={handleModuleF6} disabled={currentUser.module < 5}>
             <Text style={styles.factorTitle}>Factor 6</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Environmental Policy
@@ -133,13 +138,15 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF7}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 6 && styles.disabledFactorBox]} 
+          onPress={handleModuleF7} disabled={currentUser.module < 6}>
             <Text style={styles.factorTitle}>Factor 7</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Examplary Leadership
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF8}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 7 && styles.disabledFactorBox]}  
+          onPress={handleModuleF8} disabled={currentUser.module < 7}>
             <Text style={styles.factorTitle}>Factor 8</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Reinforcement Contigencies
@@ -148,13 +155,15 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF9}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 8 && styles.disabledFactorBox]} 
+          onPress={handleModuleF9} disabled={currentUser.module < 8}>
             <Text style={styles.factorTitle}>Factor 9</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Community Engagement
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.factorBox} onPress={handleModuleF10}>
+          <TouchableOpacity style={[styles.factorBox, currentUser.module < 9 && styles.disabledFactorBox]}  
+          onPress={handleModuleF10} disabled={currentUser.module < 9}>
             <Text style={styles.factorTitle}>Factor 10</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Social {'\n'}Technology
@@ -220,6 +229,23 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   factorBox: {
+    width: 150,
+    // height: 100,
+    backgroundColor: '#529C4E',
+    marginHorizontal: 5,
+    alignItems: 'center',
+    padding: 15,
+    borderRadius:10,
+    borderWidth: 1,
+      borderColor: 'white',
+      shadowColor: "#000",
+      shadowOpacity: 0.5,
+      shadowOffset:{
+          width: 0,
+          height: 2,
+      }
+  },
+  disabledFactorBox: {
     width: 150,
     // height: 100,
     backgroundColor: 'lightblue',
