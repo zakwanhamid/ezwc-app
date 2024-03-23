@@ -1,10 +1,14 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
+import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebase';
 
 const ModuleF7Screen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [currentUser ,setCurrentUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
@@ -12,8 +16,42 @@ const ModuleF7Screen = () => {
     navigation.navigate('ModuleFacListScreen');
   };
 
-  const handleModuleF8 = () => {
-    navigation.navigate('ModuleF8Screen');
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+
+    const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+        if (documentSnapshot.exists()) {
+            const userData = documentSnapshot.data(); // Get user data directly
+            setCurrentUser(userData);
+            setLoading(false);
+        } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+        }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleModuleF8 = async () => {
+    console.log(currentUser.module)
+
+    if (currentUser.module === 6) {
+      try {
+        const userRef = doc(FIREBASE_DB, 'users', FIREBASE_AUTH.currentUser.uid);
+        await updateDoc(userRef, {
+            module: currentUser.module + 1 // Increment module by 1
+        });
+        navigation.navigate('ModuleF8Screen');
+      } catch (error) {
+          console.error('Error updating module counter:', error);
+      }
+      console.log(currentUser.module)
+    }else {
+      console.log('Module counter is already 7');
+      navigation.navigate('ModuleF8Screen');
+    }
   };
 
   useLayoutEffect(() => {

@@ -1,10 +1,14 @@
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
+import { collection, doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../../firebase';
 
 const ModuleF10Screen = () => {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [currentUser ,setCurrentUser] = useState([]);
+  const [loading, setLoading] = useState(true);
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
@@ -12,8 +16,43 @@ const ModuleF10Screen = () => {
   const handleModuleFacList = () => {
     navigation.navigate('ModuleFacListScreen');
   };
-  const handleModuleFacSumm = () => {
-    navigation.navigate('ModuleFacSummScreen');
+
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+
+    const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+        if (documentSnapshot.exists()) {
+            const userData = documentSnapshot.data(); // Get user data directly
+            setCurrentUser(userData);
+            setLoading(false);
+        } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+        }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleModuleFacSumm = async () => {
+    console.log(currentUser.module)
+
+    if (currentUser.module === 9) {
+      try {
+        const userRef = doc(FIREBASE_DB, 'users', FIREBASE_AUTH.currentUser.uid);
+        await updateDoc(userRef, {
+            module: currentUser.module + 1 // Increment module by 1
+        });
+        navigation.navigate('ModuleFacSummScreen');
+      } catch (error) {
+          console.error('Error updating module counter:', error);
+      }
+      console.log(currentUser.module)
+    }else {
+      console.log('User have completed all 10 factors');
+      navigation.navigate('ModuleFacSummScreen');
+    }
   };
 
   useLayoutEffect(() => {

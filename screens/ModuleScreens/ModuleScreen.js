@@ -13,11 +13,53 @@ const ModuleScreen = () => {
   const handleModuleBg = () => {
     navigation.navigate('ModuleBgScreen');
   };
+  const handleContModule = () => {
+    // Switch statement based on currentUser.module
+    switch (currentUser.module) {
+      case 1:
+        navigation.navigate('ModuleF2Screen');
+        break;
+      case 2:
+        navigation.navigate('ModuleF3Screen');
+        break;
+      case 3:
+        navigation.navigate('ModuleF4Screen');
+        break;
+      case 4:
+        navigation.navigate('ModuleF5Screen');
+        break;
+      case 5:
+        navigation.navigate('ModuleF6Screen');
+        break;
+      case 6:
+        navigation.navigate('ModuleF7Screen');
+        break;
+      case 7:
+        navigation.navigate('ModuleF8Screen');
+        break;
+      case 8:
+        navigation.navigate('ModuleF9Screen');
+        break;
+      case 9:
+        navigation.navigate('ModuleF10Screen');
+        break;
+      case 10:
+        alert('You have completed this module!');
+        break;
+      default:
+        // Navigate to a default screen if module value doesn't match any case
+        alert('Press Enter to start the module');
+        break;
+    }
+  }
+
   useLayoutEffect(() => {
     navigation.setOptions({
         headerShown: false,
     });
   }, [navigation]);
+
+  
 
   useEffect(() => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
@@ -42,7 +84,7 @@ const ModuleScreen = () => {
       
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBar}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleContModule}>
             <Text style={{
               fontSize:14, 
               textAlign:'center', 
