@@ -86,6 +86,9 @@ const EditProfileScreen = () => {
                 maxLength={30}
                 value={name}
                 onChangeText={setName}
+                autoCorrect= {false}
+                autoCapitalize='none'
+
 
             />
             {/* Input for bio */}
@@ -97,6 +100,8 @@ const EditProfileScreen = () => {
                 style={[styles.input,{height: 100}]}
                 placeholder='Bio'
                 value={bio}
+                autoCapitalize='none'
+                autoCorrect= {false}
                 onChangeText={(text) => {
                     handleTextChange(text);
                     setBio(text);

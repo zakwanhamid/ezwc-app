@@ -9,19 +9,19 @@ const ModuleBgScreen = () => {
     navigation.goBack(); // Go back to the previous screen
     };
 
-    const handleModuleObj = () => {
-        navigation.navigate('ModuleObjScreen');
-      };
-
-    const handleModuleRM = () => {
-        navigation.navigate('ModuleRMScreen');
+  const handleModuleObj = () => {
+      navigation.navigate('ModuleObjScreen');
     };
 
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerShown: false,
-        });
-    }, [navigation]);
+  const handleModuleRM = () => {
+      navigation.navigate('ModuleRMScreen');
+  };
+
+  useLayoutEffect(() => {
+      navigation.setOptions({
+          headerShown: false,
+      });
+  }, [navigation]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems:"center",
         marginLeft: 45,
+        
       },
     mapBtn:{
         backgroundColor: "#529C4E",

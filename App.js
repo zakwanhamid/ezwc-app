@@ -35,6 +35,7 @@ import ModuleF10Screen from './screens/ModuleScreens/FactorsScreens/ModuleF10Scr
 import ModuleFacSummScreen from './screens/ModuleScreens/ModuleFacSummScreen';
 import ModuleQuizScreen from './screens/ModuleScreens/ModuleQuizScreen';
 import ModuleFeedbackScreen from './screens/ModuleScreens/ModuleFeedbackScreen';
+import ProfileSearchScreen from './screens/ProfileScreens/ProfileSearchScreen';
 
 
 
@@ -63,6 +64,7 @@ function HomeLayout(){
     <InsideStack.Navigator>
       <InsideStack.Screen name="HomeScreen" component={HomeScreen} />
       <InsideStack.Screen name="CreatePostScreen" component={CreatePostScreen} />
+      <InsideStack.Screen name="ProfileSearchScreen" component={ProfileSearchScreen} />
     </InsideStack.Navigator>
   );
 }

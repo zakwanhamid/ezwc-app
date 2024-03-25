@@ -144,6 +144,8 @@ const CreatePostScreen = () => {
                     autoFocus={true}
                     multiline={true}
                     numberOfLines={20}
+                    autoCapitalize='none'
+                    autoCorrect= {false}
                     style={{ flex: 1}}
                     placeholder='Want to share something?'
                     value={text}
