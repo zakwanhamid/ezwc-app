@@ -1,10 +1,12 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 
 const ModuleQuizScreen = () => {
   const navigation = useNavigation();
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [score, setScore] = useState(null);
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
@@ -15,6 +17,111 @@ const ModuleQuizScreen = () => {
     navigation.navigate('ModuleFeedbackScreen');
   };
 
+  const questions = [
+    {
+      question: '1. Which of the following does not describe zero-waste?',
+      options: [
+        'The conservation of all resources', 
+        'Encourage waste-to-energy coversion-', 
+        'To maximize recycling', 
+        'To minimize production of waste'],
+      correctAnswer: 'Encourage waste-to-energy coversion-',
+    },
+    {
+      question: '2. The SMART Goal to promote zero waste is important. The goal must be spcific, measurable, achievable _______ and timely.',
+      options: [
+        'Simple', 
+        'Complex', 
+        'Realistic-', 
+        'Big'],
+      correctAnswer: 'Realistic-',
+    },
+    {
+      question: '3. Participating in zero-waste pro environmental activities can provide the community with a personal experience that allows us to better realte our experiences to zero waste and environmental information.',
+      options: [
+       'True-', 
+       'False'],
+      correctAnswer: 'True-',
+    },
+    {
+      question: '4. Being environmentally self aware is chareacterised by the following:',
+      options: [
+        'Being aware of environmental issues', 
+        'Determining which actions can have an impact on the environment',
+        'Being self-aware of the personal environmental philosophies', 
+        'All of above-'],
+      correctAnswer: 'All of above-',
+    },
+    {
+      question: '5.  Individuals are responsible towards their impact on the environment and, if feasible, minimising the harm they cause to the environment.',
+      options: [ 'True-', 'False'],
+      correctAnswer: 'True-',
+    },
+    {
+      question: '6. USM policy includes a whole system approach which involves four major domains of ______.',
+      options: [
+        'Teaching, research, community engagement and institutional arrangement-',
+        'Teaching, learning, community engagement and institutional arrangement', 
+        'Teaching, learning, public relationship, and institutional arrangement', 
+        'Teaching, research, public relationship and institutional arrangement'],
+      correctAnswer: 'Teaching, research, community engagement and institutional arrangement-',
+    },
+    {
+      question: '7. The five practices of exemplary leadership include the following, except ______?',
+      options: [
+      'Model the way', 
+      'Inspire a shared vision', 
+      'Encourage the heart', 
+      'Challenge the people-'],
+      correctAnswer: 'Challenge the people-',
+    },
+    {
+      question: '8. Negative reinforcement increases the likelihood of a specific response by removing an unfavourable consequence',
+      options: [
+      'True-', 
+      'False'],
+      correctAnswer: 'True-',
+    },
+    {
+      question: '9. Community engagement is the process of working collaboratively with groups of people who are affiliated by',
+      options: [
+        'Different interest-', 
+        'A common interest', 
+        'Similar circumstances', 
+        'Geograpghic proximity'],
+      correctAnswer: 'Different interest-',
+    },
+    {
+      question: 'Which of the following is not a social media benefit?',
+      options: [
+      'Spreading unfolded information-', 
+      'Entertainment', 
+      'Connecting with people', 
+      'Source of inspiration'],
+      correctAnswer: 'Spreading unfolded information-',
+    },
+    // Add more questions as needed
+  ];
+
+  const handleAnswerSelection = (questionIndex, answer) => {
+    setSelectedAnswers({ ...selectedAnswers, [questionIndex]: answer });
+  };
+
+  const handleCheckAnswers = () => {
+    let currentScore = 0;
+    questions.forEach((question, index) => {
+      if (selectedAnswers[index] === question.correctAnswer) {
+        currentScore++;
+      }
+    });
+    setScore(currentScore);
+  };
+
+  const handleResetAnswers = () => {
+    setSelectedAnswers({});
+    setScore(null);
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
         headerShown: false,
@@ -22,7 +129,7 @@ const ModuleQuizScreen = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView >
       <View style={styles.header}>
         <TouchableOpacity onPress={goBack}>
             <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
@@ -34,16 +141,56 @@ const ModuleQuizScreen = () => {
             <FontAwesome name="map-o" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-        <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFeedback}>
-            <Text style={{
-                fontSize: 15,
-                fontWeight: 600,
-            }}>
-                Feedback
-            </Text>
+
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {questions.map((question, index) => (
+          <View key={index} style={styles.questionContainer}>
+            <Text style={styles.questionText}>{question.question}</Text>
+            {question.options.map((option, optionIndex) => (
+              <TouchableOpacity
+                key={optionIndex}
+                style={[
+                  styles.optionButton,
+                  selectedAnswers[index] === option && styles.selectedOption,
+                ]}
+                onPress={() => handleAnswerSelection(index, option)}
+                disabled={score !== null}
+              >
+                <Text style={styles.optionText}>{option}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        ))}
+        <TouchableOpacity
+          style={styles.checkButton}
+          onPress={handleCheckAnswers}
+          disabled={score !== null}
+        >
+          <Text style={styles.checkButtonText}>Check Answers</Text>
         </TouchableOpacity>
-      </View>
+        <TouchableOpacity
+          style={styles.resetButton}
+          onPress={handleResetAnswers}
+          disabled={score !== null}
+        >
+          <Text style={styles.resetButtonText}>Reset Answers</Text>
+        </TouchableOpacity>
+
+        {score !== null && (
+          <Text style={styles.scoreText}>Score: {score} / {questions.length}</Text>
+        )}
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFeedback}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Feedback
+              </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -96,5 +243,61 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         }
-      },
+    },
+
+    scrollContainer: {
+      marginTop:20,
+      paddingHorizontal: 20,
+      paddingBottom: 200,
+    },
+    questionContainer: {
+      marginBottom: 20,
+    },
+    questionText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 10,
+    },
+    optionButton: {
+      borderWidth: 1,
+      borderColor: 'black',
+      borderRadius: 10,
+      padding: 10,
+      marginVertical: 5,
+    },
+    selectedOption: {
+      backgroundColor: 'lightblue',
+    },
+    optionText: {
+      fontSize: 16,
+    },
+    checkButton: {
+      backgroundColor: 'blue',
+      padding: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 20,
+    },
+    checkButtonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    resetButton: {
+      backgroundColor: 'red',
+      padding: 10,
+      borderRadius: 10,
+      alignItems: 'center',
+      marginTop: 10,
+    },
+    resetButtonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    scoreText: {
+      marginTop: 20,
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
 })
