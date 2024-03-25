@@ -1,19 +1,54 @@
-import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
 
 const ProfileSearchScreen = () => {
   const navigation = useNavigation();
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
         headerShown: false,
     });
   }, [navigation]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const usersQuery = query(collection(FIREBASE_DB, 'users'));
+        const querySnapshot = await getDocs(usersQuery);
+
+        const userData = [];
+        querySnapshot.forEach((doc) => {
+          userData.push({ id: doc.id, ...doc.data() });
+        });
+
+        setUsers(userData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching users: ', error);
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+
+
+
+
 
   return (
     <SafeAreaView>
@@ -31,8 +66,25 @@ const ProfileSearchScreen = () => {
             clearButtonMode='always' 
             autoCapitalize='none'
             style={styles.searchBar}
+            autoCorrect={false}
+            // value={searchQuery}
+            onChangeText={(query) => handleSearch(query)}
             />
         </View>
+        <FlatList data={users} keyExtractor={(item) => item.id } 
+        renderItem={({ item }) => (
+            <TouchableOpacity>
+                <View style={styles.profiles}>
+                    <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+                    <View style={{marginVertical:14, marginLeft: 10,}}>
+                        <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+                        <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+          
+        )}/>
+        
     </SafeAreaView>
     
   )
@@ -68,5 +120,20 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth:1,
         borderRadius:8,
-    }
+    },
+    profiles:{
+        flexDirection: "row",
+        paddingVertical: 7,
+        paddingHorizontal: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D8D9DB",
+    },
+    profilesAvatar:{
+        width: 60,
+        height:60,
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 2,
+    },
+    
 })

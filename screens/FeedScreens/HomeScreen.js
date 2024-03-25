@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, TextInput, ScrollView } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH } from '../../firebase';
@@ -28,6 +28,7 @@ const HomeScreen = () => {
   //     setUserEmail(currentUser.email);
   //   }
   // }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -42,10 +43,162 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.body}>
-        <Text>This is HomeScreen</Text>
-        <Text>You can view all post from your following here</Text>
+      <View style={{paddingBottom: 120}}>
+      <ScrollView>
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View>
+              
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
       </View>
+
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/mrcrab.png")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/patrick.png")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/plankton.png")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/sidney.png")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+
+      <View style={styles.postItem}>
+        <View style={{width:'15%', marginRight: '5%'}}>
+            <Image source={require("../../assets/squid.png")} style={styles.postAvatar}></Image>
+        </View>
+        <View style={{width:'80%', marginTop: 8}}>
+            <View >
+                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
+                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
+                <Text>11/11/2024, 12:12 PM </Text>
+            </View>
+            <View style={{marginTop:5}}>
+                <Text >This is so new</Text>
+            </View>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Like</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+      </View>
+
+      </ScrollView>
+      </View>
+      
+
+
+      
+
 
 
     </SafeAreaView>
@@ -76,6 +229,32 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  postItem: {
+    flexDirection: "row",
+    paddingTop: 7,
+    paddingHorizontal: 7,
+    borderBottomWidth: 1,
+    borderBottomColor: "#D8D9DB",
+  },
+  postAvatar: {
+      width: 60,
+      height:60,
+      borderRadius: 50,
+      borderColor: "white",
+      borderWidth: 2,
+  },
+
+  button: {
+      width: "50%", 
+      alignItems: "center",
+      padding: 10,
+      borderBottomColor: "#529C4E"
+  },
+
+  buttonText: {
+      fontSize: 16,
+      marginLeft: 8,
   },
 })
 
