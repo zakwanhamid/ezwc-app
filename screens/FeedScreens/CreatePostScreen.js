@@ -89,8 +89,7 @@ const CreatePostScreen = () => {
         const blobImages = [];
         for (const uri of images) {
             const blob = await uriToBlob(uri);
-            blobImages.push(blob);
-            
+            blobImages.push(blob); 
         }
 
   // Save text and Blob images to Firestore using Fire.shared.addPost method
@@ -151,8 +150,8 @@ const CreatePostScreen = () => {
                     onChangeText={handleTextChange}
                     maxLength={280}
                 ></TextInput>
-                
             </View>
+
             <View>
                 <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: charCount <= 0 ? 'red' : 'grey' }}>
                     {charCount <= 0 ? '0' : charCount} characters left

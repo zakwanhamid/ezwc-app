@@ -1,18 +1,36 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import { Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 const ModuleFeedbackScreen = () => {
   const navigation = useNavigation();
-  const goBack = () => {
-    navigation.goBack(); // Go back to the previous screen
-  };
+  const [feedback, setFeedback] = useState('');
+  // const goBack = () => {
+  //   navigation.goBack(); // Go back to the previous screen
+  // };
   const handleModuleRM = () => {
     navigation.navigate('ModuleRMScreen');
   };
-  const handleModuleMP= () => {
-    navigation.navigate('ModuleScreen');
+
+  const handleSendFeedback = async () => {
+    const user = FIREBASE_AUTH.currentUser;
+    const userId = user.uid;
+    try {
+      // Add the feedback to the 'feedbacks' collection in Firestore
+      const docRef = await addDoc(collection(FIREBASE_DB, 'feedbacks'), {
+        userId: userId,
+        feedback: feedback,
+        timestamp: new Date(),
+      });
+      console.log('Feedback added with ID: ', docRef.id);
+      alert('Thank you for your feedback, we really appreciate it. We will try to improve this module so everyone else including you will get the best learning experience!')
+      navigation.navigate('ModuleScreen');
+    } catch (error) {
+      console.error('Error adding feedback: ', error);
+    }
   };
 
   useLayoutEffect(() => {
@@ -24,8 +42,11 @@ const ModuleFeedbackScreen = () => {
   return (
     <SafeAreaView>
       <View style={styles.header}>
-        <TouchableOpacity onPress={goBack}>
+        {/* <TouchableOpacity onPress={goBack}>
             <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+        </TouchableOpacity> */}
+        <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
+            <FontAwesome name="map-o" size={20} color="black" />
         </TouchableOpacity>
         <View style={styles.titleContainer}>
             <Text style={{ fontSize: 20, fontWeight:"600"}}>Feedback</Text>
@@ -35,14 +56,33 @@ const ModuleFeedbackScreen = () => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.titleBox}>
+        <Text style={styles.titleText}>
+          Give us your feedback so we can improve this learning module. 
+        </Text>
+      </View>
+
+      <View style={styles.inputContainer}>
+        <TextInput
+            autoFocus={true}
+            multiline={true}
+            numberOfLines={20}
+            style={{ flex: 1}}
+            placeholder='Share your feedback here...'
+            value={feedback}
+            onChangeText={(text) => setFeedback(text)}
+            maxLength={280}
+        ></TextInput>
+      </View>
+
 
       <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-        <TouchableOpacity style={styles.NextBtn} onPress={handleModuleMP}>
+        <TouchableOpacity style={styles.NextBtn} onPress={handleSendFeedback}>
             <Text style={{
                 fontSize: 15,
                 fontWeight: 600,
             }}>
-                Homepage
+                Send 
             </Text>
         </TouchableOpacity>
       </View>
@@ -69,7 +109,7 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent: "center",
         alignItems:"center",
-        marginLeft: 45,
+        marginLeft: 75,
       },
     mapBtn:{
       backgroundColor: "#529C4E",
@@ -85,6 +125,19 @@ const styles = StyleSheet.create({
           height: 2,
       }
     },
+    titleBox:{
+      marginHorizontal:30,
+      marginTop:20,
+    },
+
+    inputContainer:{
+      marginHorizontal: 25,
+      marginTop: 25,
+      paddingBottom: 40,
+      flexDirection: "row",
+      borderBottomWidth:1,
+      borderBottomColor: "#D8D9DB",
+    },
     NextBtn:{
         backgroundColor: "#529C4E",
         width: 100,
@@ -98,5 +151,5 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         }
-      },
+    },
 })

@@ -2,13 +2,16 @@ import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, 
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH } from '../../firebase';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
   const navigation = useNavigation();
   const handleCreatePost = () => {
     navigation.navigate('CreatePostScreen');
+  };
+  const handleProfileSearch = () => {
+    navigation.navigate('ProfileSearchScreen');
   };
 
   useLayoutEffect(() => {
@@ -28,6 +31,9 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={handleProfileSearch}>
+        <FontAwesome name="search" size={22} color="#529C4E" />
+        </TouchableOpacity>
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight:"600"}}>Feed</Text> 
         </View>
@@ -64,7 +70,7 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent: "center",
     alignItems:"center",
-    marginLeft: 50,
+    marginLeft: 10,
   },
   body:{
     flex: 1,

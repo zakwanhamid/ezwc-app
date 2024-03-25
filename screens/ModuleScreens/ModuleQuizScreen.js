@@ -1,4 +1,4 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -6,7 +6,11 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 const ModuleQuizScreen = () => {
   const navigation = useNavigation();
   const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [score, setScore] = useState(null);
+  const [isModalVisibleFullMark, setIsModalVisibleFullMark] = useState(false);
+  const [isModalVisibleNotFullMark, setIsModalVisibleNotFullMark] = useState(false);
+
+
+  const [score, setScore] = useState(0);
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
   };
@@ -15,6 +19,9 @@ const ModuleQuizScreen = () => {
   };
   const handleModuleFeedback = () => {
     navigation.navigate('ModuleFeedbackScreen');
+  };
+  const handleModuleSumm = () => {
+    navigation.navigate('ModuleFacSummScreen');
   };
 
   const questions = [
@@ -92,7 +99,7 @@ const ModuleQuizScreen = () => {
       correctAnswer: 'Different interest-',
     },
     {
-      question: 'Which of the following is not a social media benefit?',
+      question: '10. Which of the following is not a social media benefit?',
       options: [
       'Spreading unfolded information-', 
       'Entertainment', 
@@ -113,7 +120,14 @@ const ModuleQuizScreen = () => {
       if (selectedAnswers[index] === question.correctAnswer) {
         currentScore++;
       }
+      console.log("At check modal::",score)
+        if (currentScore === 10) {
+          setIsModalVisibleFullMark(true);
+        } else {
+          setIsModalVisibleNotFullMark(true);
+        }
     });
+    console.log("Current",currentScore)
     setScore(currentScore);
   };
 
@@ -154,7 +168,6 @@ const ModuleQuizScreen = () => {
                   selectedAnswers[index] === option && styles.selectedOption,
                 ]}
                 onPress={() => handleAnswerSelection(index, option)}
-                disabled={score !== null}
               >
                 <Text style={styles.optionText}>{option}</Text>
               </TouchableOpacity>
@@ -163,22 +176,22 @@ const ModuleQuizScreen = () => {
         ))}
         <TouchableOpacity
           style={styles.checkButton}
-          onPress={handleCheckAnswers}
-          disabled={score !== null}
+          onPress= {() => handleCheckAnswers() 
+            }
+          
         >
           <Text style={styles.checkButtonText}>Check Answers</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.resetButton}
           onPress={handleResetAnswers}
-          disabled={score !== null}
+
+          
         >
           <Text style={styles.resetButtonText}>Reset Answers</Text>
         </TouchableOpacity>
 
-        {score !== null && (
-          <Text style={styles.scoreText}>Score: {score} / {questions.length}</Text>
-        )}
+        
 
         <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
           <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFeedback}>
@@ -191,6 +204,51 @@ const ModuleQuizScreen = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <Modal
+        visible={isModalVisibleFullMark} 
+        onRequestClose={() => setIsModalVisibleFullMark(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            {score !== null && (
+            <Text style={styles.scoreText}>Score: {score} / {questions.length}</Text>
+            )}
+            <Text style={[styles.modalSumm, {textAlign:'center', marginTop:10}]}>
+              Congratulation! You have a perfect score! Please click this button and share your experience regarding this module. Your response is appreciated for our improvement
+            </Text>
+            
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20}]} onPress={() => {setIsModalVisibleFullMark(false); handleModuleFeedback()}}>
+              <Text> Feedback </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+
+      <Modal
+        visible={isModalVisibleNotFullMark} 
+        onRequestClose={() => setIsModalVisibleNotFullMark(false)}
+        animationType='fade'
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            {score !== null && (
+            <Text style={styles.scoreText}>Score: {score} / {questions.length}</Text>
+            )}
+            <Text style={{textAlign:'center', marginTop:10}}>
+              Sorry your is not perfect, go to summary page to revise and try again
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20, width: 200}]} onPress= {() => {handleCheckAnswers(); setIsModalVisibleNotFullMark(false); handleModuleSumm()}}>
+            
+              <Text> Summary Page </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   )
 }
@@ -299,5 +357,20 @@ const styles = StyleSheet.create({
       marginTop: 20,
       fontSize: 18,
       fontWeight: 'bold',
+    },
+    modalBg: {
+      flex: 1, 
+      backgroundColor: 'rgba(0,0,0,0.5)', 
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    modalContainer:{
+      width: '80%',
+      backgroundColor: 'white',
+      paddingHorizontal: 20,
+      paddingVertical: 30,
+      borderRadius: 20,
+      elevation: 20,
+      alignItems:'center'
     },
 })
