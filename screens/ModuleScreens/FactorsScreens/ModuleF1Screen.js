@@ -11,7 +11,6 @@ const ModuleF1Screen = () => {
   const [loading, setLoading] = useState(true);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [isModalVisibleCP, setIsModalVisibleCP] = useState(false);
-  const [isModalVisibleCorrect, setIsModalVisibleCorrect] = useState(false);
   const [isModalVisibleNotCorrect, setIsModalVisibleNotCorrect] = useState(false);
 
 
@@ -38,58 +37,42 @@ const ModuleF1Screen = () => {
     });
 
     return () => unsubscribe();
-    }, []);
+  }, []);
 
-    const questions = [
-      {
-        question: 'Which of the following does not describe zero-waste?',
-        options: [
-          'The conservation of all resources', 
-          'Encourage waste-to-energy coversion-', 
-          'To maximize recycling', 
-          'To minimize production of waste'],
-        correctAnswer: 'Encourage waste-to-energy coversion-',
-      },]
+  const questions = [
+    {
+      question: 'Which of the following does not describe zero-waste?',
+      options: [
+        'The conservation of all resources', 
+        'Encourage waste-to-energy coversion-', 
+        'To maximize recycling', 
+        'To minimize production of waste'],
+      correctAnswer: 'Encourage waste-to-energy coversion-',
+    },]
 
-    const handleAnswerSelection = (questionIndex, answer) => {
-      setSelectedAnswers({ ...selectedAnswers, [questionIndex]: answer });
-    };
+  const handleAnswerSelection = (questionIndex, answer) => {
+    setSelectedAnswers({ ...selectedAnswers, [questionIndex]: answer });
+  };
   
-    const handleCheckAnswers = () => {
-      let currentScore = 0;
-      questions.forEach((question, index) => {
-        if (selectedAnswers[index] === question.correctAnswer) {
-          currentScore++;
-          console.log(currentScore)
+  const handleCheckAnswers = () => {
+    let currentScore = 0;
+    questions.forEach((question, index) => {
+      if (selectedAnswers[index] === question.correctAnswer) {
+        currentScore++;
+        console.log(currentScore)
+      }
+        if (currentScore > 0) {
+          handleModuleF2();
+          console.log('answer is correct')
+        } else {
+          setIsModalVisibleNotCorrect(true);
+          console.log('answer is not correct')
+
         }
-          if (currentScore > 0) {
-            handleModuleF2();
-            console.log('answer is correct')
-          } else {
-            setIsModalVisibleNotCorrect(true);
-            console.log('answer is not correct')
+    });
+  };
 
-          }
-      });
-    };
-
-    {questions.map((question, index) => (
-      <View key={index} style={styles.questionContainer}>
-        <Text style={styles.questionText}>{question.question}</Text>
-        {question.options.map((option, optionIndex) => (
-          <TouchableOpacity
-            key={optionIndex}
-            style={[
-              styles.optionButton,
-              selectedAnswers[index] === option && styles.selectedOption,
-            ]}
-            onPress={() => handleAnswerSelection(index, option)}
-          >
-            <Text style={styles.optionText}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    ))}
+    
 
   const handleModuleF2 = async () => {
     console.log(currentUser.module)
