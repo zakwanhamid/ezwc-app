@@ -36,6 +36,7 @@ import ModuleFacSummScreen from './screens/ModuleScreens/ModuleFacSummScreen';
 import ModuleQuizScreen from './screens/ModuleScreens/ModuleQuizScreen';
 import ModuleFeedbackScreen from './screens/ModuleScreens/ModuleFeedbackScreen';
 import ProfileSearchScreen from './screens/ProfileScreens/ProfileSearchScreen';
+import UserProfileScreen from './screens/ProfileScreens/UserProfileScreen';
 
 
 
@@ -65,6 +66,7 @@ function HomeLayout(){
       <InsideStack.Screen name="HomeScreen" component={HomeScreen} />
       <InsideStack.Screen name="CreatePostScreen" component={CreatePostScreen} />
       <InsideStack.Screen name="ProfileSearchScreen" component={ProfileSearchScreen} />
+      <InsideStack.Screen name="UserProfileScreen" component={UserProfileScreen} />
     </InsideStack.Navigator>
   );
 }
@@ -74,6 +76,7 @@ function ProfileLayout(){
     <InsideStack.Navigator>
       <InsideStack.Screen name="ProfileScreen" component={ProfileScreen}/>
       <InsideStack.Screen name="EditProfileScreen" component={EditProfileScreen} />
+
     </InsideStack.Navigator>
   );
 }

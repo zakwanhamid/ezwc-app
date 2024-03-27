@@ -28,41 +28,41 @@ const ProfileScreen = () => {
     navigation.goBack(); // Go back to the previous screen
     };
 
-    const renderPostContent = () => {
-        return (
-            <View style={{paddingBottom:670}}>
-                <ScrollView>
-                {/* Display currentUser and userPosts data */}
-                {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
-                <View key={index} style={styles.postItem}>
-                    <View style={{width:'15%', marginRight: '5%'}}>
-                        <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
-                    </View>
-                    <View style={{width:'80%', marginTop: 8}}>
-                        <View >
-                            <Text style={{fontSize: 15, fontWeight: 600}}>{currentUser.name}</Text>
-                            <Text style={{fontSize: 13, fontWeight: 200}}>{currentUser.email}</Text>
-                            <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
-                        </View>
-                        <View style={{marginTop:5}}>
-                            <Text >{post.text}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Like</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Comment</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-                ))}
-                </ScrollView>
-            </View>
-            
-        );
-      };
+  const renderPostContent = () => {
+      return (
+          <View style={{paddingBottom:650}}>
+              <ScrollView>
+              {/* Display currentUser and userPosts data */}
+              {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
+              <View key={index} style={styles.postItem}>
+                  <View style={{width:'15%', marginRight: '5%'}}>
+                      <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+                  </View>
+                  <View style={{width:'80%', marginTop: 8}}>
+                      <View >
+                          <Text style={{fontSize: 15, fontWeight: 600}}>{currentUser.name}</Text>
+                          <Text style={{fontSize: 13, fontWeight: 200}}>{currentUser.email}</Text>
+                          <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
+                      </View>
+                      <View style={{marginTop:5}}>
+                          <Text >{post.text}</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <TouchableOpacity style={styles.button}>
+                              <Text style={styles.buttonText}>Like</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.button}>
+                              <Text style={styles.buttonText}>Comment</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+              ))}
+              </ScrollView>
+          </View>
+          
+      );
+    };
       
       const renderListingContent = () => {
         return (
@@ -124,7 +124,7 @@ const ProfileScreen = () => {
         });
         
         return () => unsubscribe();
-      }, []);
+    }, []);
 
     //   console.log(userPosts[0].id);
 

@@ -17,6 +17,9 @@ const ProfileSearchScreen = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   }
+  const handleUserProfile = (item) => {
+    navigation.navigate('UserProfileScreen', { userId: item.id});
+  };
 
   const filteredUsers = users.filter(
     (user) =>
@@ -78,9 +81,11 @@ const ProfileSearchScreen = () => {
             onChangeText={(query) => handleSearch(query)}
             />
         </View>
-        <FlatList data={filteredUsers} keyExtractor={(item) => item.id } 
+        <FlatList 
+        data={filteredUsers} 
+        keyExtractor={(item) => item.id } 
         renderItem={({ item }) => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handleUserProfile(item)}>
                 <View style={styles.profiles}>
                     <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
                     <View style={{marginVertical:14, marginLeft: 10,}}>
