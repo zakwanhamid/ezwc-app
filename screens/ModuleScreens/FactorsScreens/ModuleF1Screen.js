@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,11 @@ const ModuleF1Screen = () => {
   const navigation = useNavigation();
   const [currentUser ,setCurrentUser] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [isModalVisibleCP, setIsModalVisibleCP] = useState(false);
+  const [isModalVisibleCorrect, setIsModalVisibleCorrect] = useState(false);
+  const [isModalVisibleNotCorrect, setIsModalVisibleNotCorrect] = useState(false);
+
 
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
@@ -33,7 +38,58 @@ const ModuleF1Screen = () => {
     });
 
     return () => unsubscribe();
-  }, []);
+    }, []);
+
+    const questions = [
+      {
+        question: 'Which of the following does not describe zero-waste?',
+        options: [
+          'The conservation of all resources', 
+          'Encourage waste-to-energy coversion-', 
+          'To maximize recycling', 
+          'To minimize production of waste'],
+        correctAnswer: 'Encourage waste-to-energy coversion-',
+      },]
+
+    const handleAnswerSelection = (questionIndex, answer) => {
+      setSelectedAnswers({ ...selectedAnswers, [questionIndex]: answer });
+    };
+  
+    const handleCheckAnswers = () => {
+      let currentScore = 0;
+      questions.forEach((question, index) => {
+        if (selectedAnswers[index] === question.correctAnswer) {
+          currentScore++;
+          console.log(currentScore)
+        }
+          if (currentScore > 0) {
+            handleModuleF2();
+            console.log('answer is correct')
+          } else {
+            setIsModalVisibleNotCorrect(true);
+            console.log('answer is not correct')
+
+          }
+      });
+    };
+
+    {questions.map((question, index) => (
+      <View key={index} style={styles.questionContainer}>
+        <Text style={styles.questionText}>{question.question}</Text>
+        {question.options.map((option, optionIndex) => (
+          <TouchableOpacity
+            key={optionIndex}
+            style={[
+              styles.optionButton,
+              selectedAnswers[index] === option && styles.selectedOption,
+            ]}
+            onPress={() => handleAnswerSelection(index, option)}
+          >
+            <Text style={styles.optionText}>{option}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    ))}
 
   const handleModuleF2 = async () => {
     console.log(currentUser.module)
@@ -63,28 +119,90 @@ const ModuleF1Screen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-            <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
-            </TouchableOpacity>
-            <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 1</Text>
-            </View>
-            <TouchableOpacity style={styles.mapBtn} onPress={handleModuleFacList}>
-                <Entypo name="list" size={20} color="black"/>
-            </TouchableOpacity>
-        </View>
+      <View style={styles.header}>
+          <TouchableOpacity onPress={goBack}>
+              <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+          </TouchableOpacity>
+          <View style={styles.titleContainer}>
+              <Text style={{ fontSize: 20, fontWeight:"600"}}>Factor 1</Text>
+          </View>
+          <TouchableOpacity style={styles.mapBtn} onPress={handleModuleFacList}>
+              <Entypo name="list" size={20} color="black"/>
+          </TouchableOpacity>
+      </View>
+      
+      <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+      </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={handleModuleF2}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
+      <Modal
+      visible={isModalVisibleCP} 
+      onRequestClose={() => setIsModalVisibleCP(false)}
+      animationType='fade'
+      transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={styles.titleText}>
+              Checkpoint Question
+            </Text>
+            <Text style={{textAlign:'center', marginTop:10}}>
+              Answer this question correctly in order to go to next factor.
+            </Text>
+
+            {questions.map((question, index) => (
+            <View key={index} style={styles.questionContainer}>
+              <Text style={styles.questionText}>{question.question}</Text>
+              {question.options.map((option, optionIndex) => (
+                <TouchableOpacity
+                  key={optionIndex}
+                  style={[
+                    styles.optionButton,
+                    selectedAnswers[index] === option && styles.selectedOption,
+                  ]}
+                  onPress={() => handleAnswerSelection(index, option)}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+        ))}
+            <TouchableOpacity style={[styles.NextBtn, {width: 200}]} onPress= {() => {handleCheckAnswers(); setIsModalVisibleCP(false);}}>
+              <Text> Check Answer </Text>
             </TouchableOpacity>
+          </View>
         </View>
+      </Modal>
+
+      <Modal
+      visible={isModalVisibleNotCorrect} 
+      onRequestClose={() => setIsModalVisibleNotCorrect(false)}
+      animationType='fade'
+      transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+            <Text style={styles.titleText}>
+              Wrong Answer
+            </Text>
+            <Text style={{textAlign:'center', marginTop:10}}>
+              Your answer is not correct, Review the factor and answer the question again.
+            </Text>
+            <TouchableOpacity style={[styles.NextBtn, {marginTop: 20, width: 200}]} onPress= {() =>  setIsModalVisibleNotCorrect(false)}>
+              <Text> Try Again </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+
     </SafeAreaView>
   )
 }
@@ -124,6 +242,32 @@ const styles = StyleSheet.create({
           height: 2,
       }
     },
+    questionContainer: {
+      marginVertical: 20,
+
+    },
+    titleText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    questionText: {
+      fontSize: 18,
+      fontWeight: '500',
+      marginBottom: 10,
+    },
+    optionButton: {
+      borderWidth: 1,
+      borderColor: 'black',
+      borderRadius: 10,
+      padding: 10,
+      marginVertical: 5,
+    },
+    selectedOption: {
+      backgroundColor: 'lightblue',
+    },
+    optionText: {
+      fontSize: 16,
+    },
     NextBtn:{
       backgroundColor: "#529C4E",
       width: 100,
@@ -138,4 +282,20 @@ const styles = StyleSheet.create({
           height: 2,
       }
     },
+    modalBg: {
+      flex: 1, 
+      backgroundColor: 'rgba(0,0,0,0.5)', 
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    modalContainer:{
+      width: '80%',
+      backgroundColor: 'white',
+      paddingHorizontal: 20,
+      paddingVertical: 30,
+      borderRadius: 20,
+      elevation: 20,
+      alignItems:'center'
+    },
+
 })

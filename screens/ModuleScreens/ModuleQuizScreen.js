@@ -190,19 +190,6 @@ const ModuleQuizScreen = () => {
         >
           <Text style={styles.resetButtonText}>Reset Answers</Text>
         </TouchableOpacity>
-
-        
-
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-          <TouchableOpacity style={styles.NextBtn} onPress={handleModuleFeedback}>
-              <Text style={{
-                  fontSize: 15,
-                  fontWeight: 600,
-              }}>
-                  Feedback
-              </Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
 
       <Modal

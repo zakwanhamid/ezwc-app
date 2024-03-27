@@ -45,15 +45,9 @@ const ModuleFeedbackScreen = () => {
         {/* <TouchableOpacity onPress={goBack}>
             <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
         </TouchableOpacity> */}
-        <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
-            <FontAwesome name="map-o" size={20} color="black" />
-        </TouchableOpacity>
         <View style={styles.titleContainer}>
             <Text style={{ fontSize: 20, fontWeight:"600"}}>Feedback</Text>
         </View>
-        <TouchableOpacity style={styles.mapBtn} onPress={handleModuleRM}>
-            <FontAwesome name="map-o" size={20} color="black" />
-        </TouchableOpacity>
       </View>
 
       <View style={styles.titleBox}>
@@ -109,7 +103,6 @@ const styles = StyleSheet.create({
         flex:1,
         justifyContent: "center",
         alignItems:"center",
-        marginLeft: 75,
       },
     mapBtn:{
       backgroundColor: "#529C4E",
