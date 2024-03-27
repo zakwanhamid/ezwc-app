@@ -9,6 +9,7 @@ const ProfileSearchScreen = () => {
   const navigation = useNavigation();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
@@ -16,6 +17,12 @@ const ProfileSearchScreen = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   }
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(searchQuery.toLowerCase()) || // Filter by name
+      user.email.toLowerCase().startsWith(searchQuery.toLowerCase()) // Filter by email
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -71,7 +78,7 @@ const ProfileSearchScreen = () => {
             onChangeText={(query) => handleSearch(query)}
             />
         </View>
-        <FlatList data={users} keyExtractor={(item) => item.id } 
+        <FlatList data={filteredUsers} keyExtractor={(item) => item.id } 
         renderItem={({ item }) => (
             <TouchableOpacity>
                 <View style={styles.profiles}>
