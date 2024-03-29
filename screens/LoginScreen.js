@@ -90,7 +90,7 @@ const Login = () => {
 
 
                 <Text className="text-l mt-2 font-bold">Email : </Text>
-                <View className="h-10 mt-1 p-3 bg-gray-200">
+                <View className="h-10 mt-1 p-3 bg-gray-200 rounded-lg">
                     <TextInput
                         placeholder= "email@student.usm.my"
                         value ={email}
@@ -99,7 +99,7 @@ const Login = () => {
                 </View>
 
                 <Text className="text-l mt-2 font-bold">Password : </Text>
-                <View className="h-10 mt-1 p-3 bg-gray-200">
+                <View className="h-10 mt-1 p-3 bg-gray-200 rounded-lg">
                     <TextInput
                         placeholder= "Password"
                         value ={ password }
@@ -136,7 +136,6 @@ export default Login;
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      paddingTop:80,
-
+      justifyContent: 'center',
     }
 })

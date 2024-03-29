@@ -137,6 +137,7 @@ const ModuleScreen = () => {
 const styles = StyleSheet.create({
     container:{
       flex:1,
+
     },
     btnContainer:{
       alignItems: "center",
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
     },
     progressBar:{
       position: 'absolute',
-      marginTop: 2,
+      // marginTop: 2,
     }
 
 
