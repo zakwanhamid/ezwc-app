@@ -180,7 +180,7 @@ export default function App() {
                     alignItems: "center", 
                     justifyContent: "center",
                     backgroundColor: focused ? "white" :"#529c4e",
-                    borderWidth: focused ? 2 : 2,
+                    borderWidth: focused ? 2 : 1,
                     borderColor: focused ? "#529c4e" :"white",
                     elevation: 5,
                     shadowColor: "#000",
