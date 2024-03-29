@@ -144,10 +144,10 @@ const CreatePostScreen = () => {
                 <TextInput
                     autoFocus={true}
                     multiline={true}
-                    numberOfLines={20}
+                    // numberOfLines={20}
                     autoCapitalize='none'
                     autoCorrect= {false}
-                    style={{ flex: 1}}
+                    style={{ flex: 1, textAlignVertical: 'top' }}
                     placeholder='Want to share something?'
                     value={text}
                     onChangeText={handleTextChange}

@@ -51,7 +51,7 @@ const screenOptions = {
     bottom: 25,
     left: 20,
     right: 20,
-    elevation: 0,
+    elevation: 5,
     backgroundColor: '#ffffff',
     borderRadius: 15,
     height: 70,
@@ -174,14 +174,15 @@ export default function App() {
               return(
                 <View style={{
                     top: Platform.OS == "ios" ? -10 :-20,
-                    width: Platform.OS == "ios" ? 80 : 70,
-                    height: Platform.OS == "ios" ? 80 : 70,
+                    width: Platform.OS == "ios" ? 80 : 80,
+                    height: Platform.OS == "ios" ? 80 : 80,
                     borderRadius: Platform.OS == "ios" ? 40 :40,
                     alignItems: "center", 
                     justifyContent: "center",
                     backgroundColor: focused ? "white" :"#529c4e",
-                    borderWidth: focused ? 2 : 0.5,
+                    borderWidth: focused ? 2 : 2,
                     borderColor: focused ? "#529c4e" :"white",
+                    elevation: 5,
                     shadowColor: "#000",
                     shadowOpacity: 0.9,
                     shadowOffset:{

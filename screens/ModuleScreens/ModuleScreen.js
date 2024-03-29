@@ -137,7 +137,6 @@ const ModuleScreen = () => {
 const styles = StyleSheet.create({
     container:{
       flex:1,
-
     },
     btnContainer:{
       alignItems: "center",
