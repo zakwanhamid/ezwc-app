@@ -1,9 +1,10 @@
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const UserProfileScreen = ({ route }) => {
   const [user ,setUser] = useState([]);
@@ -11,7 +12,6 @@ const UserProfileScreen = ({ route }) => {
   const [userPosts ,setUserPosts] = useState([]);
   const [active,setActive] = useState(0);
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
-
   const navigation = useNavigation();
   const {userId} = route.params;
   const goBack = () => {

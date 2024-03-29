@@ -1,9 +1,10 @@
-import { FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { collection, doc, getDocs, onSnapshot, query } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ProfileSearchScreen = () => {
   const navigation = useNavigation();

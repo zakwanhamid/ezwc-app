@@ -1,8 +1,9 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, TextInput, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image, TextInput, ScrollView } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH } from '../../firebase';
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
@@ -209,6 +210,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container:{
     flex:1,
+    
   },
   header:{
     flexDirection:"row",

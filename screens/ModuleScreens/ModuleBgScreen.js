@@ -1,7 +1,9 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 const ModuleBgScreen = () => {
   const navigation = useNavigation();

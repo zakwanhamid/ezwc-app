@@ -1,8 +1,10 @@
-import { View, Text, Button, StyleSheet, SafeAreaView, TouchableOpacity, Image } from 'react-native'
+import { View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import * as Progress from 'react-native-progress'
 
 const ModuleScreen = () => {
@@ -80,7 +82,7 @@ const ModuleScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       
         <View style={styles.progressBarContainer}>
           <View style={styles.progressBar}>

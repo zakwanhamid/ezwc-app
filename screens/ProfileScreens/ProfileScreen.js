@@ -1,9 +1,11 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, SafeAreaView, Image, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 //this is profile screen that is unique for every user
 const ProfileScreen = () => {
@@ -212,6 +214,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     container:{
       flex:1,
+      marginTop:80,
     },
     avatarBtn:{
       flexDirection:"row",
