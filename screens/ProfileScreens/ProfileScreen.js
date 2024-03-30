@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image, ScrollView, Modal, FlatList } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +16,8 @@ const ProfileScreen = () => {
   const navigation = useNavigation();
   const [isFollowersModalVisible, setIsFollowersModalVisible] = useState(false);
   const [isFollowingModalVisible, setIsFollowingModalVisible] = useState(false);
+  const [followersData, setFollowersData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
   const [followingCount, setFollowingCount] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
   const [active,setActive] = useState(0);
@@ -49,6 +51,65 @@ const ProfileScreen = () => {
         setFollowersCount(0);
       }
     }, [currentUser, currentUser.followers]);
+
+    // Define fetchData function
+    const fetchData = async (idsArray, setDataFunc) => {
+      try {
+          const dataPromises = idsArray.map(async (id) => {
+              const docRef = doc(collection(FIREBASE_DB, 'users'), id);
+              const docSnapshot = await getDoc(docRef);
+        
+              if (docSnapshot.exists()) {
+                return { id: docSnapshot.id, ...docSnapshot.data() };
+              } else {
+                return null;
+              }
+            });
+        
+            const data = await Promise.all(dataPromises);
+            const filteredData = data.filter((item) => item !== null);
+            setDataFunc(filteredData);
+      } catch (error) {
+      console.error('Error fetching data:', error);
+      } finally {
+      setLoading(false);
+      }
+  };
+  
+    // Inside your component
+    useEffect(() => {
+        if (currentUser.followers) {
+        fetchData(currentUser.followers, setFollowersData);
+        }
+    }, [currentUser.followers]);
+    
+    useEffect(() => {
+        if (currentUser.following) {
+        fetchData(currentUser.following, setFollowingData);
+        }
+    }, [currentUser.following]);
+
+    const renderFollowerItem = ({ item }) => (
+      <View style={styles.profiles}>
+          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          <View style={{marginVertical:14, marginLeft: 10,}}>
+              <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+              <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+          </View>
+      </View>
+  );
+
+
+  const renderFollowingItem = ({ item }) => (
+      <View style={styles.profiles}>
+          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          <View style={{marginVertical:14, marginLeft: 10,}}>
+              <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+              <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+          </View>
+      </View>
+  );
+
   
 
   const renderPostContent = () => {
@@ -219,6 +280,53 @@ const ProfileScreen = () => {
         </View>
             {active === 0 && renderPostContent()}
             {active === 1 && renderListingContent()}    
+
+
+            <Modal
+            visible={isFollowersModalVisible} 
+            onRequestClose={() => setIsFollowersModalVisible(false)}
+            animationType='fade'
+            transparent={true}
+        >
+            <View style={styles.modalBg}>
+            <View style = {styles.modalContainer}>
+                <Text style={[styles.modalHeader, {fontWeight: 700}]}>Followers</Text>
+                <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>Below are your followers</Text>
+                <FlatList
+                style={{width: '90%'}}
+                data={followersData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderFollowerItem}
+                />
+                <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsFollowersModalVisible(false)}>
+                <Text> Close </Text>
+                </TouchableOpacity>
+            </View>
+            </View>
+        </Modal>
+
+        <Modal
+            visible={isFollowingModalVisible} 
+            onRequestClose={() => setIsFollowingModalVisible(false)}
+            animationType='fade'
+            transparent={true}
+        >
+            <View style={styles.modalBg}>
+            <View style = {styles.modalContainer}>
+                <Text style={[styles.modalHeader, {fontWeight: 700}]}>Following</Text>
+                <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>Below are your following</Text>
+                <FlatList
+                style={{width: '90%'}}
+                data={followingData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderFollowingItem}
+                />
+                <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsFollowingModalVisible(false)}>
+                <Text> Close </Text>
+                </TouchableOpacity>
+            </View>
+            </View>
+        </Modal>
     </SafeAreaView>
 
 
@@ -315,8 +423,57 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 8,
     },
-
-    
+    modalBg: {
+      flex: 1, 
+      backgroundColor: 'rgba(0,0,0,0.5)', 
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+  modalContainer:{
+    width: '80%',
+    backgroundColor: 'white',
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+    alignItems:'center'
+  },
+  modalHeader:{
+    fontSize: 20, 
+  },
+  modalTitle:{
+    fontSize: 18,
+  },
+  modalSumm:{
+    fontSize: 16,
+    marginTop: 20,
+  },
+  closeBtn:{
+    backgroundColor: "#529C4E",
+    width: 100,
+    height: 40,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    shadowOpacity: 0.5,
+    shadowOffset:{
+        width: 0,
+        height: 2,
+    }
+  },
+  profiles:{
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#D8D9DB",
+  },
+  profilesAvatar:{
+        width: 60,
+        height:60,
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 2,
+  },
 })
 
 export default ProfileScreen

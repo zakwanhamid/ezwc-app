@@ -341,8 +341,9 @@ const UserProfileScreen = ({ route }) => {
             <View style={styles.modalBg}>
             <View style = {styles.modalContainer}>
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Followers</Text>
-                <Text style={[styles.modalTitle, {fontWeight: 500}]}>Below are your followers</Text>
+                <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20}]}>Below are your followers</Text>
                 <FlatList
+                style={{width: '90%'}}
                 data={followersData}
                 keyExtractor={(item) => item.id}
                 renderItem={renderFollowerItem}
@@ -363,8 +364,9 @@ const UserProfileScreen = ({ route }) => {
             <View style={styles.modalBg}>
             <View style = {styles.modalContainer}>
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Following</Text>
-                <Text style={[styles.modalTitle, {fontWeight: 500}]}>Below are your following</Text>
+                <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20}]}>Below are your following</Text>
                 <FlatList
+                style={{width: '90%'}}
                 data={followingData}
                 keyExtractor={(item) => item.id}
                 renderItem={renderFollowingItem}
@@ -473,27 +475,26 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0,0,0,0.5)', 
         justifyContent: 'center',
         alignItems: 'center'
-      },
-      modalContainer:{
+    },
+    modalContainer:{
         width: '80%',
         backgroundColor: 'white',
-        paddingHorizontal: 20,
         paddingVertical: 30,
         borderRadius: 20,
         elevation: 20,
         alignItems:'center'
-      },
-      modalHeader:{
+    },
+    modalHeader:{
         fontSize: 20,
-      },
-      modalTitle:{
+    },
+    modalTitle:{
         fontSize: 18,
-      },
-      modalSumm:{
+    },
+    modalSumm:{
         fontSize: 16,
         marginTop: 20,
-      },
-      closeBtn:{
+    },
+    closeBtn:{
         backgroundColor: "#529C4E",
         width: 100,
         height: 40,
@@ -506,19 +507,18 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         }
-      },
-      profiles:{
+    },
+    profiles:{
         flexDirection: "row",
-        paddingVertical: 7,
         paddingHorizontal: 20,
         borderBottomWidth: 1,
         borderBottomColor: "#D8D9DB",
-        },
-        profilesAvatar:{
-            width: 60,
-            height:60,
-            borderRadius: 50,
-            borderColor: "white",
-            borderWidth: 2,
-        },
+    },
+    profilesAvatar:{
+        width: 60,
+        height:60,
+        borderRadius: 50,
+        borderColor: "white",
+        borderWidth: 2,
+    },
 })
