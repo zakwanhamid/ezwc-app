@@ -1,9 +1,9 @@
-import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
-import { arrayRemove, arrayUnion, collection, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const UserProfileScreen = ({ route }) => {
@@ -15,6 +15,8 @@ const UserProfileScreen = ({ route }) => {
   const [isFollowingModalVisible, setIsFollowingModalVisible] = useState(false);
   const [followingCount, setFollowingCount] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
+  const [followersData, setFollowersData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
   const [userPosts ,setUserPosts] = useState([]);
   const [active,setActive] = useState(0);
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
@@ -23,7 +25,7 @@ const UserProfileScreen = ({ route }) => {
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     console.log('user:' ,userId)
-    console.log('current user following:',currentUser.following);
+    console.log('user following:',user.following);
     console.log('user followers', user.followers);
   };
 
@@ -94,9 +96,6 @@ const UserProfileScreen = ({ route }) => {
         }
     }, [currentUser, user]);
 
-    
-
-
     const renderPostContent = () => {   
         return (
             <View style={{paddingBottom:750}}>
@@ -152,7 +151,67 @@ const UserProfileScreen = ({ route }) => {
         });
         
         return () => unsubscribe();
-    }, []);
+    }, [user.following]);
+
+    // Define fetchData function
+    const fetchData = async (idsArray, setDataFunc) => {
+        try {
+            const dataPromises = idsArray.map(async (id) => {
+                const docRef = doc(collection(FIREBASE_DB, 'users'), id);
+                const docSnapshot = await getDoc(docRef);
+          
+                if (docSnapshot.exists()) {
+                  return { id: docSnapshot.id, ...docSnapshot.data() };
+                } else {
+                  return null;
+                }
+              });
+          
+              const data = await Promise.all(dataPromises);
+              const filteredData = data.filter((item) => item !== null);
+              setDataFunc(filteredData);
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        } finally {
+        setLoading(false);
+        }
+    };
+    
+    // Inside your component
+    useEffect(() => {
+        if (user.followers) {
+        fetchData(user.followers, setFollowersData);
+        }
+    }, [user.followers]);
+    
+    useEffect(() => {
+        if (user.following) {
+        fetchData(user.following, setFollowingData);
+        }
+    }, [user.following]);
+    
+
+
+    const renderFollowerItem = ({ item }) => (
+        <View style={styles.profiles}>
+            <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+            <View style={{marginVertical:14, marginLeft: 10,}}>
+                <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+                <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+            </View>
+        </View>
+    );
+
+
+    const renderFollowingItem = ({ item }) => (
+        <View style={styles.profiles}>
+            <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+            <View style={{marginVertical:14, marginLeft: 10,}}>
+                <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+                <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+            </View>
+        </View>
+    );
 
     const handleFollow = async () => {
         if (!currentUser || !user) {
@@ -283,11 +342,11 @@ const UserProfileScreen = ({ route }) => {
             <View style = {styles.modalContainer}>
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Followers</Text>
                 <Text style={[styles.modalTitle, {fontWeight: 500}]}>Below are your followers</Text>
-                <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-                Environmental education is a process that allows individuals to explore
-                environmental issues, engage in problem-solving, and take steps to protect the 
-                environment to gain a better understanding of the issues and make more informed decisions.
-                </Text>
+                <FlatList
+                data={followersData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderFollowerItem}
+                />
                 <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsFollowersModalVisible(false)}>
                 <Text> Close </Text>
                 </TouchableOpacity>
@@ -305,14 +364,11 @@ const UserProfileScreen = ({ route }) => {
             <View style = {styles.modalContainer}>
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Following</Text>
                 <Text style={[styles.modalTitle, {fontWeight: 500}]}>Below are your following</Text>
-                <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-                Environmental education is a process that allows individuals to explore
-                environmental issues, engage in problem-solving, and take steps to protect the 
-                environment to gain a better understanding of the issues and make more informed decisions.
-                </Text>
-
-
-                
+                <FlatList
+                data={followingData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderFollowingItem}
+                />
                 <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsFollowingModalVisible(false)}>
                 <Text> Close </Text>
                 </TouchableOpacity>
@@ -451,4 +507,18 @@ const styles = StyleSheet.create({
             height: 2,
         }
       },
+      profiles:{
+        flexDirection: "row",
+        paddingVertical: 7,
+        paddingHorizontal: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D8D9DB",
+        },
+        profilesAvatar:{
+            width: 60,
+            height:60,
+            borderRadius: 50,
+            borderColor: "white",
+            borderWidth: 2,
+        },
 })

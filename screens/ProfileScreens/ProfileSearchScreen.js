@@ -1,4 +1,4 @@
-import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -56,6 +56,18 @@ const ProfileSearchScreen = () => {
     fetchUsers();
   }, []);
 
+  const renderProfileItem =({item}) => (
+    <TouchableOpacity onPress={() => handleUserProfile(item)}>
+      <View style={styles.profiles}>
+          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          <View style={{marginVertical:14, marginLeft: 10,}}>
+              <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+              <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+          </View>
+      </View>
+    </TouchableOpacity>
+  );
+
   return (
     <SafeAreaView>
         <View style={styles.header}>
@@ -77,22 +89,10 @@ const ProfileSearchScreen = () => {
             onChangeText={(query) => handleSearch(query)}
             />
         </View>
-        <FlatList 
-        data={filteredUsers} 
-        keyExtractor={(item) => item.id } 
-        renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleUserProfile(item)}>
-                <View style={styles.profiles}>
-                    <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
-                    <View style={{marginVertical:14, marginLeft: 10,}}>
-                        <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
-                        <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
-          
-        )}/>
-        
+          <FlatList 
+          data={filteredUsers} 
+          keyExtractor={(item) => item.id} 
+          renderItem={renderProfileItem}/>
     </SafeAreaView>
     
   )
