@@ -56,11 +56,6 @@ const ProfileSearchScreen = () => {
     fetchUsers();
   }, []);
 
-
-
-
-
-
   return (
     <SafeAreaView>
         <View style={styles.header}>

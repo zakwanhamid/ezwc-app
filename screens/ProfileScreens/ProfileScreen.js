@@ -14,6 +14,10 @@ const ProfileScreen = () => {
   const [userPosts ,setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
+  const [isFollowersModalVisible, setIsFollowersModalVisible] = useState(false);
+  const [isFollowingModalVisible, setIsFollowingModalVisible] = useState(false);
+  const [followingCount, setFollowingCount] = useState(0);
+  const [followersCount, setFollowersCount] = useState(0);
   const [active,setActive] = useState(0);
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
   const handleEditProfile = () => {
@@ -29,6 +33,23 @@ const ProfileScreen = () => {
   const goBack = () => {
     navigation.goBack(); // Go back to the previous screen
     };
+
+    useEffect(() => {
+      if (currentUser && currentUser.following) {
+        setFollowingCount(currentUser.following.length);
+      } else {
+        setFollowingCount(0);
+      }
+    }, [currentUser, currentUser.following]);
+  
+    useEffect(() => {
+      if (currentUser && currentUser.followers) {
+        setFollowersCount(currentUser.followers.length);
+      } else {
+        setFollowersCount(0);
+      }
+    }, [currentUser, currentUser.followers]);
+  
 
   const renderPostContent = () => {
       return (
@@ -162,11 +183,15 @@ const ProfileScreen = () => {
             <Text style={{fontSize:15, marginTop:6}}>
                 {currentUser.bio}
             </Text>
-            <View style={{ flexDirection: "row", marginTop: 10}}>
-                <Text style={{fontSize:15, fontWeight :700}}>199</Text>
-                <Text style={{fontSize:15, fontWeight :300, marginLeft:5}}>Following</Text>
-                <Text style={{fontSize:15, fontWeight :700, marginLeft:10}}>100.1K</Text>
-                <Text style={{fontSize:15, fontWeight :300, marginLeft:5}}>Following</Text>
+            <View style={{ flexDirection: "row", marginTop: 5}}>
+                <TouchableOpacity style={{ flexDirection: "row", marginTop: 10}} onPress={() => setIsFollowingModalVisible(true)} >
+                    <Text style={{fontSize:15, fontWeight :700}}>{followingCount}</Text>
+                    <Text style={{fontSize:15, fontWeight :300, marginLeft:5}}>Following</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ flexDirection: "row", marginTop: 10}} onPress={() => setIsFollowersModalVisible(true)}>
+                    <Text style={{fontSize:15, fontWeight :700, marginLeft:10}}>{followersCount}</Text>
+                    <Text style={{fontSize:15, fontWeight :300, marginLeft:5}}>Followers</Text>
+                </TouchableOpacity>
             </View>
         </View>
 
