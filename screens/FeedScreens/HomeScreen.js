@@ -1,13 +1,22 @@
 import { View, Text, TouchableOpacity, Button, StyleSheet, Image, TextInput, ScrollView } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
-import { FIREBASE_AUTH } from '../../firebase';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { collection, doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [currentUser ,setCurrentUser] = useState([]);
+  const [followingUser ,setFollowingUser] = useState([]);
+  const [followingUserPosts, setFollowingUserPosts] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
+
+
   const handleCreatePost = () => {
     navigation.navigate('CreatePostScreen');
   };
@@ -21,14 +30,93 @@ const HomeScreen = () => {
     });
   }, [navigation]);
 
-  //-----not goin to use YET, no yet retrieve data----
-  // const [userEmail ,setUserEmail] = useState(null);
-  // useEffect(() => {
-  //   const currentUser = FIREBASE_AUTH.currentUser;
-  //   if (currentUser) {
-  //     setUserEmail(currentUser.email);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+
+    const unsubscribe = onSnapshot(userRef, documentSnapshot => {
+        if (documentSnapshot.exists()) {
+            const userData = documentSnapshot.data(); // Get user data directly
+            setCurrentUser(userData);
+            setLoading(false);
+        } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+        }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  
+
+  const fetchFollowingPosts = async () => {
+    try {
+      // Assuming you have the followingUsers array with user IDs in state
+      const followingUsers = currentUser.following; // Sample user IDs
+      console.log(followingUsers)
+      const followingPostsPromises = followingUsers.map(async (followingUserId) => {
+        const postsQuery = query(collection(FIREBASE_DB, 'posts'), where('userId', '==', followingUserId));
+        const querySnapshot = await getDocs(postsQuery);
+        
+        const followingUserPosts = [];
+        querySnapshot.forEach((doc) => {
+          followingUserPosts.push({ id: doc.id, ...doc.data() });
+        });
+        console.log('following user posts',followingUserPosts)
+        return followingUserPosts;
+        
+      });
+
+      const followingPosts = await Promise.all(followingPostsPromises);
+      const mergedPosts = followingPosts.flat(); // Merge arrays of posts into one array
+      console.log('merged posts:', mergedPosts)
+      setFollowingUserPosts(mergedPosts);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching following user posts:', error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser.following) {
+    fetchFollowingPosts(currentUser.following, setFollowingData);
+    }
+  }, [currentUser.following]);
+
+  const renderPostContent = () => {
+    return (
+      <View style={{paddingBottom:650}}>
+        <ScrollView>
+          {followingUserPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
+              <View key={index} style={styles.postItem}>
+                  <View style={{width:'15%', marginRight: '5%'}}>
+                      <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+                  </View>
+                  <View style={{width:'80%', marginTop: 8}}>
+                      <View >
+                          <Text style={{fontSize: 15, fontWeight: 600}}>{currentUser.name}</Text>
+                          <Text style={{fontSize: 13, fontWeight: 200}}>{currentUser.email}</Text>
+                          <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
+                      </View>
+                      <View style={{marginTop:5}}>
+                          <Text >{post.text}</Text>
+                      </View>
+                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                          <TouchableOpacity style={styles.button}>
+                              <Text style={styles.buttonText}>Like</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity style={styles.button}>
+                              <Text style={styles.buttonText}>Comment</Text>
+                          </TouchableOpacity>
+                      </View>
+                  </View>
+              </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,164 +132,12 @@ const HomeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <View style={{paddingBottom: 120}}>
+      <View style={{paddingBottom:0}}>
       <ScrollView>
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View>
-              
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/mrcrab.png")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/patrick.png")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/plankton.png")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/sidney.png")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
-      <View style={styles.postItem}>
-        <View style={{width:'15%', marginRight: '5%'}}>
-            <Image source={require("../../assets/squid.png")} style={styles.postAvatar}></Image>
-        </View>
-        <View style={{width:'80%', marginTop: 8}}>
-            <View >
-                <Text style={{fontSize: 15, fontWeight: 600}}>Ahmad SpongeBob</Text>
-                <Text style={{fontSize: 13, fontWeight: 200}}>spongebob@usm.my</Text>
-                <Text>11/11/2024, 12:12 PM </Text>
-            </View>
-            <View style={{marginTop:5}}>
-                <Text >This is so new</Text>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Like</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Comment</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
-      </View>
-
+      {renderPostContent()}
       </ScrollView>
       </View>
       
-
-
-      
-
-
-
     </SafeAreaView>
   )
 }

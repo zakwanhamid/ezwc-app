@@ -1,0 +1,12 @@
+info Starting logkitty
+Error: spawnSync adb ENOENT
+    at spawnLogcatProcess (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/logkitty/build/android/adb.js:36:11)
+    at runAndroidLoggingProcess (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/logkitty/build/android/adb.js:21:10)
+    at logkitty (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/logkitty/build/api.js:137:85)
+    at Object.logAndroid [as func] (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli-platform-android/build/commands/logAndroid/index.js:30:44)
+    at Command.handleAction (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/build/index.js:111:23)
+    at Command.listener [as _actionHandler] (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/node_modules/commander/lib/command.js:482:17)
+    at /Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/node_modules/commander/lib/command.js:1283:65
+    at Command._chainOrCall (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/node_modules/commander/lib/command.js:1177:12)
+    at Command._parseCommand (/Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/node_modules/commander/lib/command.js:1283:27)
+    at /Users/zakwanhamid/Documents/USM/ezwc-app/node_modules/@react-native-community/cli/node_modules/commander/lib/command.js:1081:27

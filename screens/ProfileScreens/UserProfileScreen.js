@@ -52,6 +52,7 @@ const UserProfileScreen = ({ route }) => {
     });
   }, [navigation]);
 
+  //use effect for fetching user's 'users' collection
   useEffect(() => {
     const userRef = doc(collection(FIREBASE_DB, 'users'), userId);
 
@@ -69,6 +70,7 @@ const UserProfileScreen = ({ route }) => {
     return () => unsubscribe();
   }, []);
 
+  //use effect to fetch current user's 'users' information
   useEffect(() => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
@@ -87,6 +89,7 @@ const UserProfileScreen = ({ route }) => {
     return () => unsubscribe();
     }, []);
 
+    //useeffect to validate if current user already or follow user or not
     useEffect(() => {
         // Check if userId is in the currentUser's following array
         if (currentUser && currentUser.following && currentUser.following.includes(userId)) {
@@ -96,6 +99,8 @@ const UserProfileScreen = ({ route }) => {
         }
     }, [currentUser, user]);
 
+
+    //renderpost content
     const renderPostContent = () => {   
         return (
             <View style={{paddingBottom:750}}>
