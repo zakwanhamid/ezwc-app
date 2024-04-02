@@ -60,9 +60,9 @@ const ModuleFeedbackScreen = () => {
       <View style={styles.inputContainer}>
         <TextInput
             autoFocus={true}
-            multiline={true}
-            numberOfLines={20}
-            style={{ flex: 1}}
+            // multiline={true}
+            // numberOfLines={20}
+            style={{ flex: 1, textAlignVertical: 'top' }}
             placeholder='Share your feedback here...'
             value={feedback}
             onChangeText={(text) => setFeedback(text)}

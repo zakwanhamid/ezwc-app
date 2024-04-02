@@ -121,16 +121,20 @@ const ModuleQuizScreen = () => {
       if (selectedAnswers[index] === question.correctAnswer) {
         currentScore++;
       }
-      console.log("At check modal::",score)
-        if (currentScore === 10) {
-          setIsModalVisibleFullMark(true);
-        } else {
-          setIsModalVisibleNotFullMark(true);
-        }
     });
-    console.log("Current",currentScore)
+  
     setScore(currentScore);
+  
+    // Set modals based on the score
+    if (currentScore === 10) {
+      setIsModalVisibleFullMark(true);
+      setIsModalVisibleNotFullMark(false); // Make sure the other modal is not visible
+    } else {
+      setIsModalVisibleFullMark(false); // Make sure the other modal is not visible
+      setIsModalVisibleNotFullMark(true);
+    }
   };
+  
 
   const handleResetAnswers = () => {
     setSelectedAnswers({});
