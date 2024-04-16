@@ -230,7 +230,7 @@ const ProfileScreen = () => {
             <TouchableOpacity
                 onPress={() => FIREBASE_AUTH.signOut()} title="Logout"
                 style={styles.editBtn}>
-                <Text style={{ fontWeight:"700", fontSize:14}}>Log Out</Text>
+                <Text style={{ fontWeight:"500", fontSize:14, color:"black"}}>Log Out</Text>
             </TouchableOpacity>     
             <TouchableOpacity style={styles.editBtn}>
                 <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>

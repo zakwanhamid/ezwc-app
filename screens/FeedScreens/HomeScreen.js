@@ -189,7 +189,7 @@ const HomeScreen = () => {
         <View>
           {mergedData.map((userData) => (
             <View key={userData.id}>
-              {userData.posts.map((post) => (
+              {userData.posts.sort((a, b) => b.timestamp - a.timestamp).map((post) => (
                 <View key={post.id} style={styles.postItem}>
                 <View style={{width:'15%', marginRight: '5%'}}>
                     <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>

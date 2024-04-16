@@ -24,6 +24,8 @@ class Fire {
             userId: userId,
             timestamp: new Date(),
             images: [],
+            likes: [],
+            comments: [],
         };
         
     
