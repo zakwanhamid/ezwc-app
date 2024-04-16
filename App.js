@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import { FIREBASE_AUTH } from './firebase';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { EvilIcons, Feather, FontAwesome5, Ionicons, MaterialCommunityIcons, Octicons } from '@expo/vector-icons';
+import * as Location from 'expo-location';
+
 
 //screens
 import Login from './screens/LoginScreen';
@@ -37,6 +39,7 @@ import ModuleQuizScreen from './screens/ModuleScreens/ModuleQuizScreen';
 import ModuleFeedbackScreen from './screens/ModuleScreens/ModuleFeedbackScreen';
 import ProfileSearchScreen from './screens/ProfileScreens/ProfileSearchScreen';
 import UserProfileScreen from './screens/ProfileScreens/UserProfileScreen';
+import { UserLocationContext } from './Context/UserLocationContext';
 
 
 
@@ -135,8 +138,37 @@ export default function App() {
       setUser(user);
     });
   }, [])
+
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      console.log('location:',location)
+    })();
+  }, []);
+
+  let text = 'Waiting..';
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = JSON.stringify(location);
+  }
   return ( 
     //bottom navbar
+    //make the location accessible to other screen
+  <UserLocationContext.Provider 
+    value={{location, setLocation}}>
+
   <NavigationContainer>
     {user ? (
       <Tab.Navigator initialRouteName='Home' screenOptions={screenOptions} >
@@ -229,6 +261,7 @@ export default function App() {
       </Stack.Navigator>
     )}
   </NavigationContainer>
+  </UserLocationContext.Provider>
   
   );
 }
