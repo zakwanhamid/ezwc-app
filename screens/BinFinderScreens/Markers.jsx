@@ -5,13 +5,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SelectMarkerContext } from '../../Context/SelectMarkerContext';
 
 
-export default function Markers({index, place}) {
+export default function Markers({index, place, centerOnMarker}) {
     const {selectedMarker,setSelectedMarker}=useContext(SelectMarkerContext);
   return (
+    
     <Marker
         coordinate={{
-        latitude:place.location?.latitude,
-        longitude:place.location?.longitude,
+        latitude:place.latitude,
+        longitude:place.longitude,
         }}
 
         onPress={()=>setSelectedMarker(index)}

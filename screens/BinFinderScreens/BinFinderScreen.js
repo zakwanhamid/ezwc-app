@@ -1,69 +1,64 @@
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, Entypo, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import AppMapView from './AppMapView';
 import BinListView from './BinListView';
 import { SelectMarkerContext } from '../../Context/SelectMarkerContext';
+import { FIREBASE_DB } from '../../firebase';
+import { collection, getDocs, query } from 'firebase/firestore';
 
 const BinFinderScreen = () => {
   const navigation = useNavigation();
   const [selectedMarker,setSelectedMarker]=useState(0);
+  const [binsData, setBinsData] = useState([]);
 
-  const data = [
-    {
-        id: 1,
-        title: "Bin 1",
-        description: "Hamzah Sendut Library 1",
-        binNum: 3,
-        Type: "Paper, Glass, Plastics",
-        location: {
-          latitude: 5.3535,
-          longitude: 100.29683
-        }
-    },
-    {
-        id: 2,
-        title: "Bin 2",
-        description: "Desasiswa Aman Damai",
-        binNum: 4,
-        Type: "Paper, Glass, Plastics, Metals",
-        location: {
-          latitude: 5.35577,
-          longitude: 100.29877
-        }
-    },
-    {
-        id: 3,
-        title: "Bin 3",
-        description: "Desasiswa Tekun, Restu, Saujana",
-        binNum: 2,
-        Type: "Paper, Glass, Plastics, ",
-        location: {
-          latitude: 5.35461,
-          longitude: 100.30040
-        }
+  useEffect(() => {
+    // Fetch bins data from Firestore
+    const fetchBinsData = async () => {
+      try {
+        const binsCollection = query(collection(FIREBASE_DB, 'bins'));
+        const querySnapshot = await getDocs(binsCollection);
 
-    },
-    {
-        id: 4,
-        title: "Bin 4",
-        description: "Desasiswa Fajar Harapan",
-        binNum: 1,
-        Type: "Metals",
-        location: {
-          latitude: 5.35663,
-          longitude: 100.30121
-        }
-    },
-];
+        const binData = [];
+        querySnapshot.forEach((doc) => {
+          binData.push({ id: doc.id, ...doc.data() });
+        });
+
+        setBinsData(binData);
+        console.log("binData", binData)
+      } catch (error) {
+        console.error('Error fetching bins data:', error);
+      }
+    };
+
+    fetchBinsData();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
     });
   }, [navigation]);
+
+  const centerOnMarker = (binData) => {
+    if (!binData || !binData.latitude || !binData.longitude) {
+      console.error('Invalid binData:', binData);
+      return;
+    }
+  
+    const { latitude, longitude } = binData;
+    const newRegion = {
+      latitude,
+      longitude,
+      latitudeDelta: 0.01, // Adjust the zoom level as needed
+      longitudeDelta: 0.01,
+    };
+  
+    // Update the map's region to center on the selected bin's location
+    mapViewRef.current.animateToRegion(newRegion, 500); // Adjust the duration (in milliseconds) as needed
+  };
 
   return (
     <SelectMarkerContext.Provider value={{selectedMarker, setSelectedMarker}}>
@@ -77,9 +72,9 @@ const BinFinderScreen = () => {
         </TouchableOpacity>
       </View>
       
-      <AppMapView data={data}/>
+      <AppMapView data={binsData} centerOnMarker={centerOnMarker}/>
       <View style={styles.binListContainer}>
-        <BinListView data={data}/>
+        <BinListView data={binsData} centerOnMarker={centerOnMarker}/>
       </View>
       
       
