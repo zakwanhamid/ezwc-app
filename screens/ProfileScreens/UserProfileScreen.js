@@ -136,6 +136,7 @@ const UserProfileScreen = ({ route }) => {
         );
     };
 
+    //fetch data for post collection
     useEffect(() => {
         const postsRef = collection(FIREBASE_DB, 'posts');
         

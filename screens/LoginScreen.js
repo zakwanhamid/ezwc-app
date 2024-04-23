@@ -25,6 +25,7 @@ const Login = () => {
                 listings: [],
                 posts: [],
                 module: 0,
+                favBin: [],
             });
             console.log('User profile created successfully!');
         } catch (error) {
