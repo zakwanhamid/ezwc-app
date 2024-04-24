@@ -13,6 +13,10 @@ const BinFinderScreen = () => {
   const navigation = useNavigation();
   const [selectedMarker,setSelectedMarker]=useState(0);
   const [binsData, setBinsData] = useState([]);
+  
+  const handleFavBin = () => {
+    navigation.navigate('BinFavScreen');
+  };
 
   useEffect(() => {
     // Fetch bins data from Firestore
@@ -67,8 +71,8 @@ const BinFinderScreen = () => {
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight:"600"}}>BinFinder</Text> 
         </View>
-        <TouchableOpacity>
-          <MaterialIcons name="favorite-outline" size={27} color="#529C4E" />
+        <TouchableOpacity onPress={handleFavBin}>
+          <MaterialIcons name="favorite" size={27} color="#529C4E" />
         </TouchableOpacity>
       </View>
       
@@ -76,8 +80,6 @@ const BinFinderScreen = () => {
       <View style={styles.binListContainer}>
         <BinListView data={binsData} centerOnMarker={centerOnMarker}/>
       </View>
-      
-      
     </SafeAreaView>
     </SelectMarkerContext.Provider>
     
@@ -110,6 +112,7 @@ const styles = StyleSheet.create({
       zIndex:10,
       width: '100%'
     },
+    
   })
 
 export default BinFinderScreen

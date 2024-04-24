@@ -169,7 +169,7 @@ const HomeScreen = () => {
         }));
   
         // Now mergedData contains user data along with posts for each user
-        console.log('Merged data:', mergedData[0]);
+        // console.log('Merged data:', mergedData[0]);
         setMergedData(mergedData);
         setLoading(false);
       } catch (error) {

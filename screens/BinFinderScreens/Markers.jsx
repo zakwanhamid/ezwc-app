@@ -19,10 +19,10 @@ export default function Markers({index, place, centerOnMarker}) {
     >
         {selectedMarker==index?
       <Image source={require('../../assets/binMarker-selected.png')}
-      style={{ width: 60, height: 70 }}
+      style={{ width: 50, height: 60 }}
     />
       :<Image source={require('../../assets/binMarker.png')}
-          style={{ width: 60, height: 70 }}
+          style={{ width: 50, height: 60 }}
         />}
     </Marker>
   )

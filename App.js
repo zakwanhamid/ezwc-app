@@ -40,6 +40,7 @@ import ModuleFeedbackScreen from './screens/ModuleScreens/ModuleFeedbackScreen';
 import ProfileSearchScreen from './screens/ProfileScreens/ProfileSearchScreen';
 import UserProfileScreen from './screens/ProfileScreens/UserProfileScreen';
 import { UserLocationContext } from './Context/UserLocationContext';
+import BinFavScreen from './screens/BinFinderScreens/BinFavScreen';
 
 
 
@@ -115,6 +116,7 @@ function BinFinderLayout(){
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="BinFinderScreen" component={BinFinderScreen}/>
+      <InsideStack.Screen name="BinFavScreen" component={BinFavScreen}/>
     </InsideStack.Navigator>
   );
 }
@@ -178,9 +180,9 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
                   <Feather name="home" size={24} color= {focused ? "#529c4e" : "black"} />
-                  <Text style={{fontSize:12, color: focused ? "#529c4e" : "black", marginTop:2,}}>Home</Text>
+                  <Text style={{fontSize:12, fontWeight: 700, color: focused ? "#529c4e" : "black", marginTop:2,}}>Home</Text>
                 </View>
               )
             }
@@ -191,9 +193,9 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
                   <Feather name="book-open" size={24} color= {focused ? "#529c4e" : "black"} />
-                  <Text style={{fontSize:12, color: focused ? "#529c4e" : "black", marginTop:2,}}>Module</Text>
+                  <Text style={{fontSize:12, fontWeight: 700, color: focused ? "#529c4e" : "black", marginTop:2,}}>Module</Text>
                 </View>
               )
             }
@@ -223,7 +225,7 @@ export default function App() {
                     }
                     }}>
                   <EvilIcons name="trash" size={35} color={focused ? "#529c4e" : "black"} />
-                  <Text style={{fontSize:12, color: focused ? "#529c4e" : "black", marginTop:2,}}>BinFinder</Text>
+                  <Text style={{fontSize:12,fontWeight: 700, color: focused ? "#529c4e" : "black", marginTop:2,}}>BinFinder</Text>
                 </View>
               )
             }
@@ -234,9 +236,9 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
                   <Ionicons name="shirt-outline" size={24} color= {focused ? "#529c4e" : "black"} />
-                  <Text style={{fontSize:12, color:focused ? "#529c4e" : "black", marginTop:2,}}>Thrift</Text>
+                  <Text style={{fontSize:12,fontWeight: 700, color:focused ? "#529c4e" : "black", marginTop:2,}}>Thrift</Text>
                 </View>
               )
             }
@@ -247,9 +249,9 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center"}}>
+                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
                   <Octicons name="person" size={24} color= {focused ? "#529c4e" : "black"} />
-                  <Text style={{fontSize:12, color:focused ? "#529c4e" : "black", marginTop:2,}}>Profile</Text>
+                  <Text style={{fontSize:12,fontWeight: 700, color:focused ? "#529c4e" : "black", marginTop:2,}}>Profile</Text>
                 </View>
               )
             }
