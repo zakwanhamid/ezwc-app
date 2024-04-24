@@ -13,7 +13,7 @@ const ModuleScreen = () => {
   const [loading, setLoading] = useState(true);
   const progressPercentage = (currentUser.module / 10 * 100 ) + '%';
   const handleModuleBg = () => {
-    navigation.navigate('ModuleFacListScreen');
+    navigation.navigate('ModuleBgScreen');
   };
   const handleContModule = () => {
     // Switch statement based on currentUser.module

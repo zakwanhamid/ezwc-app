@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Image, Dimensions, StyleSheet, TouchableOpacity, Linking } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -38,7 +38,6 @@ export default function BinListView({data}) {
             }
             
         });
-    
         return () => unsubscribe();
     }, []);
 
@@ -67,6 +66,25 @@ export default function BinListView({data}) {
         } catch (error) {
           console.error('Error handling favorite bin:', error);
         }
+    };
+
+    /**
+     * On Direction Click Navigate to Google Map/Apple Map
+     */
+    const onDirectionClick = (item) => {
+      const latitude = item.latitude; // Assuming these fields are present in your item object
+      const longitude = item.longitude;
+    
+      // Constructing the URL based on the platform with a query for directions
+      const url = Platform.select({
+        ios: `maps:${latitude},${longitude}?q=${latitude},${longitude}`,
+        android: `geo:${latitude},${longitude}?q=${latitude},${longitude}`,
+      });
+    
+      console.log('URL:', url);
+    
+      // Opening the URL to show directions
+      Linking.openURL(url).catch(err => console.error('Error opening URL:', err));
     };
     
 
@@ -106,14 +124,12 @@ export default function BinListView({data}) {
                         <Text style={{ color: 'gray' ,marginTop:2, fontSize: 20}}>({item.type}) </Text>
                     </View> 
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>onDirectionClick(item)}>
                     <View style={styles.locationArrow}>
                         <FontAwesome name="location-arrow" size={25} color="white"/>
                     </View>
                 </TouchableOpacity>
             </View>
-            
-
         </View>
       )}
       />
