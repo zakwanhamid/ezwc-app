@@ -92,8 +92,11 @@ const BinFavScreen = () => {
           <Text style={styles.itemDescription}>{item.description}</Text>
 
           <View style={{marginTop:5}}>
-              <Text style={{color: 'gray', fontSize: 17}}>No. of Bin Available</Text>
-              <Text style={{marginTop:2, fontSize: 20, fontWeight: 600}}>{item.binNum}</Text>
+            <Text style={{color: 'gray', fontSize: 17}}>No. of Bin Available</Text>
+            <View style={{flexDirection: 'row'}}>
+                <Text style={{marginTop:2, fontSize: 20, fontWeight: 600}}>{item.binNum} </Text>
+                <Text style={{ color: 'gray' ,marginTop:2, fontSize: 20}}>({item.type}) </Text>
+            </View> 
           </View>
           <TouchableOpacity>
               <View style={styles.locationArrow}>
