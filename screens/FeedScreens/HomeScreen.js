@@ -1,10 +1,10 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, Image, FlatList, Modal } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image, FlatList, Modal, TextInput } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { collection, doc, getDoc, getDocs, onSnapshot, query, updateDoc, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore';
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
@@ -12,7 +12,11 @@ const HomeScreen = () => {
   const [currentUser ,setCurrentUser] = useState([]);
   const [mergedData ,setMergedData] = useState([]);
   const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
+  const [isCommentInputModalVisible, setIsCommentInputModalVisible] = useState(false);
+  const [isCommentAddedModalVisible, setIsCommentAddedModalVisible] = useState(false);
   const [likesModalData, setLikesModalData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [commentText, setCommentText] = useState('');
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [followingData, setFollowingData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -240,7 +244,7 @@ const HomeScreen = () => {
                           <Text style={styles.buttonText}>Like </Text>
                           )}
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.button}>
+                      <TouchableOpacity style={styles.button} onPress={() => handleCommentModal(post)}>
                         <Text style={styles.buttonText}>Comment</Text>
                       </TouchableOpacity>
                     </View>
@@ -272,6 +276,45 @@ const HomeScreen = () => {
     );
   };
 
+
+  const handleCommentSubmit = async (postId) => {
+    if (!commentText.trim()) {
+      // Handle empty comment input
+      return;
+    }
+
+  
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const commentsRef = collection(FIREBASE_DB, 'posts', postId, 'comments');
+
+  
+    try {
+      const commentData = {
+        text: commentText,
+        userId: currentUserUid,
+        timestamp: serverTimestamp(),
+      };
+
+      
+      await addDoc(commentsRef, commentData);
+      setCommentText('');
+  
+      console.log('Comment added:', commentText);
+      console.log('to post id: ', postId);
+      setIsCommentInputModalVisible(false);
+      setIsCommentAddedModalVisible(true);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+    }
+  };
+
+  const handleCommentModal = (itemData) => {
+    // Set the item data in state
+    setSelectedItem(itemData);
+    setIsCommentInputModalVisible(true);
+
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -297,22 +340,81 @@ const HomeScreen = () => {
             animationType='fade'
             transparent={true}
         >
-            <View style={styles.modalBg}>
-            <View style = {styles.modalContainer}>
-                <Text style={[styles.modalHeader, {fontWeight: 700}]}>Likes</Text>
-                {/* <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>B</Text> */}
-                <FlatList
-                style={{width: '90%'}}
-                data={likesModalData}
-                keyExtractor={(item) => item.id}
-                renderItem={renderLikesModalContent}
-                />
-                <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsLikesModalVisible(false)}>
-                <Text> Close </Text>
-                </TouchableOpacity>
-            </View>
-            </View>
-        </Modal>
+          <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+              <Text style={[styles.modalHeader, {fontWeight: 700}]}>Likes</Text>
+              {/* <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>B</Text> */}
+              <FlatList
+              style={{width: '90%'}}
+              data={likesModalData}
+              keyExtractor={(item) => item.id}
+              renderItem={renderLikesModalContent}
+              />
+              <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsLikesModalVisible(false)}>
+              <Text> Close </Text>
+              </TouchableOpacity>
+          </View>
+          </View>
+      </Modal>
+
+      <Modal
+            visible={isCommentInputModalVisible} 
+            onRequestClose={() => setIsCommentInputModalVisible(false)}
+            animationType='fade'
+            transparent={true}
+        >
+          <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+              <Text style={[styles.modalHeader, {fontWeight: 700}]}>Add Comment</Text>
+              <TouchableOpacity 
+                style={{position: 'absolute', top:0, right:0, margin:18}}
+                onPress={() => setIsCommentInputModalVisible(false)}
+                >
+                <AntDesign name="close" size={24} color="black" />
+              </TouchableOpacity>
+              
+
+              <View style={styles.inputContainer}>
+                <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+                <TextInput
+                    autoFocus={true}
+                    multiline={true}
+                    // numberOfLines={20}
+                    autoCapitalize='none'
+                    autoCorrect= {false}
+                    style={{ flex: 1, textAlignVertical: 'top' }}
+                    placeholder='Enter your comment...'
+                    value={commentText}
+                    onChangeText={(text) => setCommentText(text)}
+                    maxLength={100}
+                ></TextInput>
+              </View>
+              {selectedItem && (<TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]}
+                onPress={() => handleCommentSubmit(selectedItem.id)}
+              >
+              <Text> Send </Text>
+              </TouchableOpacity>)}
+          </View>
+          </View>
+      </Modal>
+
+      <Modal
+            visible={isCommentAddedModalVisible} 
+            onRequestClose={() => setIsCommentAddedModalVisible(false)}
+            animationType='fade'
+            transparent={true}
+        >
+          <View style={styles.modalBg}>
+          <View style = {styles.modalContainer}>
+              <Text style={[styles.modalHeader, {fontWeight: 600}]}>Comment Added !</Text>
+              <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]}
+                onPress={() => setIsCommentAddedModalVisible(false)}
+              >
+              <Text> Close </Text>
+              </TouchableOpacity>
+          </View>
+          </View>
+      </Modal>
       
     </SafeAreaView>
   )
@@ -428,6 +530,25 @@ profilesAvatar:{
       borderRadius: 50,
       borderColor: "white",
       borderWidth: 2,
+},
+addCommHeader:{
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'flex-end'
+},
+inputContainer:{
+  marginHorizontal: 25,
+  marginTop: 25,
+  paddingBottom: 40,
+  flexDirection: "row",
+  borderBottomWidth:1,
+  borderBottomColor: "#D8D9DB",
+},
+avatar: {
+  width:60,
+  height:60,
+  borderRadius: 24,
+  marginRight:16,
 },
 })
 
