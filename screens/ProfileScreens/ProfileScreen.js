@@ -328,10 +328,6 @@ const ProfileScreen = () => {
             </View>
         </Modal>
     </SafeAreaView>
-
-
-
-
     // <View style={styles.container}>
     //   <Text className="text-xl">Hi, {userEmail} </Text>
     //   <Text>this is your profile page</Text>
@@ -345,89 +341,85 @@ const ProfileScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    container:{
-      flex:1,
-      marginTop:80,
-    },
-    avatarBtn:{
-      flexDirection:"row",
-      alignItems: "center",
+  container:{
+    flex:1,
+    marginTop:80,
+  },
+  avatarBtn:{
+    flexDirection:"row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 15,
+    marginTop:5,
+  },
+  titleContainer:{
+    flex:1,
+    justifyContent: "center",
+    alignItems:"center",
+    marginLeft: 70,
+  },
+  editBtn:{
+    backgroundColor: "#529C4E",
+    width: 70,
+    height: 30,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: "#000",
+    elevation: 5,
+    shadowOpacity: 0.5,
+    shadowOffset:{
+        width: 0,
+        height: 2,
+    }
+  },
+  bgImage:{
+      height:100,
+      width: "100%"
+  },
+  avatar: {
+      width:90,
+      height:90,
+      borderRadius: 50,
+      borderColor: "white",
+      borderWidth: 2,
+      marginTop: -50,
+  },
+  tabBar: {
+      flexDirection: "row",
+      borderBottomWidth: 1,
+      borderBottomColor: "#D8D9DB",
       justifyContent: "space-between",
-      paddingHorizontal: 15,
-      marginTop:5,
-    },
-    titleContainer:{
-      flex:1,
-      justifyContent: "center",
-      alignItems:"center",
-      marginLeft: 70,
-    },
-    editBtn:{
-      backgroundColor: "#529C4E",
-      width: 70,
-      height: 30,
-      borderRadius: 15,
-      alignItems: 'center',
-      justifyContent: 'center',
-      shadowColor: "#000",
-      elevation: 5,
-      shadowOpacity: 0.5,
-      shadowOffset:{
-          width: 0,
-          height: 2,
-      }
-    },
-    bgImage:{
-        height:100,
-        width: "100%"
-    },
-    avatar: {
-        width:90,
-        height:90,
-        borderRadius: 50,
-        borderColor: "white",
-        borderWidth: 2,
-        marginTop: -50,
-    },
-    tabBar: {
-        flexDirection: "row",
-        borderBottomWidth: 1,
-        borderBottomColor: "#D8D9DB",
-        justifyContent: "space-between",
-    },
-
-    postItem: {
-        flexDirection: "row",
-        paddingTop: 7,
-        paddingHorizontal: 7,
-        borderBottomWidth: 1,
-        borderBottomColor: "#D8D9DB",
-    },
-
-    postAvatar: {
-        width: 60,
-        height:60,
-        borderRadius: 50,
-        borderColor: "white",
-        borderWidth: 2,
-    },
-
-    button: {
-        width: "50%", 
-        alignItems: "center",
-        padding: 10,
-        borderBottomColor: "#529C4E"
-    },
-
-    buttonText: {
-        fontSize: 16,
-        marginLeft: 8,
-    },
-    modalBg: {
-      flex: 1, 
-      backgroundColor: 'rgba(0,0,0,0.5)', 
-      justifyContent: 'center',
-      alignItems: 'center'
+  },
+  postItem: {
+      flexDirection: "row",
+      paddingTop: 7,
+      paddingHorizontal: 7,
+      borderBottomWidth: 1,
+      borderBottomColor: "#D8D9DB",
+  },
+  postAvatar: {
+      width: 60,
+      height:60,
+      borderRadius: 50,
+      borderColor: "white",
+      borderWidth: 2,
+  },
+  button: {
+      width: "50%", 
+      alignItems: "center",
+      padding: 10,
+      borderBottomColor: "#529C4E"
+  },
+  buttonText: {
+      fontSize: 16,
+      marginLeft: 8,
+  },
+  modalBg: {
+    flex: 1, 
+    backgroundColor: 'rgba(0,0,0,0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   modalContainer:{
     width: '80%',

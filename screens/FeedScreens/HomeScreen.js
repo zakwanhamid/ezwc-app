@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Button, StyleSheet, Image, FlatList } from 'react-native'
+import { View, Text, TouchableOpacity, Button, StyleSheet, Image, FlatList, Modal } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
@@ -11,7 +11,8 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [currentUser ,setCurrentUser] = useState([]);
   const [mergedData ,setMergedData] = useState([]);
-  // const [followingUser ,setFollowingUser] = useState([]);
+  const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
+  const [likesModalData, setLikesModalData] = useState([]);
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [followingData, setFollowingData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -156,10 +157,30 @@ const HomeScreen = () => {
       console.error('Error handling post like:', error);
     }
   };
-  
-  
-  
 
+  const handleLikesModalOpen = async (userIds) => {
+    try {
+      const usersPromises = userIds.map(async (userId) => {
+        const userDocRef = doc(FIREBASE_DB, 'users', userId);
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        if (userDocSnapshot.exists()) {
+          return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
+        } else {
+          return null;
+        }
+      });
+
+      const usersData = await Promise.all(usersPromises);
+      const filteredUsersData = usersData.filter((user) => user !== null);
+      setLikesModalData(filteredUsersData);
+      setIsLikesModalVisible(true);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  
+  
   const renderPostContent = () => {
     return (
       <View style={{paddingBottom:130}}>
@@ -186,21 +207,21 @@ const HomeScreen = () => {
                     </View>
 
                     <View style={styles.interactionCount}>
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleLikesModalOpen(post.likes)}>
                         { post.likes && post.likes.includes(currentUser.id) ? 
                         (<AntDesign name="like1" size={20} color="#529C4E" />) :
                         (<AntDesign name="like2" size={20} color="black" />)
                         }
                       </TouchableOpacity>
 
-                      <TouchableOpacity>
+                      <TouchableOpacity onPress={() => handleLikesModalOpen(post.likes)}>
                         <Text> {post.likes ? post.likes.length : 0} </Text>
                       </TouchableOpacity>
 
                       <TouchableOpacity>
                         <FontAwesome name="comments-o" size={24} color="black" />
                       </TouchableOpacity>
-                      
+
                       <TouchableOpacity>
                         <Text> {post.comment ? post.comment.length : 0} </Text>
                       </TouchableOpacity>
@@ -233,6 +254,24 @@ const HomeScreen = () => {
     );
   };
 
+  const renderLikesModalContent = () => {
+    return (
+      <FlatList
+        data={likesModalData}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.profiles}>
+          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          <View style={{marginVertical:14, marginLeft: 10,}}>
+              <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
+              <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
+          </View>
+      </View>
+        )}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -250,6 +289,30 @@ const HomeScreen = () => {
       <View style={{paddingBottom:0}}>
         {renderPostContent()}
       </View>
+
+
+      <Modal
+            visible={isLikesModalVisible} 
+            onRequestClose={() => setIsLikesModalVisible(false)}
+            animationType='fade'
+            transparent={true}
+        >
+            <View style={styles.modalBg}>
+            <View style = {styles.modalContainer}>
+                <Text style={[styles.modalHeader, {fontWeight: 700}]}>Likes</Text>
+                {/* <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>B</Text> */}
+                <FlatList
+                style={{width: '90%'}}
+                data={likesModalData}
+                keyExtractor={(item) => item.id}
+                renderItem={renderLikesModalContent}
+                />
+                <TouchableOpacity style={[styles.closeBtn, {marginTop: 20,}]} onPress={() => setIsLikesModalVisible(false)}>
+                <Text> Close </Text>
+                </TouchableOpacity>
+            </View>
+            </View>
+        </Modal>
       
     </SafeAreaView>
   )
@@ -315,6 +378,57 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginVertical: 10,
   },
+  modalBg: {
+    flex: 1, 
+    backgroundColor: 'rgba(0,0,0,0.5)', 
+    justifyContent: 'center',
+    alignItems: 'center'
+},
+modalContainer:{
+  width: '80%',
+  backgroundColor: 'white',
+  paddingVertical: 30,
+  borderRadius: 20,
+  elevation: 20,
+  alignItems:'center'
+},
+modalHeader:{
+  fontSize: 20, 
+},
+modalTitle:{
+  fontSize: 18,
+},
+modalSumm:{
+  fontSize: 16,
+  marginTop: 20,
+},
+closeBtn:{
+  backgroundColor: "#529C4E",
+  width: 100,
+  height: 40,
+  borderRadius: 15,
+  alignItems: 'center',
+  justifyContent: 'center',
+  shadowColor: "#000",
+  shadowOpacity: 0.5,
+  shadowOffset:{
+      width: 0,
+      height: 2,
+  }
+},
+profiles:{
+  flexDirection: "row",
+  paddingHorizontal: 20,
+  borderBottomWidth: 1,
+  borderBottomColor: "#D8D9DB",
+},
+profilesAvatar:{
+      width: 60,
+      height:60,
+      borderRadius: 50,
+      borderColor: "white",
+      borderWidth: 2,
+},
 })
 
 export default HomeScreen;
