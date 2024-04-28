@@ -216,6 +216,14 @@ const CreatePostScreen = () => {
             height: 2,
         }
       },
+      postItem: {
+        flexDirection: "row",
+        paddingTop: 7,
+        paddingHorizontal: 7,
+        borderBottomWidth: 1,
+        borderBottomColor: "#D8D9DB",
+        height: 100,
+        },
       inputContainer:{
         marginHorizontal: 25,
         marginTop: 25,
