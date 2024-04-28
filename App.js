@@ -41,6 +41,7 @@ import ProfileSearchScreen from './screens/ProfileScreens/ProfileSearchScreen';
 import UserProfileScreen from './screens/ProfileScreens/UserProfileScreen';
 import { UserLocationContext } from './Context/UserLocationContext';
 import BinFavScreen from './screens/BinFinderScreens/BinFavScreen';
+import AddListingScreen from './screens/ThriftScreens/AddListingScreen';
 
 
 
@@ -124,6 +125,7 @@ function ThriftLayout(){
   return (
     <InsideStack.Navigator>
       <InsideStack.Screen name="ThriftScreen" component={ThriftScreen}/>
+      <InsideStack.Screen name="AddListingScreen" component={AddListingScreen}/>
     </InsideStack.Navigator>
   );
 }
