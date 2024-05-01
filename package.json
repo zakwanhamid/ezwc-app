@@ -39,7 +39,8 @@
     "react-native-screens": "~3.22.0",
     "react-native-svg": "^14.1.0",
     "styled-components": "^6.1.8",
-    "x": "^0.1.2"
+    "x": "^0.1.2",
+    "@react-native-picker/picker": "2.4.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
