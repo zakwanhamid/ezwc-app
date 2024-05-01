@@ -1,4 +1,4 @@
-import { Alert, Button, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
@@ -13,7 +13,7 @@ const AddListingScreen = () => {
     const [image, setImage] = useState(null);
     const [categoryList, setCategoryList]= useState([{ name: 'Select Category' }]); 
     const [currentUser, setCurrentUser] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -31,6 +31,10 @@ const AddListingScreen = () => {
         getCategoryList();
     },[])
 
+    const handleThriftScreen = () => {
+        navigation.navigate("ThriftScreen");
+    };
+
     useEffect(() => {
         const currentUserUid = FIREBASE_AUTH.currentUser.uid;
         const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
@@ -43,7 +47,6 @@ const AddListingScreen = () => {
             }; // Include user ID in userData
             setCurrentUser(userData);
             console.log(currentUser.email)
-            setLoading(false);
           } else {
             // Handle case where user document doesn't exist
             console.log("User document does not exist");
@@ -84,6 +87,8 @@ const AddListingScreen = () => {
     };
 
     const onSubmitMethod = async(value)=>{
+
+        setLoading(true);
         //Convert uri to blob file
         const resp = await fetch(image);
         const blob = await resp.blob();
@@ -107,7 +112,9 @@ const AddListingScreen = () => {
                             userName: currentUser.name,
                             userEmail: currentUser.email
                 });
-                    console.log("Document Added!")
+                    setLoading(false);
+                    Alert.alert('Successfully Added',"Your listing is successfully added. This listing will be view by other users")
+                    handleThriftScreen();
                 }
             })
         });
@@ -131,7 +138,7 @@ const AddListingScreen = () => {
             </View>
             
             <Formik
-             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: `${currentUser.id}`, userName:'', userEmail:'', userPH:''}}
+             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userPH:''}}
              onSubmit={value => {
                 // Handle form submission
                 setFormSubmitted(true);
@@ -235,8 +242,16 @@ const AddListingScreen = () => {
                         </Modal>
                         
                         <View style={styles.btnContainer}>
-                            <TouchableOpacity style={styles.btn} onPress={handleSubmit}>
-                                <Text style={{fontWeight: '600', fontSize:15}}>Submit</Text>
+                            <TouchableOpacity 
+                                style={[styles.btn,{backgroundColor: loading? '#ccc':'#529C4E'}]} 
+                                onPress={handleSubmit}
+                                disabled={loading}
+                            >
+                                {loading?
+                                <ActivityIndicator color='white'/> :
+                                <Text style={{fontWeight: '600', fontSize:15,}}>Submit</Text>
+                                }
+                                
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -303,7 +318,6 @@ const styles = StyleSheet.create({
         marginTop: 20,
       },
     btn: {
-        backgroundColor: "#529C4E",
         alignItems: "center",
         justifyContent: "center",
         width: 150,
