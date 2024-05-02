@@ -5,9 +5,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
+import Header from '../../components/ThriftScreen/Header';
+import Slider from '../../components/ThriftScreen/Slider';
 
 
 const ThriftScreen = () => {
+  const [sliderList, setSliderList] = useState([]);
   
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -19,6 +22,20 @@ const ThriftScreen = () => {
   const handleAddListScreen = () => {
     navigation.navigate('AddListingScreen');
   };
+
+  useEffect(()=>{
+    getSliders();
+  },[])
+
+  //Used to get sliders for homescreen
+  const getSliders = async () => {
+    setSliderList([])
+      const querySnapshot = await getDocs(collection(FIREBASE_DB, 'sliders'));
+      querySnapshot.forEach((doc) => {
+          // console.log(doc.id, "=>", doc.data());
+          setSliderList(sliderList=>[...sliderList,doc.data()]);
+      })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -33,17 +50,8 @@ const ThriftScreen = () => {
           <MaterialIcons name="add-business" size={25} color="#529C4E" />
         </TouchableOpacity>
       </View>
-      <View style={styles.searchBarContainer}>
-            <TextInput 
-            placeholder='Search' 
-            clearButtonMode='always' 
-            autoCapitalize='none'
-            style={styles.searchBar}
-            autoCorrect={false}
-            // value={searchQuery}
-            onChangeText={(query) => handleSearch(query)}
-            />
-        </View>
+      <Header/>
+      <Slider sliderList={sliderList}/>
     </SafeAreaView>
   )
 }
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   searchBarContainer:{
-    margin:10,
+    padding:10,
   },
   searchBar:{
       paddingHorizontal: 20,
