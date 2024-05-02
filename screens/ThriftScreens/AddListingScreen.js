@@ -55,6 +55,7 @@ const AddListingScreen = () => {
         return () => unsubscribe();
     }, []);
 
+    //used to get category list
     const getCategoryList =  async() =>{
         setCategoryList([{ name: 'Select Category' }])
         const querySnapshot = await getDocs(collection(FIREBASE_DB, 'category'));

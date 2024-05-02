@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Slider({sliderList}) {
   return (
-    <View style={{padding:10, marginTop:10}}>
+    <View style={{paddingHorizontal:20, marginTop:10}}>
       <FlatList
         data={sliderList}
         horizontal={true}

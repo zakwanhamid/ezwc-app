@@ -7,10 +7,12 @@ import { collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
+import Categories from '../../components/ThriftScreen/Categories';
 
 
 const ThriftScreen = () => {
   const [sliderList, setSliderList] = useState([]);
+  const [categoryList, setCategoryList]= useState([]);
   
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -25,6 +27,7 @@ const ThriftScreen = () => {
 
   useEffect(()=>{
     getSliders();
+    getCategoryList();
   },[])
 
   //Used to get sliders for homescreen
@@ -37,12 +40,22 @@ const ThriftScreen = () => {
       })
   }
 
+  //used to get category list
+  const getCategoryList =  async() =>{
+    setCategoryList([])
+    const querySnapshot = await getDocs(collection(FIREBASE_DB, 'category'));
+    querySnapshot.forEach((doc)=>{
+        console.log("Docs:", doc.data());
+        setCategoryList(categoryList=>[...categoryList,doc.data()])
+    })
+}
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <AntDesign name="bars" size={25} color="#529C4E" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>Thrift</Text>
         </View>
@@ -52,6 +65,8 @@ const ThriftScreen = () => {
       </View>
       <Header/>
       <Slider sliderList={sliderList}/>
+      <Categories categoryList={categoryList}/>
+      
     </SafeAreaView>
   )
 }
@@ -72,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 10,
+    marginLeft: 25,
   },
   searchBarContainer:{
     padding:10,
