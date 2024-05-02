@@ -53,7 +53,7 @@ const AddListingScreen = () => {
           }
         });
         return () => unsubscribe();
-      }, []);
+    }, []);
 
     const getCategoryList =  async() =>{
         setCategoryList([{ name: 'Select Category' }])
