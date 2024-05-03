@@ -84,7 +84,7 @@ const ThriftScreen = () => {
           {/* Category List */}
           <Categories categoryList={categoryList}/>
           {/* Latest Item List */}
-          <LatestItemList latestItemList={latestItemList}/>
+          <LatestItemList latestItemList={latestItemList} heading = {'Latest Items'}/>
         </ScrollView>
       </View>
     </SafeAreaView>

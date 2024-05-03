@@ -2,10 +2,10 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import React from 'react'
 import ListingItem from './ListingItem'
 
-export default function LatestItemList({latestItemList}) {
+export default function LatestItemList({latestItemList, heading}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.listingHeaderTxt}>Latest Item</Text>
+      <Text style={styles.listingHeaderTxt}>{heading}</Text>
       <FlatList
         data={latestItemList}
         numColumns={2}
