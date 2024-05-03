@@ -139,7 +139,7 @@ const AddListingScreen = () => {
             </View>
             
             <Formik
-             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userPH:''}}
+             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userPH:'', createdAt:Date.now()}}
              onSubmit={value => {
                 // Handle form submission
                 setFormSubmitted(true);

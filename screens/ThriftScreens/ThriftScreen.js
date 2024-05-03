@@ -1,18 +1,20 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, Button, StyleSheet, TouchableOpacity, TextInput, ScrollView } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, orderBy } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
 import Categories from '../../components/ThriftScreen/Categories';
+import LatestItemList from '../../components/ThriftScreen/LatestItemList';
 
 
 const ThriftScreen = () => {
   const [sliderList, setSliderList] = useState([]);
   const [categoryList, setCategoryList]= useState([]);
+  const [latestItemList, setLatestItemList]= useState([]);
   
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -28,6 +30,7 @@ const ThriftScreen = () => {
   useEffect(()=>{
     getSliders();
     getCategoryList();
+    getLatestItemList();
   },[])
 
   //Used to get sliders for homescreen
@@ -42,13 +45,22 @@ const ThriftScreen = () => {
 
   //used to get category list
   const getCategoryList =  async() =>{
-    setCategoryList([])
+    setCategoryList([]);
     const querySnapshot = await getDocs(collection(FIREBASE_DB, 'category'));
     querySnapshot.forEach((doc)=>{
-        console.log("Docs:", doc.data());
-        setCategoryList(categoryList=>[...categoryList,doc.data()])
+      console.log("Docs:", doc.data());
+      setCategoryList(categoryList=>[...categoryList,doc.data()])
     })
-}
+  }
+  //Used to get latest item list
+  const getLatestItemList = async() =>{
+    setLatestItemList([]);
+    const querySnapshot = await getDocs(collection(FIREBASE_DB,'listings'),orderBy('createdAt','desc'));
+    querySnapshot.forEach((doc)=>{
+      console.log("Docs", doc.data())
+      setLatestItemList(latestItemList=>[...latestItemList,doc.data()])
+    })
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,10 +75,18 @@ const ThriftScreen = () => {
           <MaterialIcons name="add-business" size={25} color="#529C4E" />
         </TouchableOpacity>
       </View>
-      <Header/>
-      <Slider sliderList={sliderList}/>
-      <Categories categoryList={categoryList}/>
-      
+      <View style={{paddingBottom:130}}>
+        <ScrollView>
+          {/* Header */}
+          <Header/>
+          {/* Slider */}
+          <Slider sliderList={sliderList}/>
+          {/* Category List */}
+          <Categories categoryList={categoryList}/>
+          {/* Latest Item List */}
+          <LatestItemList latestItemList={latestItemList}/>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }
