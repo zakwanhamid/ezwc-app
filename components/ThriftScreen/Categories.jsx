@@ -1,7 +1,16 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Categories({categoryList}) {
+
+  const navigation = useNavigation();
+  const handleCatItemList = (categoryData) => {
+    navigation.navigate('CatItemListScreen',{categoryData});
+  };
+
+  
+
   return (
     <View style={styles.container}>
       <Text style={styles.catHeaderTxt}>Categories</Text>
@@ -9,7 +18,7 @@ export default function Categories({categoryList}) {
         data={categoryList}
         numColumns={3}
         renderItem={({item, index}) => (
-            <TouchableOpacity style={styles.catContainer}>
+            <TouchableOpacity style={styles.catContainer} onPress={() => handleCatItemList(item)}>
                 <Image source={{uri:item.image}}
                     style={styles.catImage}
                 />
