@@ -112,21 +112,21 @@ const ModuleRMScreen = () => {
             </TouchableOpacity>
             <TouchableOpacity onPress={handleModuleFacSumm} disabled={currentUser.module < 10}>
                 <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
                         Summary
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleModuleQuiz} disabled={currentUser.module < 10}>
                 <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
                         Quiz
                     </Text>
                 </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={handleModuleFeeback} disabled={currentUser.module < 10}>
                 <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
                         Feedback
                     </Text>
                 </View>
@@ -193,22 +193,20 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        backgroundColor: "lightblue",
+        backgroundColor: "white",
         height: 50,
         width: 300,
         borderRadius: 10,
-        borderWidth: 1,
-        borderColor: 'white',
-        shadowColor: "#000",
-        shadowOpacity: 0.5,
-        shadowOffset:{
-            width: 0,
-            height: 2,
-        }
+        borderWidth: 2,
+        borderColor: '#d9d8db',
     },
     CPTitle:{
         fontSize:20,
-        fontWeight: 500
-
+        fontWeight: 500,
+    },
+    CPDisabledTitle:{
+        color:'grey',
+        fontSize:20,
+        fontWeight: 500,
     },
 })

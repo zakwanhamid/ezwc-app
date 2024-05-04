@@ -1,9 +1,19 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React from 'react'
+import { useNavigation } from '@react-navigation/native';
 
 export default function ListingItem({item}) {
+  const navigation = useNavigation();
+
+    const handleItemDetails = (item) => {
+        navigation.navigate('ListingDetailsScreen',{product: item});
+    };
+
+
   return (
-    <TouchableOpacity style={styles.listContainer}>
+    <TouchableOpacity style={styles.listContainer} 
+        onPress={() => handleItemDetails(item)}
+    >
         <Image source = {{uri:item.image}}
             style={styles.postImg}
         />
@@ -26,7 +36,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc'
     },
     postImg:{
-        width: 'full',
+        width: '100%',
         height: 150,
         borderRadius: 5,
     },
