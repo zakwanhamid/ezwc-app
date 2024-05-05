@@ -72,7 +72,7 @@ const BinFinderScreen = () => {
           <Text style={{ fontSize: 20, fontWeight:"600"}}>BinFinder</Text> 
         </View>
         <TouchableOpacity onPress={handleFavBin}>
-          <MaterialIcons name="favorite" size={27} color="#529C4E" />
+          <MaterialIcons name="favorite-outline" size={27} color="#529C4E" />
         </TouchableOpacity>
       </View>
       

@@ -10,7 +10,7 @@ export default function BinListView({data}) {
     const flatListRef = useRef(null);
     const [currentUser ,setCurrentUser] = useState([]);
     const [loading, setLoading] = useState(true);
-  const {selectedMarker,setSelectedMarker}=useContext(SelectMarkerContext);
+    const {selectedMarker,setSelectedMarker}=useContext(SelectMarkerContext);
 
 
     useEffect(()=>{

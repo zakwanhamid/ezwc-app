@@ -169,7 +169,7 @@ const ProfileScreen = () => {
           }
         });
         return () => unsubscribe();
-    }, []);
+      }, []);
 
     useEffect(() => {
         const currentUserUid = FIREBASE_AUTH.currentUser.uid;

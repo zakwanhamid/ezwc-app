@@ -1,12 +1,13 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Linking, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
-import { deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 
 export default function ListingDetailsScreen() {
     const {params} = useRoute();
+    const [currentUser ,setCurrentUser] = useState([]);
     const navigation = useNavigation();
     const [product, setProduct] = useState([]);
     const [currentUserUid, setCurrentUserUid] = useState([]);
@@ -31,6 +32,25 @@ export default function ListingDetailsScreen() {
     const goBack = () => {
         navigation.goBack(); // Go back to the previous screen\
     };
+
+    useEffect(() => {
+        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+        const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+    
+        const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+          if (documentSnapshot.exists()) {
+            const userData = {
+              id: documentSnapshot.id,
+              ...documentSnapshot.data(),
+            }; // Include user ID in userData
+            setCurrentUser(userData);
+          } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+          }
+        });
+        return () => unsubscribe();
+      }, []);
 
     const handleOpenLink = async () => {
         if (!product.userPH) {
@@ -74,6 +94,9 @@ export default function ListingDetailsScreen() {
                         // Delete the document from Firestore
                         await deleteDoc(itemRef);
                         console.log('Document deleted successfully');
+                        Alert.alert(
+                            'Item Deleted',
+                            'The item is removed. ');
                         handleProfileScreen();
                         
                     } else {
@@ -90,7 +113,40 @@ export default function ListingDetailsScreen() {
         } catch (error) {
           console.error('Error showing alert:', error);
         }
-      };
+    };
+
+    const handleFavoriteListing = async (listingId) => {
+        try {
+          const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+          const userRef = doc(FIREBASE_DB, 'users', currentUserUid); // Assuming currentUser has an 'id' field
+          console.log('listingId:',listingId)
+    
+          // Check if listingId is already in the favListing array
+          if (currentUser.favListing.includes(listingId)) {
+            // Remove binId from favListing array
+            const updatedFavListing = currentUser.favListing.filter(id => id !== listingId);
+            await updateDoc(userRef, {
+              favListing: updatedFavListing
+            });
+            console.log('Listing removed from favorites:', listingId);
+            Alert.alert(
+                'Item Removed',
+                'This item is removed from your favourite items. ');
+          } else {
+            // Add listing to favListing array
+            const updatedFavListing = [...currentUser.favListing, listingId];
+            await updateDoc(userRef, {
+              favListing: updatedFavListing
+            });
+            Alert.alert(
+                'Item Added',
+                'This item is added to your favourite listings. View your favourite items at Thrift homepage');
+            console.log('Listing added to favorites:', listingId);
+          }
+        } catch (error) {
+          console.error('Error handling favorite listing:', error);
+        }
+    };
 
 
   return (
@@ -102,10 +158,22 @@ export default function ListingDetailsScreen() {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Item Details</Text>
             </View>
-            {product.userId === currentUserUid? (
-            <TouchableOpacity onPress={() => deleteListing(product.id)}>
-                <AntDesign name="delete" size={24} color="black" />
-            </TouchableOpacity>): null}
+            {
+                product.userId === currentUserUid? (
+                    <TouchableOpacity onPress={() => deleteListing(product.id)}>
+                        <AntDesign name="delete" size={24} color="black" />
+                    </TouchableOpacity>
+                ):(
+                    currentUser.favListing ? (
+                        <TouchableOpacity onPress={() => handleFavoriteListing(product.id)}>
+                            <MaterialIcons name="favorite" size={27} color="#529C4E" />
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity onPress={() => handleFavoriteListing(product.id)}>
+                            <MaterialIcons name="favorite-outline" size={27} color="#529C4E" />
+                        </TouchableOpacity>
+                    ))
+            }
         </View>
         <View>
             <ScrollView>

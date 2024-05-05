@@ -69,9 +69,9 @@ const ThriftScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        {/* <TouchableOpacity>
-          <AntDesign name="bars" size={25} color="#529C4E" />
-        </TouchableOpacity> */}
+        <TouchableOpacity>
+          <MaterialIcons name="favorite-outline" size={24} color="#529C4E" />
+        </TouchableOpacity>
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>Thrift</Text>
         </View>
