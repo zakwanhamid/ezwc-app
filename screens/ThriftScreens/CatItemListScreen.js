@@ -28,10 +28,14 @@ const CatItemListScreen = ({route}) => {
         setItemList([]);
         const q=query(collection(FIREBASE_DB, 'listings'),where('category','==', categoryData.name));
         const snapshot = await getDocs(q);
-        snapshot.forEach(doc=>{
-            console.log(doc.data());
-            setItemList(itemList=>[...itemList, doc.data()]);
-        })
+        snapshot.forEach(doc => {
+            const itemData = {
+                id: doc.id, // Include the document ID in the data
+                ...doc.data(),
+            };
+            console.log('doc:', itemData);
+            setItemList(itemList => [...itemList, itemData]);
+        });
     }
 
   return (

@@ -24,6 +24,9 @@ export default function ListingDetailsScreen() {
             headerShown: false,
         });
     }, [navigation]);
+    const handleProfileScreen = () => {
+        navigation.navigate("ProfileScreen");
+    };
 
     const goBack = () => {
         navigation.goBack(); // Go back to the previous screen\
@@ -71,6 +74,8 @@ export default function ListingDetailsScreen() {
                         // Delete the document from Firestore
                         await deleteDoc(itemRef);
                         console.log('Document deleted successfully');
+                        handleProfileScreen();
+                        
                     } else {
                       console.log('Document does not exist');
                     }

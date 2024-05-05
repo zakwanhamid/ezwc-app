@@ -56,10 +56,14 @@ const ThriftScreen = () => {
   const getLatestItemList = async() =>{
     setLatestItemList([]);
     const querySnapshot = await getDocs(collection(FIREBASE_DB,'listings'),orderBy('createdAt','desc'));
-    querySnapshot.forEach((doc)=>{
-      console.log("Docs", doc.data())
-      setLatestItemList(latestItemList=>[...latestItemList,doc.data()])
-    })
+    querySnapshot.forEach(doc => {
+      const itemData = {
+          id: doc.id, // Include the document ID in the data
+          ...doc.data(),
+      };
+      console.log('doc:', itemData);
+      setLatestItemList(latestItemList => [...latestItemList, itemData]);
+  });
   }
 
   return (
