@@ -21,7 +21,6 @@ const CatItemListScreen = ({route}) => {
     };
 
     useEffect(()=>{
-        console.log('categoryDatm:',categoryData.name);
         getItemListByCategory();
     },[])
 

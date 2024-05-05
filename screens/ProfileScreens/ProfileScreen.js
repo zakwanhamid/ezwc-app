@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ListingList from '../../components/ProfileScreen/ListingList';
 
 
 //this is profile screen that is unique for every user
@@ -150,40 +151,31 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <ScrollView>
-            {/* Dummy listing data */}
-            {[
-              { title: "Listing 1", description: "Description for Listing 1" },
-              { title: "Listing 2", description: "Description for Listing 2" },
-              { title: "Listing 3", description: "Description for Listing 3" },
-              { title: "Listing 4", description: "Description for Listing 4" }
-            ].map((listing, index) => (
-              <View key={index} style={styles.listingItem}>
-                <Text style={styles.listingText}>{listing.title}</Text>
-                <Text style={styles.listingDescription}>{listing.description}</Text>
-                {/* Add any other listing-related information here */}
-              </View>
-            ))}
-          </ScrollView>
+          <View style={{paddingBottom:670}}>
+            <ScrollView>
+              <ListingList currentUser = {currentUser}/>
+            </ScrollView>
+          </View>
         );
       };
 
 
-    useEffect(() => {
+      useEffect(() => {
         const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-        const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
+        const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
     
-        const unsubscribe = onSnapshot(userRef, documentSnapshot => {
-            if (documentSnapshot.exists()) {
-                const userData = documentSnapshot.data(); // Get user data directly
-                setCurrentUser(userData);
-                setLoading(false);
-            } else {
-                // Handle case where user document doesn't exist
-                console.log("User document does not exist");
-            }
+        const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+          if (documentSnapshot.exists()) {
+            const userData = {
+              id: documentSnapshot.id,
+              ...documentSnapshot.data(),
+            }; // Include user ID in userData
+            setCurrentUser(userData);
+          } else {
+            // Handle case where user document doesn't exist
+            console.log("User document does not exist");
+          }
         });
-    
         return () => unsubscribe();
     }, []);
 
