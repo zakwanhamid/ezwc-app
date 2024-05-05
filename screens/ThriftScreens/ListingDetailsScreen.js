@@ -1,16 +1,23 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Linking } from 'react-native'
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Linking, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { deleteDoc, doc, getDoc } from 'firebase/firestore';
 
 export default function ListingDetailsScreen() {
     const {params} = useRoute();
     const navigation = useNavigation();
     const [product, setProduct] = useState([]);
+    const [currentUserUid, setCurrentUserUid] = useState([]);
 
     useEffect(() => {
         params&&setProduct(params.product);
+        const currentUserId = FIREBASE_AUTH.currentUser.uid;
+        setCurrentUserUid(currentUserId);
     },[params])
+
+    console.log('product.id:',product.id)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -38,6 +45,48 @@ export default function ListingDetailsScreen() {
         }
     };
 
+    const deleteListing = async (itemId) => {
+        try {
+            console.log('itemId:', itemId)
+          // Show an alert to confirm deletion
+          Alert.alert(
+            'Confirmation',
+            'Are you sure you want to delete this item?',
+            [
+              {
+                text: 'No',
+                style: 'cancel',
+                onPress: () => console.log('Deletion canceled'),
+              },
+              {
+                text: 'Yes',
+                onPress: async () => {
+                  try {
+                    // Construct a reference to the document you want to delete
+                    const itemRef = doc(FIREBASE_DB, 'listings', itemId);
+      
+                    // Check if the document exists before attempting to delete it
+                    const itemSnapshot = await getDoc(itemRef);
+                    if (itemSnapshot.exists()) {
+                        // Delete the document from Firestore
+                        await deleteDoc(itemRef);
+                        console.log('Document deleted successfully');
+                    } else {
+                      console.log('Document does not exist');
+                    }
+                  } catch (error) {
+                    console.error('Error deleting document:', error);
+                  }
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+        } catch (error) {
+          console.error('Error showing alert:', error);
+        }
+      };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -48,6 +97,10 @@ export default function ListingDetailsScreen() {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Item Details</Text>
             </View>
+            {product.userId === currentUserUid? (
+            <TouchableOpacity onPress={() => deleteListing(product.id)}>
+                <AntDesign name="delete" size={24} color="black" />
+            </TouchableOpacity>): null}
         </View>
         <View>
             <ScrollView>
@@ -100,7 +153,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginLeft: -18,
+        marginLeft: -10,
     },
     productImg:{
         height: 300,

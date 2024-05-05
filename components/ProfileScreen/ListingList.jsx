@@ -16,10 +16,14 @@ export default function ListingList({currentUser}) {
         setItemList([]);
         const q=query(collection(FIREBASE_DB, 'listings'),where('userId','==', currentUser.id));
         const snapshot = await getDocs(q);
-        snapshot.forEach(doc=>{
-            console.log('doc:',doc.data());
-            setItemList(itemList=>[...itemList, doc.data()]);
-        })
+        snapshot.forEach(doc => {
+            const itemData = {
+                id: doc.id, // Include the document ID in the data
+                ...doc.data(),
+            };
+            console.log('doc:', itemData);
+            setItemList(itemList => [...itemList, itemData]);
+        });
     }
 
   return (
