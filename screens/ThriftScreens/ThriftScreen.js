@@ -3,8 +3,8 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { collection, getDocs, orderBy } from 'firebase/firestore';
-import { FIREBASE_DB } from '../../firebase';
+import { collection, doc, getDocs, onSnapshot, orderBy } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
 import Categories from '../../components/ThriftScreen/Categories';
@@ -15,6 +15,7 @@ const ThriftScreen = () => {
   const [sliderList, setSliderList] = useState([]);
   const [categoryList, setCategoryList]= useState([]);
   const [latestItemList, setLatestItemList]= useState([]);
+  const [currentUser,setCurrentUser] = useState([]);
   
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -26,6 +27,30 @@ const ThriftScreen = () => {
   const handleAddListScreen = () => {
     navigation.navigate('AddListingScreen');
   };
+
+  const handleListingFav = (currentUser) => {
+    navigation.navigate('ListingFavScreen',{currentUser});
+  };
+
+  useEffect(() => {
+    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+
+    const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+      if (documentSnapshot.exists()) {
+        const userData = {
+          id: documentSnapshot.id,
+          ...documentSnapshot.data(),
+        }; // Include user ID in userData
+        setCurrentUser(userData);
+        console.log('ccurrentuser:',currentUser)
+      } else {
+        // Handle case where user document doesn't exist
+        console.log("User document does not exist");
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(()=>{
     getSliders();
@@ -69,7 +94,7 @@ const ThriftScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => handleListingFav(currentUser)}>
           <MaterialIcons name="favorite-outline" size={24} color="#529C4E" />
         </TouchableOpacity>
         <View style={styles.titleContainer}>
