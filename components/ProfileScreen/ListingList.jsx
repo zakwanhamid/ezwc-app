@@ -27,7 +27,7 @@ export default function ListingList({currentUser}) {
       {itemList.length? <LatestItemList latestItemList={itemList} 
         heading = {''}/>
         : <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>You didnt have any...</Text>
+            <Text style={styles.emptyText}>No listing available...</Text>
         </View>
         }
     </View>
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     emptyText: {
+        margin: 30,
         fontSize: 18,
         color: 'gray',
     },

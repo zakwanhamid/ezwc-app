@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ListingList from '../../components/ProfileScreen/ListingList';
 
 const UserProfileScreen = ({ route }) => {
   const [user ,setUser] = useState([]);
@@ -58,7 +59,10 @@ const UserProfileScreen = ({ route }) => {
 
     const unsubscribe = onSnapshot(userRef, documentSnapshot => {
         if (documentSnapshot.exists()) {
-            const userData = documentSnapshot.data(); // Get user data directly
+            const userData = {
+                id: documentSnapshot.id,
+                ...documentSnapshot.data(),
+              }; // Include user ID in userData
             setUser(userData);
             setLoading(false);
         } else {
@@ -66,6 +70,7 @@ const UserProfileScreen = ({ route }) => {
             console.log("User document does not exist");
         }
     });
+    
 
     return () => unsubscribe();
   }, []);
@@ -77,7 +82,10 @@ const UserProfileScreen = ({ route }) => {
 
     const unsubscribe = onSnapshot(userRef, documentSnapshot => {
         if (documentSnapshot.exists()) {
-            const userData = documentSnapshot.data(); // Get user data directly
+            const userData = {
+                id: documentSnapshot.id,
+                ...documentSnapshot.data(),
+              }; // Include user ID in userData
             setCurrentUser(userData);
             setLoading(false);
         } else {
@@ -135,6 +143,16 @@ const UserProfileScreen = ({ route }) => {
             </View>
         );
     };
+
+    const renderListingContent = () => {
+        return (
+          <View style={{paddingBottom:670}}>
+            <ScrollView>
+              <ListingList currentUser = {user}/>
+            </ScrollView>
+          </View>
+        );
+      };
 
     //fetch data for post collection
     useEffect(() => {
@@ -336,7 +354,7 @@ const UserProfileScreen = ({ route }) => {
             </TouchableOpacity>
         </View>
             {active === 0 && renderPostContent()}
-            {/* {active === 1 && renderListingContent()}  */}
+            {active === 1 && renderListingContent()} 
 
         <Modal
             visible={isFollowersModalVisible} 

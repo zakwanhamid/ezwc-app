@@ -10,7 +10,6 @@ export default function ListingDetailsScreen() {
 
     useEffect(() => {
         params&&setProduct(params.product);
-        console.log('userph:',product.userPH)
     },[params])
 
     useLayoutEffect(() => {

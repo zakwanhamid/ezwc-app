@@ -132,14 +132,6 @@ const ProfileScreen = () => {
                       <View style={{marginTop:5}}>
                           <Text >{post.text}</Text>
                       </View>
-                      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                          <TouchableOpacity style={styles.button}>
-                              <Text style={styles.buttonText}>Like</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity style={styles.button}>
-                              <Text style={styles.buttonText}>Comment</Text>
-                          </TouchableOpacity>
-                      </View>
                   </View>
               </View>
               ))}
@@ -385,7 +377,7 @@ const styles = StyleSheet.create({
   },
   postItem: {
       flexDirection: "row",
-      paddingTop: 7,
+      padding: 7,
       paddingHorizontal: 7,
       borderBottomWidth: 1,
       borderBottomColor: "#D8D9DB",

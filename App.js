@@ -74,6 +74,8 @@ function HomeLayout(){
       <InsideStack.Screen name="CreatePostScreen" component={CreatePostScreen} />
       <InsideStack.Screen name="ProfileSearchScreen" component={ProfileSearchScreen} />
       <InsideStack.Screen name="UserProfileScreen" component={UserProfileScreen} />
+      <InsideStack.Screen name="ListingDetailsScreen" component={ListingDetailsScreen}/>
+
     </InsideStack.Navigator>
   );
 }
@@ -83,7 +85,7 @@ function ProfileLayout(){
     <InsideStack.Navigator>
       <InsideStack.Screen name="ProfileScreen" component={ProfileScreen}/>
       <InsideStack.Screen name="EditProfileScreen" component={EditProfileScreen} />
-
+      <InsideStack.Screen name="ListingDetailsScreen" component={ListingDetailsScreen}/>
     </InsideStack.Navigator>
   );
 }
