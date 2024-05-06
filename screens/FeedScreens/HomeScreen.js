@@ -8,6 +8,7 @@ import {
   FlatList,
   Modal,
   TextInput,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
@@ -22,12 +23,14 @@ import {
   getDoc,
   getDocs,
   onSnapshot,
+  orderBy,
   query,
   serverTimestamp,
   setDoc,
   updateDoc,
   where,
 } from "firebase/firestore";
+import LatestPostList from "../../components/HomeScreen/LatestPostList";
 
 //this is the feed screen that will show all posts
 const HomeScreen = () => {
@@ -35,10 +38,8 @@ const HomeScreen = () => {
   const [currentUser, setCurrentUser] = useState([]);
   const [mergedData, setMergedData] = useState([]);
   const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
-  const [isCommentInputModalVisible, setIsCommentInputModalVisible] =
-    useState(false);
-  const [isCommentAddedModalVisible, setIsCommentAddedModalVisible] =
-    useState(false);
+  const [isCommentInputModalVisible, setIsCommentInputModalVisible] = useState(false);
+  const [isCommentAddedModalVisible, setIsCommentAddedModalVisible] = useState(false);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [commentsData, setCommentsData] = useState([]);
   const [likesModalData, setLikesModalData] = useState([]);
@@ -48,6 +49,8 @@ const HomeScreen = () => {
   const [followingData, setFollowingData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentAdd, setCommentAdd] = useState(false);
+  const [postList,setPostList] = useState([]);
+
   const options = {
     year: "numeric",
     month: "2-digit",
@@ -71,109 +74,137 @@ const HomeScreen = () => {
   }, [navigation]);
 
   useEffect(() => {
+    getPostListByFollowing(currentUser.following);
+  },[]);
+
+  const getPostListByFollowing = async (followingIds) => {
+      setPostList([]);
+      try {
+          const q = query(
+            collection(FIREBASE_DB, 'posts'), 
+            where('userId', 'in', followingIds),
+            orderBy('timestamp','desc'));
+          const snapshot = await getDocs(q);
+          
+          snapshot.forEach(doc => {
+              const postData = {
+                  id: doc.id, // Include the docume ID in the data
+                  ...doc.data(),
+              };
+              console.log('doc:', postData);
+              setPostList(postList => [...postList, postData]);
+          });
+      } catch (error) {
+          console.error('Error fetching item list by IDs:', error);
+      }
+  };
+
+  useEffect(() => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
-
+  
     const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
       if (documentSnapshot.exists()) {
         const userData = {
           id: documentSnapshot.id,
           ...documentSnapshot.data(),
         }; // Include user ID in userData
-        setCurrentUser(userData);
-        console.log('ccurrentuser:',currentUser)
+        setCurrentUser(userData); // Log the updated currentUser
         setLoading(false);
       } else {
         // Handle case where user document doesn't exist
         console.log("User document does not exist");
       }
     });
-    return () => unsubscribe();
+  
+    // Make sure to return the unsubscribe function
+    return () => unsubscribe;
   }, []);
+  
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!currentUser.following || currentUser.following.length === 0) {
-          console.log("No following users.");
-          return;
-        }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (!currentUser.following || currentUser.following.length === 0) {
+  //         console.log("No following users.");
+  //         return;
+  //       }
 
-        // Fetch user data for following users
-        const usersPromises = currentUser.following.map(async (userId) => {
-          const userDocRef = doc(collection(FIREBASE_DB, "users"), userId);
-          const userDocSnapshot = await getDoc(userDocRef);
-          console.log("userSnapshot::", userDocSnapshot);
+  //       // Fetch user data for following users
+  //       const usersPromises = currentUser.following.map(async (userId) => {
+  //         const userDocRef = doc(collection(FIREBASE_DB, "users"), userId);
+  //         const userDocSnapshot = await getDoc(userDocRef);
+  //         console.log("userSnapshot::", userDocSnapshot);
 
-          if (userDocSnapshot.exists()) {
-            return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
-          } else {
-            return null;
-          }
-        });
+  //         if (userDocSnapshot.exists()) {
+  //           return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
+  //         } else {
+  //           return null;
+  //         }
+  //       });
 
-        const usersData = await Promise.all(usersPromises);
-        const filteredUsersData = usersData.filter((user) => user !== null);
+  //       const usersData = await Promise.all(usersPromises);
+  //       const filteredUsersData = usersData.filter((user) => user !== null);
 
-        // Fetch posts for following users and include comments
-        const postsPromises = filteredUsersData.map(async (user) => {
-          const postsQuery = query(
-            collection(FIREBASE_DB, "posts"),
-            where("userId", "==", user.id)
-          );
-          const postsSnapshot = await getDocs(postsQuery);
+  //       // Fetch posts for following users and include comments
+  //       const postsPromises = filteredUsersData.map(async (user) => {
+  //         const postsQuery = query(
+  //           collection(FIREBASE_DB, "posts"),
+  //           where("userId", "==", user.id)
+  //         );
+  //         const postsSnapshot = await getDocs(postsQuery);
 
-          const userPosts = [];
-          for (const postDoc of postsSnapshot.docs) {
-            const postData = postDoc.data();
-            const postLikes = postData.likes || [];
+  //         const userPosts = [];
+  //         for (const postDoc of postsSnapshot.docs) {
+  //           const postData = postDoc.data();
+  //           const postLikes = postData.likes || [];
 
-            // Fetch comments for the current post
-            const commentsQuery = query(
-              collection(FIREBASE_DB, "comments"),
-              where("postId", "==", postDoc.id)
-            );
-            const commentsSnapshot = await getDocs(commentsQuery); // Make sure this is inside an async function
+  //           // Fetch comments for the current post
+  //           const commentsQuery = query(
+  //             collection(FIREBASE_DB, "comments"),
+  //             where("postId", "==", postDoc.id)
+  //           );
+  //           const commentsSnapshot = await getDocs(commentsQuery); // Make sure this is inside an async function
 
-            const postComments = commentsSnapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }));
+  //           const postComments = commentsSnapshot.docs.map((doc) => ({
+  //             id: doc.id,
+  //             ...doc.data(),
+  //           }));
 
-            userPosts.push({
-              id: postDoc.id,
-              ...postData,
-              comments: postComments,
-              likes: postLikes,
-            });
-          }
+  //           userPosts.push({
+  //             id: postDoc.id,
+  //             ...postData,
+  //             comments: postComments,
+  //             likes: postLikes,
+  //           });
+  //         }
 
-          return { ...user, posts: userPosts };
-        });
+  //         return { ...user, posts: userPosts };
+  //       });
 
-        const postsData = await Promise.all(postsPromises);
+  //       const postsData = await Promise.all(postsPromises);
 
-        // Merge user data with posts data
-        const mergedDatas = postsData.map(({ posts, ...user }) => ({
-          ...user,
-          posts: posts.map((post) => ({
-            ...post,
-            name: user.name,
-            email: user.email,
-          })),
-        }));
+  //       // Merge user data with posts data
+  //       const mergedDatas = postsData.map(({ posts, ...user }) => ({
+  //         ...user,
+  //         posts: posts.map((post) => ({
+  //           ...post,
+  //           name: user.name,
+  //           email: user.email,
+  //         })),
+  //       }));
 
-        // Now mergedData contains user data along with posts and comments for each user
-        setMergedData(mergedDatas);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      }
-    };
+  //       // Now mergedData contains user data along with posts and comments for each user
+  //       setMergedData(mergedDatas);
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchData();
-  }, [currentUser.following]);
+  //   fetchData();
+  // }, [currentUser.following]);
 
   const handlePostLike = async (postId) => {
     try {
@@ -255,116 +286,123 @@ const HomeScreen = () => {
 
   const renderPostContent = () => {
     return (
-      <View style={{ paddingBottom: 130 }}>
-        <FlatList
-          data={mergedData}
-          keyExtractor={(userData) => userData.id}
-          renderItem={({ item: userData }) => (
-            <FlatList
-              data={userData.posts.sort((a, b) => b.timestamp - a.timestamp)}
-              keyExtractor={(post) => post.id}
-              renderItem={({ item: post }) => (
-                <View style={styles.postItem}>
-                  <View style={{ width: "15%", marginRight: "5%" }}>
-                    <Image
-                      source={require("../../assets/profilePic.jpeg")}
-                      style={styles.postAvatar}
-                    />
-                  </View>
-                  <View style={{ width: "80%", marginTop: 8 }}>
-                    <View>
-                      <Text style={{ fontSize: 15, fontWeight: 600 }}>
-                        {userData.name}
-                      </Text>
-                      <Text style={{ fontSize: 13, fontWeight: 200 }}>
-                        {userData.email}
-                      </Text>
-                      <Text>
-                        {post.timestamp
-                          .toDate()
-                          .toLocaleString("en-US", options)}
-                      </Text>
-                    </View>
-                    <View style={{ marginTop: 5 }}>
-                      <Text>{post.text}</Text>
-                    </View>
+      // <View style={{ paddingBottom: 130 }}>
+      //   <FlatList
+      //     data={mergedData}
+      //     keyExtractor={(userData) => userData.id}
+      //     renderItem={({ item: userData }) => (
+      //       <FlatList
+      //         data={userData.posts.sort((a, b) => b.timestamp - a.timestamp)}
+      //         keyExtractor={(post) => post.id}
+      //         renderItem={({ item: post }) => (
+      //           <View style={styles.postItem}>
+      //             <View style={{ width: "15%", marginRight: "5%" }}>
+      //               <Image
+      //                 source={require("../../assets/profilePic.jpeg")}
+      //                 style={styles.postAvatar}
+      //               />
+      //             </View>
+      //             <View style={{ width: "80%", marginTop: 8 }}>
+      //               <View>
+      //                 <Text style={{ fontSize: 15, fontWeight: 600 }}>
+      //                   {userData.name}
+      //                 </Text>
+      //                 <Text style={{ fontSize: 13, fontWeight: 200 }}>
+      //                   {userData.email}
+      //                 </Text>
+      //                 <Text>
+      //                   {post.timestamp
+      //                     .toDate()
+      //                     .toLocaleString("en-US", options)}
+      //                 </Text>
+      //               </View>
+      //               <View style={{ marginTop: 5 }}>
+      //                 <Text>{post.text}</Text>
+      //               </View>
 
-                    <View style={styles.interactionCount}>
-                      <TouchableOpacity
-                        onPress={() => handleLikesModalOpen(post.likes)}
-                      >
-                        {post.likes && post.likes.includes(currentUser.id) ? (
-                          <AntDesign name="like1" size={20} color="#529C4E" />
-                        ) : (
-                          <AntDesign name="like2" size={20} color="black" />
-                        )}
-                      </TouchableOpacity>
+      //               <View style={styles.interactionCount}>
+      //                 <TouchableOpacity
+      //                   onPress={() => handleLikesModalOpen(post.likes)}
+      //                 >
+      //                   {post.likes && post.likes.includes(currentUser.id) ? (
+      //                     <AntDesign name="like1" size={20} color="#529C4E" />
+      //                   ) : (
+      //                     <AntDesign name="like2" size={20} color="black" />
+      //                   )}
+      //                 </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleLikesModalOpen(post.likes)}
-                      >
-                        <Text> {post.likes ? post.likes.length : 0} </Text>
-                      </TouchableOpacity>
+      //                 <TouchableOpacity
+      //                   onPress={() => handleLikesModalOpen(post.likes)}
+      //                 >
+      //                   <Text> {post.likes ? post.likes.length : 0} </Text>
+      //                 </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleCommentsModalOpen(post.id)}
-                      >
-                        <FontAwesome
-                          name="comments-o"
-                          size={24}
-                          color="black"
-                        />
-                      </TouchableOpacity>
+      //                 <TouchableOpacity
+      //                   onPress={() => handleCommentsModalOpen(post.id)}
+      //                 >
+      //                   <FontAwesome
+      //                     name="comments-o"
+      //                     size={24}
+      //                     color="black"
+      //                   />
+      //                 </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleCommentsModalOpen(post.id)}
-                      >
-                        <Text>
-                          {" "}
-                          {post.comments ? post.comments.length : 0}{" "}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+      //                 <TouchableOpacity
+      //                   onPress={() => handleCommentsModalOpen(post.id)}
+      //                 >
+      //                   <Text>
+      //                     {" "}
+      //                     {post.comments ? post.comments.length : 0}{" "}
+      //                   </Text>
+      //                 </TouchableOpacity>
+      //               </View>
 
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={[
-                          styles.button,
-                          post.likes && post.likes.includes(currentUser.id)
-                            ? styles.likedButton
-                            : null,
-                        ]}
-                        onPress={() => handlePostLike(post.id)}
-                      >
-                        {post.likes && post.likes.includes(currentUser.id) ? (
-                          <Text
-                            style={[styles.buttonText, styles.buttonTextLiked]}
-                          >
-                            Liked
-                          </Text>
-                        ) : (
-                          <Text style={styles.buttonText}>Like </Text>
-                        )}
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => handleCommentModal(post)}
-                      >
-                        <Text style={styles.buttonText}>Comment</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              )}
-            />
-          )}
-        />
-      </View>
+      //               <View
+      //                 style={{
+      //                   flexDirection: "row",
+      //                   justifyContent: "space-between",
+      //                 }}
+      //               >
+      //                 <TouchableOpacity
+      //                   style={[
+      //                     styles.button,
+      //                     post.likes && post.likes.includes(currentUser.id)
+      //                       ? styles.likedButton
+      //                       : null,
+      //                   ]}
+      //                   onPress={() => handlePostLike(post.id)}
+      //                 >
+      //                   {post.likes && post.likes.includes(currentUser.id) ? (
+      //                     <Text
+      //                       style={[styles.buttonText, styles.buttonTextLiked]}
+      //                     >
+      //                       Liked
+      //                     </Text>
+      //                   ) : (
+      //                     <Text style={styles.buttonText}>Like </Text>
+      //                   )}
+      //                 </TouchableOpacity>
+      //                 <TouchableOpacity
+      //                   style={styles.button}
+      //                   onPress={() => handleCommentModal(post)}
+      //                 >
+      //                   <Text style={styles.buttonText}>Comment</Text>
+      //                 </TouchableOpacity>
+      //               </View>
+      //             </View>
+      //           </View>
+      //         )}
+      //       />
+      //     )}
+      //   />
+      // </View>
+      
+        <View style={{paddingBottom:110}}>
+          <ScrollView>
+            <LatestPostList latestPostList = {postList}/>
+          </ScrollView>
+        </View>
+        
     );
   };
 

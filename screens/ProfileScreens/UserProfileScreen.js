@@ -6,6 +6,7 @@ import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { arrayRemove, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ListingList from '../../components/ProfileScreen/ListingList';
+import PostList from '../../components/ProfileScreen/PostList';
 
 const UserProfileScreen = ({ route }) => {
   const [user ,setUser] = useState([]);
@@ -111,42 +112,17 @@ const UserProfileScreen = ({ route }) => {
     //renderpost content
     const renderPostContent = () => {   
         return (
-            <View style={{paddingBottom:750}}>
-                <ScrollView>
-                {/* Display currentUser and userPosts data */}
-                {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
-                <View key={index} style={styles.postItem}>
-                    <View style={{width:'15%', marginRight: '5%'}}>
-                        <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
-                    </View>
-                    <View style={{width:'80%', marginTop: 8}}>
-                        <View >
-                            <Text style={{fontSize: 15, fontWeight: 600}}>{user.name}</Text>
-                            <Text style={{fontSize: 13, fontWeight: 200}}>{user.email}</Text>
-                            <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
-                        </View>
-                        <View style={{marginTop:5}}>
-                            <Text >{post.text}</Text>
-                        </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Like</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.button}>
-                                <Text style={styles.buttonText}>Comment</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                </View>
-                ))}
-                </ScrollView>
-            </View>
+            <View style={{paddingBottom:760}}>
+            <ScrollView>
+              <PostList currentUser = {user}/>
+            </ScrollView>
+          </View>
         );
     };
 
     const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:670}}>
+          <View style={{paddingBottom:760}}>
             <ScrollView>
               <ListingList currentUser = {user}/>
             </ScrollView>
