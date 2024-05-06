@@ -1,17 +1,21 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import fire from '../../fire';
+import { Formik } from 'formik';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 
 
-const CreatePostScreen = () => {
+const CreatePostScreen = ({route}) => {
+    const {currentUser} = route.params;
     const [text, setText] = useState('');
     const [images, setImages] = useState([]);
     const navigation = useNavigation();
-
+    const [formSubmitted, setFormSubmitted] = useState(false);
     const [charCount, setCharCount] = useState(280);
 
     useLayoutEffect(() => {
@@ -24,101 +28,73 @@ const CreatePostScreen = () => {
         navigation.goBack(); // Go back to the previous screen
     };
 
+    const handleHomeScreen = () => {
+        navigation.navigate("HomeScreen");
+    };
+
     const handleTextChange = (text) => {
         setText(text);
         setCharCount(280 - text.length); // Update character count
     };
 
     const pickImage = async () => {
-        const MAX_TOTAL_SIZE_MB = 20; // Maximum total size in megabytes allowed
-        const totalSizeAllowedBytes = MAX_TOTAL_SIZE_MB * 1024 * 1024; // Convert megabytes to bytes
-    
-        let totalNewSizeBytes = 0;
-        let selectedImages = [];
-    
-        // Calculate total size of images already selected
-        for (let i = 0; i < images.length; i++) {
-            const uri = images[i];
-            const file = await uriToBlob(uri);
-            totalNewSizeBytes += file.size;
-            selectedImages.push(uri);
-            console.log('image uri',uri);
-        }
-    
-        // Check if adding another image exceeds the maximum total size allowed
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [4, 4],
+          quality: 1,
+          multiple: true, // Allow multiple selections
         });
-    
+      
+        console.log(result);
+      
         if (!result.canceled) {
-            const newImageSizeBytes = (await uriToBlob(result.assets[0].uri)).size;
-            totalNewSizeBytes += newImageSizeBytes;
-    
-            if (totalNewSizeBytes <= totalSizeAllowedBytes) {
-                selectedImages.push(result.assets[0].uri);
-                setImages(selectedImages);
-                console.log(result.assets[0].uri);
-                console.log('selected images:',selectedImages);
-
-            } else {
-                const totalSizeUploadedMB = (totalNewSizeBytes / (1024 * 1024)).toFixed(2);
-                alert(`Your images already exceed the maximum allowed size (${MAX_TOTAL_SIZE_MB} MB). Total size uploaded: ${totalSizeUploadedMB} MB. Please choose another.`);
-            }
+          const selectedImages = result.assets.map((asset) => asset.uri);
+          setImages((prevImages) => [...prevImages, ...selectedImages]);
         }
     };
-    
-    
-    // Helper function to convert image URI to Blob
-    const uriToBlob = async (uri) => {
-        const uriParts = uri.split('.');
-        const fileType = uriParts[uriParts.length - 1];
-    
-        const response = await fetch(uri);
-        const blob = await response.blob();
-    
-        return blob;
-    };
-    
-    
 
-    const handlePost = async() => {
-        // Save text and images to Firestore using Fire.shared.addPost method
-
-        const blobImages = [];
-        for (const uri of images) {
-            const blob = await uriToBlob(uri);
-            blobImages.push(blob); 
-        }
-
-  // Save text and Blob images to Firestore using Fire.shared.addPost method
-        fire.addPost({ text, images: blobImages })
-
-            .then(() => {
-            // Reset text and images state
-            setText('');
-            setImages([]);
-            // Navigate back to the previous screen
-            goBack();
-            })
-            .catch(error => {
-            console.log('Error:', error);
+    const onSubmitMethod = async (value) => {
+        try {
+          console.log('images:', images);
+      
+          // Handle uploading multiple images
+          const uploadTasks = images.map(async (image) => {
+            const resp = await fetch(image);
+            const blob = await resp.blob();
+            const storageRef = ref(FIREBASE_STORAGE, 'post-imgs/' + Date.now() + ".jpg");
+            await uploadBytes(storageRef, blob);
+            return getDownloadURL(storageRef);
+          });
+      
+          // Wait for all uploads to finish
+          const downloadURLs = await Promise.all(uploadTasks);
+      
+          // Assign the download URLs to the post data
+          value.images = downloadURLs;
+          console.log('donwload url:',downloadURLs)
+      
+          // Create the post in Firestore
+          const docRef = await addDoc(collection(FIREBASE_DB, "posts"), value);
+          if (docRef.id) {
+            const updateRef = doc(FIREBASE_DB, 'posts', docRef.id);
+            await updateDoc(updateRef, {
+              userId: currentUser.id,
+              userName: currentUser.name,
+              userEmail: currentUser.email
             });
-
-        // fire.addPost({ text, images })
-        //     .then(() => {
-        //         // Reset text and images state
-        //         setText('');
-        //         setImages([]);
-        //         // Navigate back to the previous screen
-        //         goBack();
-        //     })
-        //     .catch(error => {
-        //         console.log('Error:', error);
-        //     });
-    };
+            console.log('post successsfully added:',docRef.id)
+            Alert.alert('Successfully Added', "Your post is successfully added. This post will be view by other users");
+            handleHomeScreen();
+          }
+        } catch (error) {
+          console.error('Error adding post:', error);
+        } finally {
+          setImages([]); // Clear images array after uploading
+        }
+      };
+      
 
     const removeImage = (index) => {
         setImages(prevImages => prevImages.filter((_, i) => i !== index));
@@ -126,46 +102,76 @@ const CreatePostScreen = () => {
       
     return (
         <SafeAreaView style={styles.container}>
+            <Formik
+                initialValues={{text:'', likes:[], images:[], userId: ``, userName:'', userEmail:'', timestamp:new Date() }}
+                onSubmit={value => {
+                    setFormSubmitted(true);
+                    onSubmitMethod(value);
+                }}
+
+                validate={(values)=>{
+                    const errors = {}
+                    if(!values.text)
+                    {
+                        console.log("Title not Present");
+                        Alert.alert('Alert!', 'Please fill in all the fields...', [{ text: 'OK', onPress: () => {}, style: 'cancel' }], { cancelable: false });
+                        errors.name="Title Must be there"   
+                    }
+                    return errors;
+                }}
+            >
             
-            <View style={styles.header}>
-                <TouchableOpacity onPress={goBack}>
-                    <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
-                </TouchableOpacity>
-                <View style={styles.titleContainer}>
-                    <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
-                </View>
-                <TouchableOpacity style={styles.postBtn} onPress={handlePost}>
-                    <Text style={{ fontWeight:"700", fontSize:14}}>Post</Text>
-                </TouchableOpacity>
-            </View>
+            
 
-            <View style={styles.inputContainer}>
-                <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
-                <TextInput
-                    autoFocus={true}
-                    multiline={true}
-                    // numberOfLines={20}
-                    autoCapitalize='none'
-                    autoCorrect= {false}
-                    style={{ flex: 1, textAlignVertical: 'top' }}
-                    placeholder='Want to share something?'
-                    value={text}
-                    onChangeText={handleTextChange}
-                    maxLength={280}
-                ></TextInput>
-            </View>
+            
+                {({handleChange, handleBlur, handleSubmit, values, setFieldValue, errors})=>(
+                    <View>
+                        <View style={styles.header}>
+                        <TouchableOpacity onPress={goBack}>
+                            <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                        </TouchableOpacity>
+                        <View style={styles.titleContainer}>
+                            <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
+                        </View>
+                        <TouchableOpacity style={styles.postBtn} onPress={handleSubmit}>
+                            <Text style={{ fontWeight:"700", fontSize:14}}>Post</Text>
+                        </TouchableOpacity>
+                    </View>
+                        <View style={styles.inputContainer}>
+                            <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+                            <TextInput
+                                autoFocus={true}
+                                multiline={true}
+                                // numberOfLines={20}
+                                autoCapitalize='none'
+                                autoCorrect= {false}
+                                style={{ flex: 1, textAlignVertical: 'top' }}
+                                placeholder='Want to share something?'
+                                value={values?.text}
+                                onChangeText={(text) => {
+                                    handleChange('text')(text); // Use Formik's handleChange to update form values
+                                    handleTextChange(text); // Your custom text change handler
+                                  }}
+                                maxLength={280}
+                            ></TextInput>
+                        </View>
+                        <View>
+                            <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: charCount <= 0 ? 'red' : 'grey' }}>
+                                {charCount <= 0 ? '0' : charCount} characters left
+                            </Text>
+                        </View>
+                        <Text style={{ marginLeft: 25, marginTop:5, fontSize: 14, color: 'grey' }}>
+                            Total images allowed: 4 | Total size: 60MB
+                        </Text>
+                        <TouchableOpacity style={styles.photo} onPress={pickImage}>
+                            <Ionicons name="md-camera" size={32} color="#696969"> </Ionicons>
+                        </TouchableOpacity>
+                    </View>
+                    
+                )}
+            </Formik>
 
-            <View>
-                <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: charCount <= 0 ? 'red' : 'grey' }}>
-                    {charCount <= 0 ? '0' : charCount} characters left
-                </Text>
-            </View>
-            <Text style={{ marginLeft: 25, marginTop:5, fontSize: 14, color: 'grey' }}>
-                Total images allowed: 4 | Total size: 60MB
-            </Text>
-            <TouchableOpacity style={styles.photo} onPress={pickImage}>
-                <Ionicons name="md-camera" size={32} color="#696969"> </Ionicons>
-            </TouchableOpacity>
+            
 
             <View style={{ marginHorizontal: 32, marginTop: 32, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
                 {images.slice(0, 4).map((uri, index) => (

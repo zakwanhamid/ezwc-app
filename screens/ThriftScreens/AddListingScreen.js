@@ -91,6 +91,8 @@ const AddListingScreen = () => {
 
         setLoading(true);
         //Convert uri to blob file
+        console.log('images:',image)
+
         const resp = await fetch(image);
         const blob = await resp.blob();
         const storageRef = ref(FIREBASE_STORAGE, 'listing-imgs/'+Date.now()+".jpg");

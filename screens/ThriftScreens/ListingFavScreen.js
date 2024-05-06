@@ -20,6 +20,7 @@ const ListingFavScreen = ({route}) => {
 
     const goBack = () => {
         navigation.goBack(); // Go back to the previous screen\
+        console.log('curretnUSerfav:',currentUser)
     };
 
 

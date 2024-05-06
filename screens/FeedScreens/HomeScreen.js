@@ -57,8 +57,8 @@ const HomeScreen = () => {
     hour12: true,
   };
 
-  const handleCreatePost = () => {
-    navigation.navigate("CreatePostScreen");
+  const handleCreatePost = (currentUser) => {
+    navigation.navigate('CreatePostScreen',{currentUser});
   };
   const handleProfileSearch = () => {
     navigation.navigate("ProfileSearchScreen");
@@ -81,6 +81,7 @@ const HomeScreen = () => {
           ...documentSnapshot.data(),
         }; // Include user ID in userData
         setCurrentUser(userData);
+        console.log('ccurrentuser:',currentUser)
         setLoading(false);
       } else {
         // Handle case where user document doesn't exist
@@ -554,7 +555,7 @@ const HomeScreen = () => {
         <View style={styles.titleContainer}>
           <Text style={{ fontSize: 20, fontWeight: "600" }}>Feed</Text>
         </View>
-        <TouchableOpacity onPress={handleCreatePost}>
+        <TouchableOpacity onPress={() => handleCreatePost(currentUser)}>
           <AntDesign name="pluscircleo" size={24} color="#529C4E" />
         </TouchableOpacity>
       </View>
