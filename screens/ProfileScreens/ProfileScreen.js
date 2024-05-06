@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { doc, collection, onSnapshot, where, getDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ListingList from '../../components/ProfileScreen/ListingList';
+import PostList from '../../components/ProfileScreen/PostList';
 
 
 //this is profile screen that is unique for every user
@@ -22,7 +23,7 @@ const ProfileScreen = () => {
   const [followingCount, setFollowingCount] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
   const [active,setActive] = useState(0);
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
+  
   const handleEditProfile = () => {
     navigation.navigate('EditProfileScreen');
   };
@@ -115,27 +116,10 @@ const ProfileScreen = () => {
 
   const renderPostContent = () => {
       return (
-          <View style={{paddingBottom:650}}>
-              <ScrollView>
-              {/* Display currentUser and userPosts data */}
-              {userPosts.sort((a, b) => b.timestamp - a.timestamp).map((post, index) => (
-              <View key={index} style={styles.postItem}>
-                  <View style={{width:'15%', marginRight: '5%'}}>
-                      <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
-                  </View>
-                  <View style={{width:'80%', marginTop: 8}}>
-                      <View >
-                          <Text style={{fontSize: 15, fontWeight: 600}}>{currentUser.name}</Text>
-                          <Text style={{fontSize: 13, fontWeight: 200}}>{currentUser.email}</Text>
-                          <Text>{post.timestamp.toDate().toLocaleString('en-US', options)}</Text>
-                      </View>
-                      <View style={{marginTop:5}}>
-                          <Text >{post.text}</Text>
-                      </View>
-                  </View>
-              </View>
-              ))}
-              </ScrollView>
+          <View style={{paddingBottom:670}}>
+            <ScrollView>
+              <PostList currentUser = {currentUser}/>
+            </ScrollView>
           </View>
           
       );
@@ -375,20 +359,6 @@ const styles = StyleSheet.create({
       borderBottomColor: "#D8D9DB",
       justifyContent: "space-between",
   },
-  postItem: {
-      flexDirection: "row",
-      padding: 7,
-      paddingHorizontal: 7,
-      borderBottomWidth: 1,
-      borderBottomColor: "#D8D9DB",
-  },
-  postAvatar: {
-      width: 60,
-      height:60,
-      borderRadius: 50,
-      borderColor: "white",
-      borderWidth: 2,
-  },
   button: {
       width: "50%", 
       alignItems: "center",
@@ -450,6 +420,7 @@ const styles = StyleSheet.create({
         borderColor: "white",
         borderWidth: 2,
   },
+  
 })
 
 export default ProfileScreen

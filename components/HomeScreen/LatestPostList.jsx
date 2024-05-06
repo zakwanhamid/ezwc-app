@@ -1,17 +1,16 @@
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'
 import React from 'react'
-import ListingItem from './ListingItem'
+import PostItem from './PostItem'
 
-export default function LatestItemList({latestItemList, heading}) {
-  console.log("latestItemList",latestItemList)
+export default function LatestPostList({latestPostList, heading}) {
+    console.log('latestPSToList:',latestPostList)
   return (
     <View style={styles.container}>
       <Text style={styles.listingHeaderTxt}>{heading}</Text>
       <FlatList
-        data={latestItemList}
-        numColumns={2}
+        data={latestPostList}
         renderItem={({item,index})=>(
-            <ListingItem item={item}/>
+            <PostItem item={item}/>
         )}
       />
     </View>
@@ -20,8 +19,6 @@ export default function LatestItemList({latestItemList, heading}) {
 
 const styles = StyleSheet.create({
     container:{
-        marginHorizontal:20,
-        marginTop:10,
     },
     listingHeaderTxt:{
         fontSize: 18,
