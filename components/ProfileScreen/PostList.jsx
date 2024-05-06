@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestPostList from '../HomeScreen/LatestPostList';
 
@@ -14,7 +14,10 @@ export default function PostList({currentUser}) {
 
     const getItemListByCurrentUser = async () => {
         setPostList([]);
-        const q=query(collection(FIREBASE_DB, 'posts'),where('userId','==', currentUser.id));
+        const q=query(
+            collection(FIREBASE_DB, 'posts'),
+            where('userId','==', currentUser.id),
+            orderBy('timestamp','desc'));
         const snapshot = await getDocs(q);
         snapshot.forEach(doc => {
             const postData = {
