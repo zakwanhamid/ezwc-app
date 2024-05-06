@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 export default function PostItem({item}) {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
@@ -31,6 +32,42 @@ export default function PostItem({item}) {
                       <Image source={{ uri: imageUri }} style={styles.postImages} />
                   ))}
               </View>
+              <View style={styles.interactionCount}>
+                      <TouchableOpacity
+                        onPress={() => handleLikesModalOpen(item.likes)}
+                      >
+                        {item.likes && item.likes.includes(item.UserId) ? (
+                          <AntDesign name="like1" size={20} color="#529C4E" />
+                        ) : (
+                          <AntDesign name="like2" size={20} color="black" />
+                        )}
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => handleLikesModalOpen(item.likes)}
+                      >
+                        <Text> {item.likes ? item.likes.length : 0} </Text>
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => handleCommentsModalOpen(item.id)}
+                      >
+                        <FontAwesome
+                          name="comments-o"
+                          size={24}
+                          color="black"
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={() => handleCommentsModalOpen(item.id)}
+                      >
+                        <Text>
+                          {" "}
+                          {item.comments ? item.comments.length : 0}{" "}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
           </View>
       </View>
               
@@ -63,6 +100,13 @@ const styles = StyleSheet.create({
     height:100,
     borderRadius: 8,
     marginBottom:10
-  }
+  },
+  interactionCount: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginRight: 20,
+    marginVertical: 10,
+  },
 
 })
