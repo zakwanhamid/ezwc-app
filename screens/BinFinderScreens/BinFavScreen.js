@@ -1,4 +1,4 @@
-import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -69,6 +69,22 @@ const BinFavScreen = () => {
     fetchData(currentUser.favBin, setFavBinsData);
     }
   }, [currentUser.favBin]);
+
+  const onDirectionClick = (item) => {
+    const latitude = item.latitude; // Assuming these fields are present in your item object
+    const longitude = item.longitude;
+  
+    // Constructing the URL based on the platform with a query for directions
+    const url = Platform.select({
+      ios: `maps:${latitude},${longitude}?q=${latitude},${longitude}`,
+      android: `geo:${latitude},${longitude}?q=${latitude},${longitude}`,
+    });
+  
+    console.log('URL:', url);
+  
+    // Opening the URL to show directions
+    Linking.openURL(url).catch(err => console.error('Error opening URL:', err));
+  };
   
 
   const renderFavBinList = ({ item }) => (
@@ -98,7 +114,7 @@ const BinFavScreen = () => {
                 <Text style={{ color: 'gray' ,marginTop:2, fontSize: 20}}>({item.type}) </Text>
             </View> 
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={()=>onDirectionClick(item)}>
               <View style={styles.locationArrow}>
                   <FontAwesome name="location-arrow" size={25} color="white"/>
               </View>

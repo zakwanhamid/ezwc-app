@@ -89,10 +89,12 @@ const ProfileSearchScreen = () => {
             onChangeText={(query) => handleSearch(query)}
             />
         </View>
-          <FlatList 
-          data={filteredUsers} 
-          keyExtractor={(item) => item.id} 
-          renderItem={renderProfileItem}/>
+        <View style={{paddingBottom: 300,}}>
+            <FlatList 
+            data={filteredUsers} 
+            keyExtractor={(item) => item.id} 
+            renderItem={renderProfileItem}/>
+        </View>
     </SafeAreaView>
     
   )

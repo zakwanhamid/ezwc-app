@@ -1,15 +1,231 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, FlatList, Alert, TextInput } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
+import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
-export default function PostItem({item}) {
+export default function PostItem({item, changeLike, setChangeLike}) {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
   const navigation = useNavigation();
+  const [currentUser, setCurrentUser] = useState([]);
+  const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
+  const [isCommentInputModalVisible, setIsCommentInputModalVisible] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [likesModalData, setLikesModalData] = useState([]);
+  const [commentsModalData, setCommentsModalData] = useState([]);
+  const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
 
-    const handleItemDetails = (item) => {
-        navigation.navigate('ListingDetailsScreen',{product: item});
+
+
+
+    useEffect(() => {
+      const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+      const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+    
+      const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+        if (documentSnapshot.exists()) {
+          const userData = {
+            id: documentSnapshot.id,
+            ...documentSnapshot.data(),
+          }; // Include user ID in userData
+          setCurrentUser(userData); // Log the updated currentUse
+          console.log('user:',currentUser)
+        } else {
+          // Handle case where user document doesn't exist
+          console.log("User document does not exist");
+        }
+      });
+    
+      // Make sure to return the unsubscribe function
+      return () => unsubscribe;
+    }, []);
+
+    const handlePostLike = async (userId) => {
+      try {
+        const postRef = doc(collection(FIREBASE_DB, "posts"), item.id);
+    
+        // Get the current post data
+        const postDoc = await getDoc(postRef);
+        if (postDoc.exists()) {
+          const postData = postDoc.data();
+    
+          // Check if the likes array already contains the current user's I
+          if (postData.likes.includes(userId)) {
+            // Remove the user ID from the likes array
+            const updatedLikes = postData.likes.filter((id) => id !== userId);
+
+            // Update the post document with the updated likes array
+            await updateDoc(postRef, { likes: updatedLikes });
+
+            console.log("User removed from likes successfully.");
+            setChangeLike(!setChangeLike);
+
+            return;
+          }
+    
+          // Add the current user's ID to the likes array
+          const updatedLikes = [...postData.likes, userId];
+    
+          // Update the post document with the updated likes array
+          await updateDoc(postRef, { likes: updatedLikes });
+    
+          console.log("User added to likes successfully.");
+          setChangeLike(!changeLike);
+        } else {
+          console.log("Post document not found.");
+        }
+      } catch (error) {
+        console.error("Error adding user to likes:", error);
+      }
     };
+
+    const handleLikesModalOpen = async (userIds) => {
+      try {
+        const usersPromises = userIds.map(async (userId) => {
+          const userDocRef = doc(FIREBASE_DB, "users", userId);
+          const userDocSnapshot = await getDoc(userDocRef);
+  
+          if (userDocSnapshot.exists()) {
+            return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
+          } else {
+            return null;
+          }
+        });
+  
+        const usersData = await Promise.all(usersPromises);
+        const filteredUsersData = usersData.filter((user) => user !== null);
+        setLikesModalData(filteredUsersData);
+        setIsLikesModalVisible(true);
+      } catch (error) {
+        console.error("Error fetching user dataa:", error);
+      }
+    };
+
+    const renderLikesModalContent = () => {
+      return (
+        <FlatList
+          data={likesModalData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.profiles}>
+              <Image
+                source={require("../../assets/profilePic.jpeg")}
+                style={styles.profilesAvatar}
+              ></Image>
+              <View style={{ marginVertical: 14, marginLeft: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
+                <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
+                  {item.email}
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      );
+    };
+
+    const renderCommentsModalContent = (comment) => {
+      return (
+        <FlatList
+          data={commentsModalData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <View style={styles.commentContainer}>
+              <View style={{ width: "20%", marginRight: "5%" }}>
+                <Image
+                  source={require("../../assets/profilePic.jpeg")}
+                  style={styles.postAvatar}
+                ></Image>
+              </View>
+              <View style={{ width: "80%", marginTop: 8 }}>
+                <View>
+                  <Text style={{ fontSize: 15, fontWeight: 600 }}>
+                    {item.commenterName}
+                  </Text>
+                  <Text style={{ fontSize: 13, fontWeight: 200 }}>
+                    {item.commenterEmail}
+                  </Text>
+                  <Text>
+                    {item.timestamp.toDate().toLocaleString('en-US', options)}
+                  </Text>
+                </View>
+                <View style={{ marginTop: 5 }}>
+                  <Text>{item.text}</Text>
+                </View>
+              </View>
+            </View>
+          )}
+        />
+
+      );
+    };
+
+    const handleCommentModal = (itemData) => {
+      // Set the item data in state
+      setIsCommentInputModalVisible(true);
+    };
+
+    const handleCommentSubmit = async (postId) => {
+      if (!commentText.trim()) {
+        // Handle empty comment input
+        return;
+      }
+  
+      const postRef = doc(collection(FIREBASE_DB, "posts"), postId);
+      const commentsCollectionRef = collection(FIREBASE_DB, "comments");
+  
+      try {
+        const commentData = {
+          text: commentText,
+          commenterId: currentUser.id,
+          commenterName: currentUser.name,
+          commenterEmail: currentUser.email,
+          timestamp: serverTimestamp(),
+          postId: postId,
+        };
+  
+        // Add comment data to the 'comments' collection
+        const newCommentRef = await addDoc(commentsCollectionRef, commentData);
+  
+        // Update the post document's 'comments' array with the new comment ID
+        await updateDoc(postRef, {
+          comments: arrayUnion(newCommentRef.id),
+        });
+  
+        setCommentText("");
+        console.log("Comment added:", commentText);
+        console.log("to post id:", postId);
+        setIsCommentInputModalVisible(false);
+        Alert.alert('Comment submitted!','Your comment has been submitted under this post');
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
+    };
+
+    const handleCommentsModalOpen = async (commentIds) => {
+      try {
+
+        const commentsPromises = commentIds.map(async (commentId) => {
+          const commentDocRef = doc(FIREBASE_DB, "comments", commentId);
+          const commentDocSnapshot = await getDoc(commentDocRef);
+  
+          if (commentDocSnapshot.exists()) {
+            return { id: commentDocSnapshot.id, ...commentDocSnapshot.data() };
+          } else {
+            return null;
+          }
+        });
+  
+        const commentsData = await Promise.all(commentsPromises);
+        const filteredCommentsData = commentsData.filter((comment) => comment !== null);
+        setCommentsModalData(filteredCommentsData);
+        setIsCommentsModalVisible(true);
+      } catch (error) {
+        console.error("Error fetching comments dataa:", error);
+      }
+    };
+    
 
 
   return (
@@ -32,43 +248,196 @@ export default function PostItem({item}) {
                       <Image source={{ uri: imageUri }} style={styles.postImages} />
                   ))}
               </View>
+
               <View style={styles.interactionCount}>
-                      <TouchableOpacity
-                        onPress={() => handleLikesModalOpen(item.likes)}
-                      >
-                        {item.likes && item.likes.includes(item.UserId) ? (
-                          <AntDesign name="like1" size={20} color="#529C4E" />
-                        ) : (
-                          <AntDesign name="like2" size={20} color="black" />
-                        )}
-                      </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleLikesModalOpen(item.likes)}
+                >
+                  {item.likes && item.likes.includes(currentUser.id) ? (
+                    <AntDesign name="like1" size={20} color="#529C4E" />
+                  ) : (
+                    <AntDesign name="like2" size={20} color="black" />
+                  )}
+                </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleLikesModalOpen(item.likes)}
-                      >
-                        <Text> {item.likes ? item.likes.length : 0} </Text>
-                      </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleLikesModalOpen(item.likes)}
+                >
+                  <Text> {item.likes? item.likes.length : 0} </Text>
+                </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleCommentsModalOpen(item.id)}
-                      >
-                        <FontAwesome
-                          name="comments-o"
-                          size={24}
-                          color="black"
-                        />
-                      </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => handleCommentsModalOpen(item.comments)}
+                >
+                  <FontAwesome
+                    name="comments-o"
+                    size={24}
+                    color="black"
+                  />
+                </TouchableOpacity>
 
-                      <TouchableOpacity
-                        onPress={() => handleCommentsModalOpen(item.id)}
-                      >
-                        <Text>
-                          {" "}
-                          {item.comments ? item.comments.length : 0}{" "}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                <TouchableOpacity
+                  onPress={() => handleCommentsModalOpen(item.comments)}
+                >
+                  <Text>
+                    {" "}
+                    {item.comments ? item.comments.length : 0}{" "}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              { item.userId === currentUser.id ?
+                (null):(<View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+                >
+                <TouchableOpacity
+                  style={[
+                    styles.button,
+                    item.likes && item.likes.includes(item.userId)
+                      ? styles.likedButton
+                      : null,
+                  ]}
+                  onPress={() => handlePostLike(currentUser.id)}
+                >
+                  {item.likes && item.likes.includes(currentUser.id) ? (
+                    <Text
+                      style={[styles.buttonText, styles.buttonTextLiked]}
+                    >
+                      Liked
+                    </Text>
+                  ) : (
+                    <Text style={styles.buttonText}>Like </Text>
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() => handleCommentModal()}
+                >
+                  <Text style={styles.buttonText}>Comment</Text>
+                </TouchableOpacity>
+              </View> ) 
+              }
+              
           </View>
+
+          <Modal
+          visible={isLikesModalVisible}
+          onRequestClose={() => setIsLikesModalVisible(false)}
+          animationType="fade"
+          transparent={true}
+          >
+            <View style={styles.modalBg}>
+              <View style={styles.modalContainer}>
+                <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Likes</Text>
+                <FlatList
+                  style={{ width: "90%" }}
+                  data={likesModalData}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderLikesModalContent}
+                />
+                <TouchableOpacity
+                  style={[styles.closeBtn, { marginTop: 20 }]}
+                  onPress={() => setIsLikesModalVisible(false)}
+                >
+                  <Text> Close </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+          visible={isCommentInputModalVisible}
+          onRequestClose={() => setIsCommentInputModalVisible(false)}
+          animationType="fade"
+          transparent={true}
+          >
+            <View style={styles.modalBg}>
+              <View style={styles.modalContainer}>
+                <Text style={[styles.modalHeader, { fontWeight: 700 }]}>
+                  Add Comment
+                </Text>
+                <TouchableOpacity
+                  style={{ position: "absolute", top: 0, right: 0, margin: 18 }}
+                  onPress={() => setIsCommentInputModalVisible(false)}
+                >
+                  <AntDesign name="close" size={24} color="black" />
+                </TouchableOpacity>
+
+                <View style={styles.inputContainer}>
+                  <Image
+                    source={require("../../assets/profilePic.jpeg")}
+                    style={styles.avatar}
+                  ></Image>
+                  <TextInput
+                    autoFocus={true}
+                    multiline={true}
+                    // numberOfLines={20}
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={{ flex: 1, textAlignVertical: "top" }}
+                    placeholder="Enter your comment..."
+                    value={commentText}
+                    onChangeText={(text) => setCommentText(text)}
+                    maxLength={100}
+                  ></TextInput>
+                </View>
+                <TouchableOpacity
+                  style={[styles.closeBtn, { marginTop: 20 }]}
+                  onPress={() => handleCommentSubmit(item.id)}
+                >
+                  <Text> Send </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+
+      <Modal
+        visible={isCommentsModalVisible}
+        onRequestClose={() => setIsCommentsModalVisible(false)}
+        animationType="fade"
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <View style={styles.modalContainer}>
+            <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Comments</Text>
+            <FlatList
+                  style={{ width: "90%" }}
+                  data={commentsModalData}
+                  keyExtractor={(item) => item.id}
+                  renderItem={renderCommentsModalContent}
+                />
+            <TouchableOpacity
+              style={[styles.closeBtn, { marginTop: 20 }]}
+              onPress={() => setIsCommentsModalVisible(false)}
+            >
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/*
+        <View style={styles.modalBg}>
+          <View style={styles.modalContainer}>
+            <Text style={[styles.modalHeader, { fontWeight: 700 }]}>
+              Comments
+            </Text>
+            {commentsData ? (
+              
+            ) : (
+              <Text> No comment available</Text>
+            )}
+            <TouchableOpacity
+              style={[styles.closeBtn, { marginTop: 20 }]}
+              onPress={() => setIsCommentsModalVisible(false)}
+            >
+              <Text> Close </Text>
+            </TouchableOpacity>
+          </View>
+        </View>*/}
+
       </View>
               
   )
@@ -105,8 +474,94 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-end",
-    marginRight: 20,
+    marginRight: 10,
     marginVertical: 10,
+  },
+  button: {
+    width: "50%",
+    alignItems: "center",
+    padding: 10,
+    borderBottomColor: "#529C4E",
+    // backgroundColor: 'white'
+  },
+  buttonText: {
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  buttonTextLiked: {
+    color: "#529C4E",
+  },
+  modalBg: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "white",
+    paddingVertical: 30,
+    borderRadius: 20,
+    elevation: 20,
+    alignItems: "center",
+  },
+  modalHeader: {
+    fontSize: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+  },
+  modalSumm: {
+    fontSize: 16,
+    marginTop: 20,
+  },
+  closeBtn: {
+    backgroundColor: "#529C4E",
+    width: 100,
+    height: 40,
+    borderRadius: 15,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOpacity: 0.5,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+  },
+  profiles: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#D8D9DB",
+  },
+  profilesAvatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    borderColor: "white",
+    borderWidth: 2,
+  },
+  inputContainer: {
+    marginHorizontal: 25,
+    marginTop: 25,
+    paddingBottom: 40,
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderBottomColor: "#D8D9DB",
+  },
+  avatar: {
+    width: 60,
+    height: 60,
+    borderRadius: 24,
+    marginRight: 16,
+  },
+  commentContainer: {
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: "#D8D9DB",
   },
 
 })

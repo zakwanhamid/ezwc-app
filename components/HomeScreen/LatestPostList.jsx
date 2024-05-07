@@ -2,15 +2,15 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import React from 'react'
 import PostItem from './PostItem'
 
-export default function LatestPostList({latestPostList, heading}) {
-    console.log('latestPSToList:',latestPostList)
+export default function LatestPostList({latestPostList, heading, changeLike, setChangeLike}) {
+    console.log('changeLike',changeLike)
   return (
     <View style={styles.container}>
       <Text style={styles.listingHeaderTxt}>{heading}</Text>
       <FlatList
         data={latestPostList}
         renderItem={({item,index})=>(
-            <PostItem item={item}/>
+            <PostItem item={item} changeLike = {changeLike} setChangeLike ={setChangeLike}/>
         )}
       />
     </View>

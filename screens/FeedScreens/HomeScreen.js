@@ -37,6 +37,7 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState([]);
   const [mergedData, setMergedData] = useState([]);
+  const [changeLike, setChangeLike] = useState(false);
   const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
   const [isCommentInputModalVisible, setIsCommentInputModalVisible] = useState(false);
   const [isCommentAddedModalVisible, setIsCommentAddedModalVisible] = useState(false);
@@ -74,6 +75,7 @@ const HomeScreen = () => {
   }, [navigation]);
 
   useEffect(() => {
+    getCurrentUserDocument();
     getPostListByFollowing(currentUser.following);
   },[]);
 
@@ -88,7 +90,7 @@ const HomeScreen = () => {
           
           snapshot.forEach(doc => {
               const postData = {
-                  id: doc.id, // Include the docume ID in the data
+                  id: doc.id, // Include the docume ID in the dat
                   ...doc.data(),
               };
               console.log('doc:', postData);
@@ -99,27 +101,74 @@ const HomeScreen = () => {
       }
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+  //   const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+  
+  //   const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+  //     if (documentSnapshot.exists()) {
+  //       const userData = {
+  //         id: documentSnapshot.id,
+  //         ...documentSnapshot.data(),
+  //       }; // Include user ID in userData
+  //       setCurrentUser(userData); // Log the updated currentUse
+  //       setLoading(false);
+  //     } else {
+  //       // Handle case where user document doesn't exist
+  //       console.log("User document does not exist");
+  //     }
+  //   });
+  
+  //   // Make sure to return the unsubscribe function
+  //   return () => unsubscribe;
+  // }, []);
+
+  const getCurrentUserDocument = async () => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
   
-    const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
-      if (documentSnapshot.exists()) {
+    try {
+      const userDocSnapshot = await getDoc(userRef);
+      if (userDocSnapshot.exists()) {
         const userData = {
-          id: documentSnapshot.id,
-          ...documentSnapshot.data(),
-        }; // Include user ID in userData
-        setCurrentUser(userData); // Log the updated currentUser
-        setLoading(false);
+          id: userDocSnapshot.id,
+          ...userDocSnapshot.data(),
+        };
+        console.log("User document:", userData);
+        setCurrentUser(userData);
+        return userData; // Return the user document data
       } else {
-        // Handle case where user document doesn't exist
         console.log("User document does not exist");
+        return null; // Handle case where user document doesn't exist
       }
-    });
+    } catch (error) {
+      console.error("Error fetching user document:", error);
+      return null; // Handle error fetching user document
+    }
+  };
+
+
+  // const fetchData = async() => {
+  //   const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+  //   const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
   
-    // Make sure to return the unsubscribe function
-    return () => unsubscribe;
-  }, []);
+  //   const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+  //     if (documentSnapshot.exists()) {
+  //       const userData = {
+  //         id: documentSnapshot.id,
+  //         ...documentSnapshot.data(),
+  //       }; // Include user ID in userData
+  //       setCurrentUser(userData); // Log the updated currentUser
+  //       setLoading(false);
+  //     } else {
+  //       // Handle case where user document doesn't exist
+  //       console.log("User document does not exist");
+  //     }
+  //   });
+  
+  //   // Make sure to return the unsubscribe function
+  //   return () => unsubscribe;
+  // }
   
 
   // useEffect(() => {
@@ -194,7 +243,7 @@ const HomeScreen = () => {
   //         })),
   //       }));
 
-  //       // Now mergedData contains user data along with posts and comments for each user
+  //       // Now mergedData contains user data along with posts and comments for each use
   //       setMergedData(mergedDatas);
   //       setLoading(false);
   //     } catch (error) {
@@ -206,83 +255,83 @@ const HomeScreen = () => {
   //   fetchData();
   // }, [currentUser.following]);
 
-  const handlePostLike = async (postId) => {
-    try {
-      const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-      const postRef = doc(FIREBASE_DB, "posts", postId);
+  // const handlePostLike = async (postId) => {
+  //   try {
+  //     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+  //     const postRef = doc(FIREBASE_DB, "posts", postId);
 
-      const postSnapshot = await getDoc(postRef);
-      if (postSnapshot.exists()) {
-        //console.log("PostSnapshot::",postSnapshot.data())
-        const postData = postSnapshot.data();
-        const postLikes = postData.likes || [];
+  //     const postSnapshot = await getDoc(postRef);
+  //     if (postSnapshot.exists()) {
+  //       //console.log("PostSnapshot::",postSnapshot.data())
+  //       const postData = postSnapshot.data();
+  //       const postLikes = postData.likes || [];
 
-        let updatedLikes;
-        if (postLikes.includes(currentUserUid)) {
-          // Remove current user id from post likes array
-          updatedLikes = postLikes.filter((id) => id !== currentUserUid);
-        } else {
-          // Add current user id to post likes array
-          updatedLikes = [...postLikes, currentUserUid];
-        }
+  //       let updatedLikes;
+  //       if (postLikes.includes(currentUserUid)) {
+  //         // Remove current user id from post likes array
+  //         updatedLikes = postLikes.filter((id) => id !== currentUserUid);
+  //       } else {
+  //         // Add current user id to post likes array
+  //         updatedLikes = [...postLikes, currentUserUid];
+  //       }
 
-        // Update likes array in Firestore
-        await updateDoc(postRef, { likes: updatedLikes });
-        console.log("Post likes updated:", updatedLikes);
+  //       // Update likes array in Firestore
+  //       await updateDoc(postRef, { likes: updatedLikes });
+  //       console.log("Post likes updated:", updatedLikes);
 
-        // Fetch the updated post data again
-        const updatedPostSnapshot = await getDoc(postRef);
-        if (updatedPostSnapshot.exists()) {
-          const updatedPostData = updatedPostSnapshot.data();
-          const updatedPost = {
-            id: updatedPostSnapshot.id,
-            ...updatedPostData,
-          };
+  //       // Fetch the updated post data again
+  //       const updatedPostSnapshot = await getDoc(postRef);
+  //       if (updatedPostSnapshot.exists()) {
+  //         const updatedPostData = updatedPostSnapshot.data();
+  //         const updatedPost = {
+  //           id: updatedPostSnapshot.id,
+  //           ...updatedPostData,
+  //         };
 
-          // Update the mergedData state with the updated post data
-          const updatedMergedData = mergedData.map((userData) => {
-            if (userData.posts) {
-              const updatedPosts = userData.posts.map((post) => {
-                if (post.id === postId) {
-                  return updatedPost;
-                }
-                return post;
-              });
-              return { ...userData, posts: updatedPosts };
-            }
-            return userData;
-          });
-          setMergedData(updatedMergedData);
-        }
-      } else {
-        console.log("Post not found");
-      }
-    } catch (error) {
-      console.error("Error handling post like:", error);
-    }
-  };
+  //         // Update the mergedData state with the updated post data
+  //         const updatedMergedData = mergedData.map((userData) => {
+  //           if (userData.posts) {
+  //             const updatedPosts = userData.posts.map((post) => {
+  //               if (post.id === postId) {
+  //                 return updatedPost;
+  //               }
+  //               return post;
+  //             });
+  //             return { ...userData, posts: updatedPosts };
+  //           }
+  //           return userData;
+  //         });
+  //         setMergedData(updatedMergedData);
+  //       }
+  //     } else {
+  //       console.log("Post not found");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error handling post like:", error);
+  //   }
+  // };
 
-  const handleLikesModalOpen = async (userIds) => {
-    try {
-      const usersPromises = userIds.map(async (userId) => {
-        const userDocRef = doc(FIREBASE_DB, "users", userId);
-        const userDocSnapshot = await getDoc(userDocRef);
+  // const handleLikesModalOpen = async (userIds) => {
+  //   try {
+  //     const usersPromises = userIds.map(async (userId) => {
+  //       const userDocRef = doc(FIREBASE_DB, "users", userId);
+  //       const userDocSnapshot = await getDoc(userDocRef);
 
-        if (userDocSnapshot.exists()) {
-          return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
-        } else {
-          return null;
-        }
-      });
+  //       if (userDocSnapshot.exists()) {
+  //         return { id: userDocSnapshot.id, ...userDocSnapshot.data() };
+  //       } else {
+  //         return null;
+  //       }
+  //     });
 
-      const usersData = await Promise.all(usersPromises);
-      const filteredUsersData = usersData.filter((user) => user !== null);
-      setLikesModalData(filteredUsersData);
-      setIsLikesModalVisible(true);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
-  };
+  //     const usersData = await Promise.all(usersPromises);
+  //     const filteredUsersData = usersData.filter((user) => user !== null);
+  //     setLikesModalData(filteredUsersData);
+  //     setIsLikesModalVisible(true);
+  //   } catch (error) {
+  //     console.error("Error fetching user dataa:", error);
+  //   }
+  // };
 
   const renderPostContent = () => {
     return (
@@ -399,7 +448,7 @@ const HomeScreen = () => {
       
         <View style={{paddingBottom:110}}>
           <ScrollView>
-            <LatestPostList latestPostList = {postList}/>
+            <LatestPostList latestPostList = {postList} changeLike = {changeLike} setChangeLike = {setChangeLike}/>
           </ScrollView>
         </View>
         
@@ -429,52 +478,52 @@ const HomeScreen = () => {
     );
   };
 
-  const handleCommentSubmit = async (postId) => {
-    if (!commentText.trim()) {
-      // Handle empty comment input
-      return;
-    }
+  // const handleCommentSubmit = async (postId) => {
+  //   if (!commentText.trim()) {
+  //     // Handle empty comment input
+  //     return;
+  //   }
 
-    const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-    const postRef = doc(collection(FIREBASE_DB, "posts"), postId);
-    const commentsCollectionRef = collection(FIREBASE_DB, "comments");
+  //   const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+  //   const postRef = doc(collection(FIREBASE_DB, "posts"), postId);
+  //   const commentsCollectionRef = collection(FIREBASE_DB, "comments");
 
-    try {
-      const commentData = {
-        text: commentText,
-        userId: currentUserUid,
-        timestamp: serverTimestamp(),
-        postId: postId,
-      };
+  //   try {
+  //     const commentData = {
+  //       text: commentText,
+  //       userId: currentUserUid,
+  //       timestamp: serverTimestamp(),
+  //       postId: postId,
+  //     };
 
-      // Add comment data to the 'comments' collection
-      const newCommentRef = await addDoc(commentsCollectionRef, commentData);
+  //     // Add comment data to the 'comments' collection
+  //     const newCommentRef = await addDoc(commentsCollectionRef, commentData);
 
-      // Update the post document's 'comments' array with the new comment ID
-      await updateDoc(postRef, {
-        comments: arrayUnion(newCommentRef.id),
-      });
+  //     // Update the post document's 'comments' array with the new comment ID
+  //     await updateDoc(postRef, {
+  //       comments: arrayUnion(newCommentRef.id),
+  //     });
 
-      setCommentText("");
-      console.log("Comment added:", commentText);
-      console.log("to post id:", postId);
-      setIsCommentInputModalVisible(false);
-      setIsCommentAddedModalVisible(true);
-    } catch (error) {
-      console.error("Error adding comment:", error);
-    }
-  };
+  //     setCommentText("");
+  //     console.log("Comment added:", commentText);
+  //     console.log("to post id:", postId);
+  //     setIsCommentInputModalVisible(false);
+  //     setIsCommentAddedModalVisible(true);
+  //   } catch (error) {
+  //     console.error("Error adding comment:", error);
+  //   }
+  // };
 
-  const handleCommentModal = (itemData) => {
-    // Set the item data in state
-    setSelectedItem(itemData);
-    setIsCommentInputModalVisible(true);
-  };
+  // const handleCommentModal = (itemData) => {
+  //   // Set the item data in state
+  //   setSelectedItem(itemData);
+  //   setIsCommentInputModalVisible(true);
+  // };
 
   const handleCommentsModalOpen = async (postId) => {
     try {
       const comments = await fetchCommentsForPost(postId);
-      setCommentsData(comments); // Set comments data separately
+      setCommentsData(comments); // Set comments data separate
       console.log("comments:", comments);
       console.log("commentsData:", commentsData);
       setIsCommentsModalVisible(true);
@@ -600,7 +649,7 @@ const HomeScreen = () => {
 
       <View style={{ paddingBottom: 0 }}>{renderPostContent()}</View>
 
-      <Modal
+      {/* <Modal
         visible={isLikesModalVisible}
         onRequestClose={() => setIsLikesModalVisible(false)}
         animationType="fade"
@@ -609,7 +658,7 @@ const HomeScreen = () => {
         <View style={styles.modalBg}>
           <View style={styles.modalContainer}>
             <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Likes</Text>
-            {/* <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>B</Text> */}
+            <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20,}]}>B</Text> 
             <FlatList
               style={{ width: "90%" }}
               data={likesModalData}
@@ -624,9 +673,9 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
-      <Modal
+      {/* <Modal
         visible={isCommentInputModalVisible}
         onRequestClose={() => setIsCommentInputModalVisible(false)}
         animationType="fade"
@@ -672,9 +721,9 @@ const HomeScreen = () => {
             )}
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
-      <Modal
+      {/* <Modal
         visible={isCommentAddedModalVisible}
         onRequestClose={() => setIsCommentAddedModalVisible(false)}
         animationType="fade"
@@ -693,7 +742,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
 
       <Modal
         visible={isCommentsModalVisible}

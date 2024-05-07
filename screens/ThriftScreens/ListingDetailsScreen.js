@@ -14,8 +14,7 @@ export default function ListingDetailsScreen() {
 
     useEffect(() => {
         params&&setProduct(params.product);
-        const currentUserId = FIREBASE_AUTH.currentUser.uid;
-        setCurrentUserUid(currentUserId);
+        getCurrentUserDocument();
     },[params])
 
     console.log('product.id:',product.id)
@@ -33,24 +32,49 @@ export default function ListingDetailsScreen() {
         navigation.goBack(); // Go back to the previous screen\
     };
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+    //     const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+    
+    //     const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
+    //       if (documentSnapshot.exists()) {
+    //         const userData = {
+    //           id: documentSnapshot.id,
+    //           ...documentSnapshot.data(),
+    //         }; // Include user ID in userData
+    //         setCurrentUser(userData);
+    //       } else {
+    //         // Handle case where user document doesn't exist
+    //         console.log("User document does not exist");
+    //       }
+    //     });
+    //     return () => unsubscribe();
+    //   }, []);
+
+    const getCurrentUserDocument = async () => {
         const currentUserUid = FIREBASE_AUTH.currentUser.uid;
         const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
-    
-        const unsubscribe = onSnapshot(userRef, (documentSnapshot) => {
-          if (documentSnapshot.exists()) {
+      
+        try {
+          const userDocSnapshot = await getDoc(userRef);
+          if (userDocSnapshot.exists()) {
             const userData = {
-              id: documentSnapshot.id,
-              ...documentSnapshot.data(),
-            }; // Include user ID in userData
+              id: userDocSnapshot.id,
+              ...userDocSnapshot.data(),
+            };
+            console.log("User document:", userData);
             setCurrentUser(userData);
+            console.log('curUSer:',currentUser.favListing)
+            return userData; // Return the user document data
           } else {
-            // Handle case where user document doesn't exist
             console.log("User document does not exist");
+            return null; // Handle case where user document doesn't exist
           }
-        });
-        return () => unsubscribe();
-      }, []);
+        } catch (error) {
+          console.error("Error fetching user document:", error);
+          return null; // Handle error fetching user document
+        }
+      };
 
     const handleOpenLink = async () => {
         if (!product.userPH) {
@@ -123,7 +147,7 @@ export default function ListingDetailsScreen() {
     
           // Check if listingId is already in the favListing array
           if (currentUser.favListing.includes(listingId)) {
-            // Remove binId from favListing array
+            // Remove binId from favListing arra
             const updatedFavListing = currentUser.favListing.filter(id => id !== listingId);
             await updateDoc(userRef, {
               favListing: updatedFavListing
@@ -159,7 +183,7 @@ export default function ListingDetailsScreen() {
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Item Details</Text>
             </View>
             {
-                product.userId === currentUserUid? (
+                product.userId === currentUser.id? (
                     <TouchableOpacity onPress={() => deleteListing(product.id)}>
                         <AntDesign name="delete" size={24} color="black" />
                     </TouchableOpacity>
