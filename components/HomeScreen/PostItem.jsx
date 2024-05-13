@@ -396,7 +396,7 @@ export default function PostItem({item, updatePostList }) {
           <View style={styles.modalContainer}>
             <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Comments</Text>
             <FlatList
-                  style={{ width: "90%", height: 200 }}
+                  style={{ width: "90%", height: 250 }}
                   data={commentsModalData}
                   keyExtractor={(item) => item.id}
                   renderItem={renderCommentsModalContent}
