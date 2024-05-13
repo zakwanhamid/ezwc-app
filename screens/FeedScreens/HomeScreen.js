@@ -75,7 +75,6 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getCurrentUserDocument();
-    getPostListByFollowing(currentUser.following);
   },[]);
 
   const getPostListByFollowing = async (followingIds) => {
@@ -117,6 +116,7 @@ const HomeScreen = () => {
         };
         console.log("User document:", userData);
         setCurrentUser(userData);
+        getPostListByFollowing(currentUser.following);
         return userData; // Return the user document data
       } else {
         console.log("User document does not exist");
