@@ -5,7 +5,7 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
-export default function PostItem({item, changeLike, setChangeLike}) {
+export default function PostItem({item, updatePostList }) {
   const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: 'numeric', minute: 'numeric', hour12: true };
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState([]);
@@ -15,8 +15,6 @@ export default function PostItem({item, changeLike, setChangeLike}) {
   const [likesModalData, setLikesModalData] = useState([]);
   const [commentsModalData, setCommentsModalData] = useState([]);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
-
-
 
 
     useEffect(() => {
@@ -41,6 +39,8 @@ export default function PostItem({item, changeLike, setChangeLike}) {
       return () => unsubscribe;
     }, []);
 
+    
+
     const handlePostLike = async (userId) => {
       try {
         const postRef = doc(collection(FIREBASE_DB, "posts"), item.id);
@@ -57,9 +57,10 @@ export default function PostItem({item, changeLike, setChangeLike}) {
 
             // Update the post document with the updated likes array
             await updateDoc(postRef, { likes: updatedLikes });
+            item.likes = updatedLikes;
+            updatePostList(item);
 
             console.log("User removed from likes successfully.");
-            setChangeLike(!setChangeLike);
 
             return;
           }
@@ -69,9 +70,10 @@ export default function PostItem({item, changeLike, setChangeLike}) {
     
           // Update the post document with the updated likes array
           await updateDoc(postRef, { likes: updatedLikes });
+          item.likes = updatedLikes;
+          updatePostList(item);
     
           console.log("User added to likes successfully.");
-          setChangeLike(!changeLike);
         } else {
           console.log("Post document not found.");
         }
@@ -102,61 +104,49 @@ export default function PostItem({item, changeLike, setChangeLike}) {
       }
     };
 
-    const renderLikesModalContent = () => {
+    const renderLikesModalContent = ({item}) => {
       return (
-        <FlatList
-          data={likesModalData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.profiles}>
-              <Image
-                source={require("../../assets/profilePic.jpeg")}
-                style={styles.profilesAvatar}
-              ></Image>
-              <View style={{ marginVertical: 14, marginLeft: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
-                <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
-                  {item.email}
-                </Text>
-              </View>
-            </View>
-          )}
-        />
+        <View style={styles.profiles}>
+          <Image
+            source={require("../../assets/profilePic.jpeg")}
+            style={styles.profilesAvatar}
+          ></Image>
+          <View style={{ marginVertical: 14, marginLeft: 10 }}>
+            <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
+            <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
+              {item.email}
+            </Text>
+          </View>
+        </View>
       );
     };
 
-    const renderCommentsModalContent = (comment) => {
+    const renderCommentsModalContent = ({item}) => {
       return (
-        <FlatList
-          data={commentsModalData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.commentContainer}>
-              <View style={{ width: "20%", marginRight: "5%" }}>
-                <Image
-                  source={require("../../assets/profilePic.jpeg")}
-                  style={styles.postAvatar}
-                ></Image>
-              </View>
-              <View style={{ width: "80%", marginTop: 8 }}>
-                <View>
-                  <Text style={{ fontSize: 15, fontWeight: 600 }}>
-                    {item.commenterName}
-                  </Text>
-                  <Text style={{ fontSize: 13, fontWeight: 200 }}>
-                    {item.commenterEmail}
-                  </Text>
-                  <Text>
-                    {item.timestamp.toDate().toLocaleString('en-US', options)}
-                  </Text>
-                </View>
-                <View style={{ marginTop: 5 }}>
-                  <Text>{item.text}</Text>
-                </View>
-              </View>
+        <View style={styles.commentContainer}>
+          <View style={{ width: "20%", marginRight: "5%" }}>
+            <Image
+              source={require("../../assets/profilePic.jpeg")}
+              style={styles.postAvatar}
+            ></Image>
+          </View>
+          <View style={{ width: "80%", marginTop: 8 }}>
+            <View>
+              <Text style={{ fontSize: 15, fontWeight: 600 }}>
+                {item.commenterName}
+              </Text>
+              <Text style={{ fontSize: 13, fontWeight: 200 }}>
+                {item.commenterEmail}
+              </Text>
+              <Text>
+                {item.timestamp.toDate().toLocaleString('en-US', options)}
+              </Text>
             </View>
-          )}
-        />
+            <View style={{ marginTop: 5 }}>
+              <Text>{item.text}</Text>
+            </View>
+          </View>
+        </View>
 
       );
     };
@@ -192,6 +182,11 @@ export default function PostItem({item, changeLike, setChangeLike}) {
         await updateDoc(postRef, {
           comments: arrayUnion(newCommentRef.id),
         });
+        // Add the new comment ID to the comments array
+        item.comments.push(newCommentRef.id);
+
+        // Update local state
+        updatePostList(item);
   
         setCommentText("");
         console.log("Comment added:", commentText);
@@ -226,8 +221,6 @@ export default function PostItem({item, changeLike, setChangeLike}) {
       }
     };
     
-
-
   return (
       <View style={styles.postItem}>
           <View style={{width:'15%', marginRight: '5%'}}>
@@ -332,7 +325,7 @@ export default function PostItem({item, changeLike, setChangeLike}) {
               <View style={styles.modalContainer}>
                 <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Likes</Text>
                 <FlatList
-                  style={{ width: "90%" }}
+                  style={{ width: "90%", height: 200 }}
                   data={likesModalData}
                   keyExtractor={(item) => item.id}
                   renderItem={renderLikesModalContent}
@@ -403,7 +396,7 @@ export default function PostItem({item, changeLike, setChangeLike}) {
           <View style={styles.modalContainer}>
             <Text style={[styles.modalHeader, { fontWeight: 700 }]}>Comments</Text>
             <FlatList
-                  style={{ width: "90%" }}
+                  style={{ width: "90%", height: 200 }}
                   data={commentsModalData}
                   keyExtractor={(item) => item.id}
                   renderItem={renderCommentsModalContent}
@@ -437,7 +430,6 @@ export default function PostItem({item, changeLike, setChangeLike}) {
             </TouchableOpacity>
           </View>
         </View>*/}
-
       </View>
               
   )

@@ -37,7 +37,6 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState([]);
   const [mergedData, setMergedData] = useState([]);
-  const [changeLike, setChangeLike] = useState(false);
   const [isLikesModalVisible, setIsLikesModalVisible] = useState(false);
   const [isCommentInputModalVisible, setIsCommentInputModalVisible] = useState(false);
   const [isCommentAddedModalVisible, setIsCommentAddedModalVisible] = useState(false);
@@ -90,7 +89,7 @@ const HomeScreen = () => {
           
           snapshot.forEach(doc => {
               const postData = {
-                  id: doc.id, // Include the docume ID in the dat
+                  id: doc.id, // Include the docume ID in the data
                   ...doc.data(),
               };
               console.log('doc:', postData);
@@ -99,6 +98,10 @@ const HomeScreen = () => {
       } catch (error) {
           console.error('Error fetching item list by IDs:', error);
       }
+  };
+
+  const updatePostList = (updatedPost) => {
+    setPostList(postList.map(post => post.id === updatedPost.id ? updatedPost : post));
   };
 
   // useEffect(() => {
@@ -111,7 +114,7 @@ const HomeScreen = () => {
   //         id: documentSnapshot.id,
   //         ...documentSnapshot.data(),
   //       }; // Include user ID in userData
-  //       setCurrentUser(userData); // Log the updated currentUse
+  //       setCurrentUser(userData); // Log the updated currentUser
   //       setLoading(false);
   //     } else {
   //       // Handle case where user document doesn't exist
@@ -139,7 +142,7 @@ const HomeScreen = () => {
         return userData; // Return the user document data
       } else {
         console.log("User document does not exist");
-        return null; // Handle case where user document doesn't exist
+        return null; // Handle case where user document doesn't exist 
       }
     } catch (error) {
       console.error("Error fetching user document:", error);
@@ -448,35 +451,35 @@ const HomeScreen = () => {
       
         <View style={{paddingBottom:110}}>
           <ScrollView>
-            <LatestPostList latestPostList = {postList} changeLike = {changeLike} setChangeLike = {setChangeLike}/>
+            <LatestPostList latestPostList = {postList} updatePostList={updatePostList}/>
           </ScrollView>
         </View>
         
     );
   };
 
-  const renderLikesModalContent = () => {
-    return (
-      <FlatList
-        data={likesModalData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.profiles}>
-            <Image
-              source={require("../../assets/profilePic.jpeg")}
-              style={styles.profilesAvatar}
-            ></Image>
-            <View style={{ marginVertical: 14, marginLeft: 10 }}>
-              <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
-              <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
-                {item.email}
-              </Text>
-            </View>
-          </View>
-        )}
-      />
-    );
-  };
+  // const renderLikesModalContent = () => {
+  //   return (
+  //     <FlatList
+  //       data={likesModalData}
+  //       keyExtractor={(item) => item.id}
+  //       renderItem={({ item }) => (
+  //         <View style={styles.profiles}>
+  //           <Image
+  //             source={require("../../assets/profilePic.jpeg")}
+  //             style={styles.profilesAvatar}
+  //           ></Image>
+  //           <View style={{ marginVertical: 14, marginLeft: 10 }}>
+  //             <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
+  //             <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
+  //               {item.email}
+  //             </Text>
+  //           </View>
+  //         </View>
+  //       )}
+  //     />
+  //   );
+  // };
 
   // const handleCommentSubmit = async (postId) => {
   //   if (!commentText.trim()) {
@@ -520,118 +523,118 @@ const HomeScreen = () => {
   //   setIsCommentInputModalVisible(true);
   // };
 
-  const handleCommentsModalOpen = async (postId) => {
-    try {
-      const comments = await fetchCommentsForPost(postId);
-      setCommentsData(comments); // Set comments data separate
-      console.log("comments:", comments);
-      console.log("commentsData:", commentsData);
-      setIsCommentsModalVisible(true);
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-    }
-  };
+  // const handleCommentsModalOpen = async (postId) => {
+  //   try {
+  //     const comments = await fetchCommentsForPost(postId);
+  //     setCommentsData(comments); // Set comments data separate
+  //     console.log("comments:", comments);
+  //     console.log("commentsData:", commentsData);
+  //     setIsCommentsModalVisible(true);
+  //   } catch (error) {
+  //     console.error("Error fetching comments:", error);
+  //   }
+  // };
 
-  const fetchCommentsForPost = async (postId) => {
-    try {
-      //const commentsRef = collection(FIREBASE_DB, "posts", postId, "comments");
-      const commentsRef = doc(collection(FIREBASE_DB, "posts"), postId)
-      console.log("commentsRef", commentsRef);
+  // const fetchCommentsForPost = async (postId) => {
+  //   try {
+  //     //const commentsRef = collection(FIREBASE_DB, "posts", postId, "comments");
+  //     const commentsRef = doc(collection(FIREBASE_DB, "posts"), postId)
+  //     console.log("commentsRef", commentsRef);
 
-      // const postsQuery = query(
-      //   collection(FIREBASE_DB, "posts"),
-      //   where("userId", "==", user.id)
-      // );
+  //     // const postsQuery = query(
+  //     //   collection(FIREBASE_DB, "posts"),
+  //     //   where("userId", "==", user.id)
+  //     // );
 
-      console.log("Sampai sini")
+  //     console.log("Sampai sini")
 
-      const commentsSnapshot = await getDoc(commentsRef);
-      console.log("CommentDOCS", commentsSnapshot);
+  //     const commentsSnapshot = await getDoc(commentsRef);
+  //     console.log("CommentDOCS", commentsSnapshot);
 
-      /*getDoc(commentsRef)
-  .then((postDoc) => {
-    if (postDoc.exists()) {
-      console.log("Post data:", postDoc.data().comments);
-    } else {
-      console.log("Post not found.");
-    }
-  })
-  .catch((error) => {
-    console.error("Error fetching post:", error);
-  });
-  */
+  //     /*getDoc(commentsRef)
+  // .then((postDoc) => {
+  //   if (postDoc.exists()) {
+  //     console.log("Post data:", postDoc.data().comments);
+  //   } else {
+  //     console.log("Post not found.");
+  //   }
+  // })
+  // .catch((error) => {
+  //   console.error("Error fetching post:", error);
+  // });
+  // */
 
-      /*console.log("commentsSnapshot", commentsSnapshot);
-      commentsSnapshot.forEach((doc) => {
-        console.log("Document ID:", doc.id);
-        console.log("Document data:", doc.data());
-      });*/
+  //     /*console.log("commentsSnapshot", commentsSnapshot);
+  //     commentsSnapshot.forEach((doc) => {
+  //       console.log("Document ID:", doc.id);
+  //       console.log("Document data:", doc.data());
+  //     });*/
       
 
-      // await getDocs(collection(FIREBASE_DB, "posts", postId, "comments"))
-      //   .then((querySnapshot) => {
-      //     const newData = querySnapshot.docs
-      //       .map((doc) => ({...doc.data(), id:doc.id}));
-      //     console.log("COmMENT:", newData);
-      //   })
+  //     // await getDocs(collection(FIREBASE_DB, "posts", postId, "comments"))
+  //     //   .then((querySnapshot) => {
+  //     //     const newData = querySnapshot.docs
+  //     //       .map((doc) => ({...doc.data(), id:doc.id}));
+  //     //     console.log("COmMENT:", newData);
+  //     //   })
 
-      /*try {
-        const querySnapshot = await getDocs(collection(FIREBASE_DB, "posts", postId, "comments"));
-        if (!querySnapshot.empty) {
-          const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-          console.log("COMMENTS:", newData);
-        } else {
-          console.log("No comments found for this post.");
-        }
-      } catch (error) {
-        console.error("Error fetching comments:", error);
-      }
-      */
+  //     /*try {
+  //       const querySnapshot = await getDocs(collection(FIREBASE_DB, "posts", postId, "comments"));
+  //       if (!querySnapshot.empty) {
+  //         const newData = querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //         console.log("COMMENTS:", newData);
+  //       } else {
+  //         console.log("No comments found for this post.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching comments:", error);
+  //     }
+  //     */
 
-      const commentsData = [];
-      if (commentsSnapshot.exists()) {
-        console.log("here");
-        console.log(commentsSnapshot.data().comments)
-        for(let commentDoc of commentsSnapshot.data().comments) {
-          const comment = { id: commentDoc };
-          console.log("commentInloop:", comment);
+  //     const commentsData = [];
+  //     if (commentsSnapshot.exists()) {
+  //       console.log("here");
+  //       console.log(commentsSnapshot.data().comments)
+  //       for(let commentDoc of commentsSnapshot.data().comments) {
+  //         const comment = { id: commentDoc };
+  //         console.log("commentInloop:", comment);
 
-          // Fetch comment data such as text and timestamp
-          const commentDataRef = doc(FIREBASE_DB, "comments", comment.id);
-          const commentDataSnapshot = await getDoc(commentDataRef);
+  //         // Fetch comment data such as text and timestamp
+  //         const commentDataRef = doc(FIREBASE_DB, "comments", comment.id);
+  //         const commentDataSnapshot = await getDoc(commentDataRef);
 
-          if (commentDataSnapshot.exists()) {
-            const commentData = {
-              id: commentDataSnapshot.id,
-              ...commentDataSnapshot.data(),
-            };
+  //         if (commentDataSnapshot.exists()) {
+  //           const commentData = {
+  //             id: commentDataSnapshot.id,
+  //             ...commentDataSnapshot.data(),
+  //           };
 
-            // Fetch user data for the commenter
-            const userDocRef = doc(FIREBASE_DB, "users", commentData.userId);
-            const userDocSnapshot = await getDoc(userDocRef);
-            if (userDocSnapshot.exists()) {
-              const userData = {
-                id: userDocSnapshot.id,
-                ...userDocSnapshot.data(),
-              };
-              commentsData.push({
-                ...comment,
-                ...commentData,
-                commenter: userData,
-              });
-            }
-          }
-        }
-      } else {
-        console.log("no");
-      }
-      console.log("commentsDataendfetch:", commentsData);
-      return commentsData;
-    } catch (error) {
-      console.error("Error fetching comments:", error);
-      return [];
-    }
-  };
+  //           // Fetch user data for the commenter
+  //           const userDocRef = doc(FIREBASE_DB, "users", commentData.userId);
+  //           const userDocSnapshot = await getDoc(userDocRef);
+  //           if (userDocSnapshot.exists()) {
+  //             const userData = {
+  //               id: userDocSnapshot.id,
+  //               ...userDocSnapshot.data(),
+  //             };
+  //             commentsData.push({
+  //               ...comment,
+  //               ...commentData,
+  //               commenter: userData,
+  //             });
+  //           }
+  //         }
+  //       }
+  //     } else {
+  //       console.log("no");
+  //     }
+  //     console.log("commentsDataendfetch:", commentsData);
+  //     return commentsData;
+  //   } catch (error) {
+  //     console.error("Error fetching comments:", error);
+  //     return [];
+  //   }
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -744,7 +747,7 @@ const HomeScreen = () => {
         </View>
       </Modal> */}
 
-      <Modal
+      {/* <Modal
         visible={isCommentsModalVisible}
         onRequestClose={() => setIsCommentsModalVisible(false)}
         animationType="fade"
@@ -800,7 +803,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </SafeAreaView>
   );
 };
