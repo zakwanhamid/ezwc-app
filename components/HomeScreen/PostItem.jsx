@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, FlatList, Alert, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import { addDoc, arrayUnion, collection, doc, getDoc, getDocs, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { AntDesign, Entypo, FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { addDoc, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
 export default function PostItem({item, updatePostList }) {
@@ -15,6 +15,8 @@ export default function PostItem({item, updatePostList }) {
   const [likesModalData, setLikesModalData] = useState([]);
   const [commentsModalData, setCommentsModalData] = useState([]);
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
+  const [isImageModalVisible, setIsImageModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
 
     useEffect(() => {
@@ -220,6 +222,62 @@ export default function PostItem({item, updatePostList }) {
         console.error("Error fetching comments dataa:", error);
       }
     };
+
+    const handleImageModalOpen = (imageUri) => {
+      setSelectedImage(imageUri);
+      setIsImageModalVisible(true);
+    }
+
+    const deletePost = async (itemId) => {
+      try {
+          console.log('postId:', itemId)
+        // Show an alert to confirm deletion
+        Alert.alert(
+          'Confirmation',
+          'Are you sure you want to delete this post?',
+          [
+            {
+              text: 'No',
+              style: 'cancel',
+              onPress: () => console.log('Deletion canceled'),
+            },
+            {
+              text: 'Yes',
+              onPress: async () => {
+                try {
+                  // Construct a reference to the document you want to delete
+                  const itemRef = doc(FIREBASE_DB, 'posts', itemId);
+    
+                  // Check if the document exists before attempting to delete it
+                  const itemSnapshot = await getDoc(itemRef);
+                  if (itemSnapshot.exists()) {
+                      // Delete the document from Firestore
+                      await deleteDoc(itemRef);
+                      console.log('Document deleted successfully');
+                      Alert.alert(
+                          'Post Deleted',
+                          'The post is removed. ');
+                      handleProfileScreen();
+                      
+                  } else {
+                    console.log('Document does not exist');
+                  }
+                } catch (error) {
+                  console.error('Error deleting document:', error);
+                }
+              },
+            },
+          ],
+          { cancelable: false }
+        );
+      } catch (error) {
+        console.error('Error showing alert:', error);
+      }
+  };
+
+  const handleProfileScreen = () => {
+    navigation.navigate("ProfileScreen");
+  };
     
   return (
       <View style={styles.postItem}>
@@ -230,7 +288,7 @@ export default function PostItem({item, updatePostList }) {
               <View >
                   <Text style={{fontSize: 15, fontWeight: 600}}>{item.userName}</Text>
                   <Text style={{fontSize: 13, fontWeight: 200}}>{item.userEmail}</Text>
-                  <Text>{item.timestamp.toDate().toLocaleString('en-US', options)}</Text>
+                  <Text style={{fontSize: 13, fontWeight: 200}}>{item.timestamp.toDate().toLocaleString('en-US', options)}</Text>
                   
               </View>
               <View style={{marginTop:5}}>
@@ -238,9 +296,27 @@ export default function PostItem({item, updatePostList }) {
               </View>
               <View style={styles.postImagesContainer}>
                   {item.images.map((imageUri, index) => (
-                      <Image source={{ uri: imageUri }} style={styles.postImages} />
+                      <TouchableOpacity key={index} onPress={() => handleImageModalOpen(imageUri)}>
+                        <Image source={{ uri: imageUri }} style={styles.postImages} />
+                      </TouchableOpacity>
                   ))}
               </View>
+
+              {
+                item.userId === currentUser.id? (
+                  <TouchableOpacity 
+                  onPress={() => deletePost(item.id)}
+                  style={{ 
+                    position: 'absolute', 
+                    right: 10, }}>
+                    <MaterialIcons name="delete-sweep" size={23} color="gray" 
+                    />
+                  </TouchableOpacity>
+                ):(
+                null
+                )
+              }
+              
 
               <View style={styles.interactionCount}>
                 <TouchableOpacity
@@ -408,6 +484,22 @@ export default function PostItem({item, updatePostList }) {
               <Text> Close </Text>
             </TouchableOpacity>
           </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={isImageModalVisible}
+        onRequestClose={() => setIsImageModalVisible(false)}
+        animationType="fade"
+        transparent={true}
+      >
+        <View style={styles.modalBg}>
+          <Image source={{ uri: selectedImage }} style={{height: 260 , width: '90%', margin: 10, borderRadius: 10}} />
+          <TouchableOpacity
+            style={[styles.closeBtn, { marginTop: 20 }]}
+            onPress={() => setIsImageModalVisible(false)}
+          >
+            <Text> Close </Text>
+          </TouchableOpacity>
         </View>
       </Modal>
 

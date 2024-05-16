@@ -116,7 +116,7 @@ const HomeScreen = () => {
         };
         console.log("User document:", userData);
         setCurrentUser(userData);
-        getPostListByFollowing(currentUser.following);
+        getPostListByFollowing(userData.following);
         return userData; // Return the user document data
       } else {
         console.log("User document does not exist");
