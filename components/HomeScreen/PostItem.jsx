@@ -85,6 +85,10 @@ export default function PostItem({item, updatePostList }) {
     };
 
     const handleLikesModalOpen = async (userIds) => {
+      if (!userIds || userIds.length === 0) {
+        console.log("No likes in this post");
+        return;
+      }
       try {
         const usersPromises = userIds.map(async (userId) => {
           const userDocRef = doc(FIREBASE_DB, "users", userId);
@@ -201,8 +205,11 @@ export default function PostItem({item, updatePostList }) {
     };
 
     const handleCommentsModalOpen = async (commentIds) => {
+      if (!commentIds || commentIds.length === 0) {
+        console.log("No comments in this post");
+        return;
+      }
       try {
-
         const commentsPromises = commentIds.map(async (commentId) => {
           const commentDocRef = doc(FIREBASE_DB, "comments", commentId);
           const commentDocSnapshot = await getDoc(commentDocRef);
@@ -216,7 +223,11 @@ export default function PostItem({item, updatePostList }) {
   
         const commentsData = await Promise.all(commentsPromises);
         const filteredCommentsData = commentsData.filter((comment) => comment !== null);
-        setCommentsModalData(filteredCommentsData);
+
+        // Sort the comments in descending order based on the timestamp
+        const sortedCommentsData = filteredCommentsData.sort((a, b) => b.timestamp - a.timestamp);
+
+        setCommentsModalData(sortedCommentsData);
         setIsCommentsModalVisible(true);
       } catch (error) {
         console.error("Error fetching comments dataa:", error);

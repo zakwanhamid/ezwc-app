@@ -52,6 +52,11 @@ const CreatePostScreen = ({route}) => {
         if (!result.canceled) {
           const selectedImages = result.assets.map((asset) => asset.uri);
           setImages((prevImages) => [...prevImages, ...selectedImages]);
+
+          for (const asset of result.assets) {
+            const sizeInMB = asset.fileSize / (1024 * 1024);
+            console.log(`Image size: ${sizeInMB} MB`);
+          }
         }
     };
 

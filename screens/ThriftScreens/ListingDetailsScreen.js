@@ -77,12 +77,12 @@ export default function ListingDetailsScreen() {
       };
 
     const handleOpenLink = async () => {
-        if (!product.userPH) {
+        if (!product.userHP) {
             console.error('User phone number not available.');
             return;
         }
 
-        const whatsappLink = 'https://www.wasap.my/6' + product.userPH;
+        const whatsappLink = 'https://www.wasap.my/6' + product.userHP;
         console.log('whatsppLink:',whatsappLink)
         const supported = await Linking.canOpenURL(whatsappLink);
         if (supported) {

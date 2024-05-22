@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import * as ImagePicker from 'expo-image-picker';
+import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const EditProfileScreen = () => {
@@ -11,19 +12,52 @@ const EditProfileScreen = () => {
     const [text, setText] = useState('');
     const [name, setName] = useState('');
     const [bio, setBio] = useState('');
+    const [userHP, setUserHP] = useState('');
     const [charCount, setCharCount] = useState(100);
+    const [currentUser, setCurrentUser] = useState([]);
+    const [profileImage, setProfileImage] = useState(null);
+    const [wallpaperImage, setWallpaperImage] = useState(null);
 
     const goBack = () => {
         navigation.goBack()
     };
 
     useEffect(() => {
-        const { currentUser } = FIREBASE_AUTH;
-        if (currentUser) {
-            setName(currentUser.name || ''); // Set name from auth profile
-            setBio(currentUser.bio || ''); // Set bio from auth profile
-        }
+        getCurrentUserDocument();
+        console.log('Current user:', currentUser)
     }, []);
+
+    const getCurrentUserDocument = async () => {
+        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+        const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
+      
+        try {
+          const userDocSnapshot = await getDoc(userRef);
+          if (userDocSnapshot.exists()) {
+            const userData = {
+              id: userDocSnapshot.id,
+              ...userDocSnapshot.data(),
+            };
+            console.log("User document:", userData);
+            setCurrentUser(userData);
+            if (userData) {
+                setName(userData.name || ''); // Set name from auth profile
+                setBio(userData.bio || ''); // Set bio from auth profile
+                setUserHP(userData.userHP || ''); // Set bio from auth profile
+                setProfileImage(userData.profileImage || null); // Set profile image from auth profile
+                setWallpaperImage(userData.wallpaperImage || null); // Set profile image from auth profile
+            }
+
+            return userData; // Return the user document data
+          } else {
+            console.log("User document does not exist");
+            return null; // Handle case where user document doesn't exist 
+          }
+        } catch (error) {
+          console.error("Error fetching user document:", error);
+          return null; // Handle error fetching user document
+        }
+      };
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -46,13 +80,44 @@ const EditProfileScreen = () => {
             await updateDoc(userRef, {
                 name: name,
                 bio: bio,
+                userHP: userHP,
             });
-            alert('Profile updated successfully!');
+            Alert.alert('Profile Updated','Your profile has been updated successfully!');
             navigation.navigate('ProfileScreen');
 
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile. Please try again.');
+        }
+    };
+
+    const pickProfileImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+        setProfileImage(result.assets[0].uri);
+        }
+    };
+
+    const pickWallpaperImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+        setWallpaperImage(result.assets[0].uri);
         }
     };
 
@@ -73,14 +138,17 @@ const EditProfileScreen = () => {
 
         <View style={styles.content}>
             {/* Touchable opacity for image */}
-            <TouchableOpacity style={styles.imageContainer}>
-                <Image
-                    source={require("../../assets/profilePic.jpeg")}
-                    style={styles.image}
-                />
+            <TouchableOpacity style={styles.imageContainer} onPress={pickProfileImage}>
+                {profileImage?
+                <Image source={{uri:profileImage}} style={styles.profileImage} />
+                :<Image source={require('../../assets/imgPlaceholder.jpeg')}
+                style={styles.profileImage}
+                />}
                 <Text style={styles.replaceText}>Replace</Text>
             </TouchableOpacity>
             {/* Input for name */}
+            <Text style={styles.inputHeader}>Name: </Text>
+
             <TextInput
                 style={styles.input}
                 placeholder="Name"
@@ -89,9 +157,21 @@ const EditProfileScreen = () => {
                 onChangeText={setName}
                 autoCorrect= {false}
                 autoCapitalize='none'
-
-
             />
+
+            <Text style={styles.inputHeader}>Phone Number: </Text>
+            <TextInput
+                style={styles.input}
+                placeholder="Phone Number"
+                maxLength={11}
+                value={String(userHP)}
+                onChangeText={setUserHP}
+                keyboardType='numeric'
+                autoCorrect= {false}
+                autoCapitalize='none'
+            />
+
+            <Text style={styles.inputHeader}>Bio: </Text>
             {/* Input for bio */}
             <TextInput
                 // style={[styles.input, { height: 100 }]}
@@ -109,12 +189,22 @@ const EditProfileScreen = () => {
                 }}
                 maxLength={100}
             />
-        </View>
-        <View>
-            <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: charCount <= 0 ? 'red' : 'grey' }}>
+            <Text style={{fontSize: 14, marginBottom:10, color: charCount <= 0 ? 'red' : 'grey' }}>
                 {charCount <= 0 ? '0' : charCount} characters left
             </Text>
+
+            <Text style={styles.inputHeader}>Wallpaper: </Text>
+            {/* Touchable opacity for image */}
+            <TouchableOpacity style={styles.imageContainer} onPress={pickWallpaperImage}>
+                {wallpaperImage?
+                <Image source={{uri:wallpaperImage}} style={styles.wallpaperImage} />
+                :<Image source={require('../../assets/imgPlaceholder.jpeg')}
+                style={styles.wallpaperImage}
+                />}
+                <Text style={styles.replaceText}>Replace</Text>
+            </TouchableOpacity>
         </View>
+        
 
 
     </SafeAreaView>
@@ -156,16 +246,21 @@ const styles = StyleSheet.create({
     },
     content: {
         paddingHorizontal: 20,
-        paddingTop: 20,
+        paddingTop: 10,
     },
     imageContainer: {
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 5,
     },
-    image: {
+    profileImage: {
         width: 100,
         height: 100,
         borderRadius: 50, // Make the image round
+    },
+    wallpaperImage: {
+        width: 350,
+        height: 120,
+        borderRadius: 10, // Make the image round
     },
     replaceText: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
@@ -175,12 +270,17 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 12,
     },
+    inputHeader:{
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5
+    },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 5,
         padding: 10,
-        marginBottom: 20,
+        marginBottom: 10,
     },
 })
 

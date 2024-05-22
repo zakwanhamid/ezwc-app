@@ -113,7 +113,8 @@ const AddListingScreen = () => {
                         await updateDoc(updateRef, {
                             userId: currentUser.id,
                             userName: currentUser.name,
-                            userEmail: currentUser.email
+                            userEmail: currentUser.email,
+                            userHP: currentUser.userHP
                 });
                     setLoading(false);
                     Alert.alert('Successfully Added',"Your listing is successfully added. This listing will be view by other users")
@@ -141,7 +142,7 @@ const AddListingScreen = () => {
             </View>
             
             <Formik
-             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userPH:'', createdAt:Date.now()}}
+             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userHP:'', timestamp:new Date()}}
              onSubmit={value => {
                 // Handle form submission
                 setFormSubmitted(true);
