@@ -3,7 +3,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { collection, doc, getDocs, onSnapshot, orderBy } from 'firebase/firestore';
+import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
@@ -16,6 +16,7 @@ const ThriftScreen = () => {
   const [categoryList, setCategoryList]= useState([]);
   const [latestItemList, setLatestItemList]= useState([]);
   const [currentUser,setCurrentUser] = useState([]);
+  const [lastVisible, setLastVisible] = useState(null);
   
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -45,7 +46,7 @@ const ThriftScreen = () => {
         setCurrentUser(userData);
         console.log('ccurrentuser:',currentUser)
       } else {
-        // Handle case where user document doesn't exist
+        // Handle case where user document doesn't exis
         console.log("User document does not exist");
       }
     });
@@ -80,16 +81,45 @@ const ThriftScreen = () => {
   //Used to get latest item list
   const getLatestItemList = async() =>{
     setLatestItemList([]);
-    const querySnapshot = await getDocs(collection(FIREBASE_DB,'listings'),orderBy('createdAt','desc'));
-    querySnapshot.forEach(doc => {
+    const querySnapshot = query(
+      collection(FIREBASE_DB,'listings'),
+      orderBy('timestamp','desc'),
+      limit(10)
+      );
+    const snapshot = await getDocs(querySnapshot);
+    let lastVisible = snapshot.docs[snapshot.docs.length - 1];
+    setLastVisible(lastVisible);
+
+    snapshot.forEach(doc => {
       const itemData = {
-          id: doc.id, // Include the document ID in the data
+          id: doc.id, // Include the document ID in the dataa
           ...doc.data(),
       };
       console.log('doc:', itemData);
       setLatestItemList(latestItemList => [...latestItemList, itemData]);
-  });
+    });
   }
+
+  const getMoreItems = async () => {
+    const nextSnapshot = query(
+      collection(FIREBASE_DB, 'listings'),
+      orderBy('timestamp', 'desc'),
+      startAfter(lastVisible),
+      limit(10)
+    );
+    const snapshot = await getDocs(nextSnapshot);
+    let lastVisible = snapshot.docs[snapshot.docs.length - 1];
+    setLastVisible(lastVisible);
+  
+    snapshot.forEach(doc => {
+      const itemData = {
+        id: doc.id, // Include the document ID in the data
+        ...doc.data(),
+      };
+      setLatestItemList(latestItemList => [...latestItemList, itemData]);
+    });
+  }
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,7 +143,7 @@ const ThriftScreen = () => {
           {/* Category List */}
           <Categories categoryList={categoryList}/>
           {/* Latest Item List */}
-          <LatestItemList latestItemList={latestItemList} heading = {'Latest Items'}/>
+          <LatestItemList latestItemList={latestItemList} getMoreItems={getMoreItems} heading = {'Latest Items'}/>
         </ScrollView>
       </View>
     </SafeAreaView>

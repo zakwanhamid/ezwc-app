@@ -116,7 +116,7 @@ const UserProfileScreen = ({ route }) => {
             <ScrollView>
               <PostList currentUser = {user}/>
             </ScrollView>
-          </View>
+          </View>   
         );
     };
 

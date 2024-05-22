@@ -1,8 +1,8 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestItemList from '../../components/ThriftScreen/LatestItemList';
 
@@ -26,8 +26,14 @@ const CatItemListScreen = ({route}) => {
 
     const getItemListByCategory = async () => {
         setItemList([]);
-        const q=query(collection(FIREBASE_DB, 'listings'),where('category','==', categoryData.name));
+        try{
+        const q=query(
+            collection(FIREBASE_DB, 'listings'),
+            where('category','==', categoryData.name),
+            orderBy('timestamp','desc')
+            );
         const snapshot = await getDocs(q);
+
         snapshot.forEach(doc => {
             const itemData = {
                 id: doc.id, // Include the document ID in the data
@@ -36,6 +42,9 @@ const CatItemListScreen = ({route}) => {
             console.log('doc:', itemData);
             setItemList(itemList => [...itemList, itemData]);
         });
+        } catch (error) {
+            console.error('Error fetching item list by IDs:', error);
+        }
     }
 
   return (
@@ -48,8 +57,13 @@ const CatItemListScreen = ({route}) => {
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>{categoryData.name} Items</Text>
             </View>
         </View>
-        {itemList.length? <LatestItemList latestItemList={itemList} 
-        heading = {''}/>
+        {itemList.length? 
+        <View style={{paddingBottom:110}}>
+            <ScrollView>
+                <LatestItemList latestItemList={itemList} heading = {''}/>
+            </ScrollView>
+        </View>
+
         : <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No item available for this category...</Text>
         </View>

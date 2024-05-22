@@ -2,7 +2,7 @@ import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
-import { collection, doc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, doc, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import LatestItemList from '../../components/ThriftScreen/LatestItemList';
 
@@ -32,7 +32,11 @@ const ListingFavScreen = ({route}) => {
         console.log('listingIdsArray:', listingIdsArray);
         setItemList([]);
         try {
-            const q = query(collection(FIREBASE_DB, 'listings'), where('__name__', 'in', listingIdsArray));
+            const q = query(
+                collection(FIREBASE_DB, 'listings'), 
+                where('__name__', 'in', listingIdsArray),
+                orderBy('timestamp','desc')
+                );
             const snapshot = await getDocs(q);
             
             snapshot.forEach(doc => {

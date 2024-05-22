@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import React, { useState } from 'react'
 import ListingItem from './ListingItem'
 
-export default function LatestItemList({latestItemList, heading}) {
+export default function LatestItemList({latestItemList, heading, getMoreItems}) {
   console.log("latestItemList",latestItemList)
   const [refresh, setRefresh] = useState(false);
   return (
@@ -11,6 +11,8 @@ export default function LatestItemList({latestItemList, heading}) {
       <FlatList
         data={latestItemList}
         numColumns={2}
+        onEndReached={getMoreItems}
+        onEndReachedThreshold={0.5}
         renderItem={({item,index})=>(
           <View style={{ width: '50%', padding: 0 }}>
             <ListingItem item={item}/>
