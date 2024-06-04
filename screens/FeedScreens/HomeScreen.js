@@ -83,6 +83,7 @@ const HomeScreen = () => {
           const q = query(
             collection(FIREBASE_DB, 'posts'), 
             where('userId', 'in', followingIds),
+            where('status', '==', 'active'),
             orderBy('timestamp','desc')
             );
           const snapshot = await getDocs(q);

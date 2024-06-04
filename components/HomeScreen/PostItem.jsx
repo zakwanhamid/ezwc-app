@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, FlatList, Alert, TextInput } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { AntDesign, Entypo, FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { addDoc, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, serverTimestamp, updateDoc } from 'firebase/firestore';
+import { AntDesign, Entypo, FontAwesome, MaterialIcons, Octicons } from '@expo/vector-icons';
+import { addDoc, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
 export default function PostItem({item, updatePostList }) {
@@ -70,7 +70,7 @@ export default function PostItem({item, updatePostList }) {
           // Add the current user's ID to the likes array
           const updatedLikes = [...postData.likes, userId];
     
-          // Update the post document with the updated likes array
+          // Update the post document with the updated likes arra
           await updateDoc(postRef, { likes: updatedLikes });
           item.likes = updatedLikes;
           updatePostList(item);
@@ -289,6 +289,81 @@ export default function PostItem({item, updatePostList }) {
   const handleProfileScreen = () => {
     navigation.navigate("ProfileScreen");
   };
+
+  const reportPost = async (postId) => {
+    try {
+      const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+  
+      // Check if the user has already reported this post
+      const reportsRef = collection(FIREBASE_DB, 'reports');
+      const q = query(reportsRef, where('postId', '==', postId), where('reportedBy', '==', currentUserUid));
+      const querySnapshot = await getDocs(q);
+  
+      if (!querySnapshot.empty) {
+        Alert.alert(
+          'Already Reported',
+          'You have already reported this post.',
+          [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+          { cancelable: false }
+        );
+        return;
+      }
+  
+      // Ask for confirmation before submitting a new report
+      Alert.alert(
+        'Confirm Report',
+        'Are you sure you want to report this post?',
+        [
+          { text: 'Cancel', onPress: () => console.log('Report cancelled'), style: 'cancel' },
+          {
+            text: 'Report',
+            onPress: async () => {
+              try {
+                const reportData = {
+                  postId: postId,
+                  reportStat: 'pending', //pending or resolved
+                  action: '', // deleted or ignored
+                  reason: '', // Admin can fill this later
+                  reportedBy: currentUserUid,
+                  timestamp: serverTimestamp() // Optional: To track when the report was created
+                };
+  
+                // Add the report to the "reports" collection
+                await addDoc(collection(FIREBASE_DB, 'reports'), reportData);
+  
+                Alert.alert(
+                  'Report Submitted',
+                  'Your report has been submitted and is pending review.',
+                  [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+                  { cancelable: false }
+                );
+  
+                console.log('Report submitted:', reportData);
+              } catch (error) {
+                console.error('Error reporting post:', error);
+                Alert.alert(
+                  'Error',
+                  'There was an error submitting your report. Please try again later.',
+                  [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+                  { cancelable: false }
+                );
+              }
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+  
+    } catch (error) {
+      console.error('Error checking report status:', error);
+      Alert.alert(
+        'Error',
+        'There was an error checking your report status. Please try again later.',
+        [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+        { cancelable: false }
+      );
+    }
+  };
     
   return (
       <View style={styles.postItem}>
@@ -324,7 +399,13 @@ export default function PostItem({item, updatePostList }) {
                     />
                   </TouchableOpacity>
                 ):(
-                null
+                <TouchableOpacity 
+                onPress={() => reportPost(item.id)}
+                style={{ 
+                  position: 'absolute', 
+                  right: 10, }}>
+                  <Octicons name="report" size={19} color="gray" />
+                </TouchableOpacity>
                 )
               }
               

@@ -185,6 +185,7 @@ const AddListingScreen = () => {
                             placeholder='Title'
                             value={values?.title}
                             onChangeText={handleChange('title')}
+                            maxLength={30}
                         />
                         <TextInput
                             style={[styles.input,{height: 100, paddingTop:15}]}
@@ -192,6 +193,7 @@ const AddListingScreen = () => {
                             value={values?.desc}
                             // numberOfLines={}
                             onChangeText={handleChange('desc')}
+                            maxLength={200}
                             multiline
                         />
                         <TextInput
@@ -200,12 +202,14 @@ const AddListingScreen = () => {
                             value={values?.price}
                             keyboardType='numeric'
                             onChangeText={handleChange('price')}
+                            maxLength={5}
                         />
                         <TextInput
                             style={styles.input}
                             placeholder='Location'
                             value={values?.location}
                             onChangeText={handleChange('location')}
+                            maxLength={50}
                         />
                         {/* Category List Dropdown */}
                         <View>

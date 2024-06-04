@@ -100,7 +100,6 @@ const CreatePostScreen = ({route}) => {
         }
       };
       
-
     const removeImage = (index) => {
         setImages(prevImages => prevImages.filter((_, i) => i !== index));
     };
@@ -108,7 +107,7 @@ const CreatePostScreen = ({route}) => {
     return (
         <SafeAreaView style={styles.container}>
             <Formik
-                initialValues={{text:'', likes:[], images:[], userId: ``, userName:'', userEmail:'', timestamp:new Date() }}
+                initialValues={{text:'', likes:[], images:[], userId: ``, userName:'', userEmail:'', timestamp:new Date(), status:'active' }}
                 onSubmit={value => {
                     setFormSubmitted(true);
                     onSubmitMethod(value);
