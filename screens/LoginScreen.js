@@ -94,6 +94,7 @@ const Login = () => {
                 <Text className="text-l mt-2 font-bold">Email : </Text>
                 <View className="h-10 mt-1 p-3 bg-gray-200 rounded-lg">
                     <TextInput
+                        autoCapitalize='none'
                         placeholder= "email@student.usm.my"
                         value ={email}
                         onChangeText={text => setEmail(text)}

@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Linking, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
-import { collection, deleteDoc, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
 
 export default function ListingDetailsScreen() {
     const {params} = useRoute();
@@ -172,6 +172,81 @@ export default function ListingDetailsScreen() {
         }
     };
 
+    const reportListing = async (listingId) => {
+        try {
+          const currentUserUid = FIREBASE_AUTH.currentUser.uid;
+      
+          // Check if the user has already reported this post
+          const reportsRef = collection(FIREBASE_DB, 'reportsListing');
+          const q = query(reportsRef, where('listingId', '==', listingId), where('reportedBy', '==', currentUserUid));
+          const querySnapshot = await getDocs(q);
+      
+          if (!querySnapshot.empty) {
+            Alert.alert(
+              'Already Reported',
+              'You have already reported this listing.',
+              [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+              { cancelable: false }
+            );
+            return;
+          }
+      
+          // Ask for confirmation before submitting a new report
+          Alert.alert(
+            'Confirm Report',
+            'Are you sure you want to report this listing?',
+            [
+              { text: 'Cancel', onPress: () => console.log('Report cancelled'), style: 'cancel' },
+              {
+                text: 'Report',
+                onPress: async () => {
+                  try {
+                    const reportData = {
+                      listingId: listingId,
+                      reportStat: 'pending', //pending or resolved
+                      action: '', // deleted or ignored
+                      reason: '', // Admin can fill this later
+                      reportedBy: currentUserUid,
+                      timestamp: serverTimestamp() // Optional: To track when the report was created
+                    };
+      
+                    // Add the report to the "reports" collection
+                    await addDoc(collection(FIREBASE_DB, 'reportsListing'), reportData);
+      
+                    Alert.alert(
+                      'Report Submitted',
+                      'Your report has been submitted and is pending review.',
+                      [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+                      { cancelable: false }
+                    );
+      
+                    console.log('Report submitted:', reportData);
+                  } catch (error) {
+                    console.error('Error reporting listing:', error);
+                    Alert.alert(
+                      'Error',
+                      'There was an error submitting your report. Please try again later.',
+                      [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+                      { cancelable: false }
+                    );
+                  }
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+      
+        } catch (error) {
+          console.error('Error checking report status:', error);
+          Alert.alert(
+            'Error',
+            'There was an error checking your report status. Please try again later.',
+            [{ text: 'OK', onPress: () => {}, style: 'cancel' }],
+            { cancelable: false }
+          );
+        }
+    };
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -188,15 +263,21 @@ export default function ListingDetailsScreen() {
                         <AntDesign name="delete" size={24} color="black" />
                     </TouchableOpacity>
                 ):(
-                    currentUser.favListing ? (
+                    <View style={{ flexDirection: 'row' }}>
+                    {currentUser.favListing ? (
                         <TouchableOpacity onPress={() => handleFavoriteListing(product.id)}>
-                            <MaterialIcons name="favorite" size={27} color="#529C4E" />
+                        <MaterialIcons name="favorite" size={27} color="#529C4E" />
                         </TouchableOpacity>
                     ) : (
                         <TouchableOpacity onPress={() => handleFavoriteListing(product.id)}>
-                            <MaterialIcons name="favorite-outline" size={27} color="#529C4E" />
+                        <MaterialIcons name="favorite-outline" size={27} color="#529C4E" />
                         </TouchableOpacity>
-                    ))
+                    )}
+                    <TouchableOpacity onPress={() => reportListing(product.id)} style={{marginTop: 3, marginLeft:9}}>
+                        <Octicons name="report" size={22} color="#529C4E" />
+                    </TouchableOpacity>
+                    </View>
+                    )
             }
         </View>
         <View>
@@ -250,7 +331,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        marginLeft: -10,
+        marginLeft: 35,
     },
     productImg:{
         height: 300,
