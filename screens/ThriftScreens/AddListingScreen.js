@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Button, Image, Modal, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { addDoc, collection, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
@@ -8,6 +8,7 @@ import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AddListingScreen = () => {
     const [image, setImage] = useState(null);
@@ -129,7 +130,7 @@ const AddListingScreen = () => {
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Add New Listing</Text>

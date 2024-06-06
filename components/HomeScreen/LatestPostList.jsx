@@ -5,7 +5,6 @@ import PostItem from './PostItem'
 export default function LatestPostList({latestPostList, heading, updatePostList}) {
   return (
     <View style={styles.container}>
-      <Text style={styles.listingHeaderTxt}>{heading}</Text>
       <FlatList
         data={latestPostList}
         renderItem={({item,index})=>(
@@ -18,10 +17,6 @@ export default function LatestPostList({latestPostList, heading, updatePostList}
 
 const styles = StyleSheet.create({
     container:{
-    },
-    listingHeaderTxt:{
-        fontSize: 18,
-        fontWeight: '600',
-        marginBottom: 5,
+      paddingBottom: 150,
     },
 })

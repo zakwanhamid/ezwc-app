@@ -132,7 +132,7 @@ const CreatePostScreen = ({route}) => {
                     <View>
                         <View style={styles.header}>
                         <TouchableOpacity onPress={goBack}>
-                            <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                            <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
                         </TouchableOpacity>
                         <View style={styles.titleContainer}>
                             <Text style={{ fontSize: 20, fontWeight:"600"}}>Create Post</Text> 
@@ -168,7 +168,7 @@ const CreatePostScreen = ({route}) => {
                             Total images allowed: 4 | Total size: 60MB
                         </Text>
                         <TouchableOpacity style={styles.photo} onPress={pickImage}>
-                            <Ionicons name="md-camera" size={32} color="#696969"> </Ionicons>
+                            <Ionicons name="camera" size={32} color="#696969"> </Ionicons>
                         </TouchableOpacity>
                     </View>
                     

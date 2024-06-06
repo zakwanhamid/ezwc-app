@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, ScrollView, Linking, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView, Linking, Alert } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AntDesign, Entypo, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons, Octicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, query, serverTimestamp, updateDoc, where } from 'firebase/firestore';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ListingDetailsScreen() {
     const {params} = useRoute();
@@ -11,11 +12,13 @@ export default function ListingDetailsScreen() {
     const navigation = useNavigation();
     const [product, setProduct] = useState([]);
     const [currentUserUid, setCurrentUserUid] = useState([]);
+    const [reload, setReload] = useState(false);
+    
 
     useEffect(() => {
         params&&setProduct(params.product);
         getCurrentUserDocument();
-    },[params])
+    },[params, reload])
 
     console.log('product.id:',product.id)
 
@@ -24,6 +27,7 @@ export default function ListingDetailsScreen() {
             headerShown: false,
         });
     }, [navigation]);
+
     const handleProfileScreen = () => {
         navigation.navigate("ProfileScreen");
     };
@@ -64,7 +68,7 @@ export default function ListingDetailsScreen() {
             };
             console.log("User document:", userData);
             setCurrentUser(userData);
-            console.log('curUSer:',currentUser.favListing)
+            
             return userData; // Return the user document data
           } else {
             console.log("User document does not exist");
@@ -74,6 +78,7 @@ export default function ListingDetailsScreen() {
           console.error("Error fetching user document:", error);
           return null; // Handle error fetching user document
         }
+        
       };
 
     const handleOpenLink = async () => {
@@ -142,7 +147,7 @@ export default function ListingDetailsScreen() {
     const handleFavoriteListing = async (listingId) => {
         try {
           const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-          const userRef = doc(FIREBASE_DB, 'users', currentUserUid); // Assuming currentUser has an 'id' field
+          const userRef = doc(FIREBASE_DB, 'users', currentUserUid); // Assuming currentUser has an 'id' fields
           console.log('listingId:',listingId)
     
           // Check if listingId is already in the favListing array
@@ -167,6 +172,7 @@ export default function ListingDetailsScreen() {
                 'This item is added to your favourite listings. View your favourite items at Thrift homepage');
             console.log('Listing added to favorites:', listingId);
           }
+          setReload(!reload);
         } catch (error) {
           console.error('Error handling favorite listing:', error);
         }
@@ -252,7 +258,7 @@ export default function ListingDetailsScreen() {
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Item Details</Text>
@@ -280,36 +286,35 @@ export default function ListingDetailsScreen() {
                     )
             }
         </View>
-        <View>
-            <ScrollView>
-                <View>
-                    <Image source={{uri:product.image}}
-                        style={styles.productImg}/>
-                        <View style={styles.detailsContainer}>
-                            <Text style={styles.titleTxt}>{product.title}</Text>
-                            <Text style={styles.catTxt}>{product.category}</Text>
-                            <Text style={styles.descHeader}>Description</Text>
-                            <Text style={styles.descTxt}>{product.desc}</Text>
-                        </View>
-                </View>
-
-                <View style={styles.userContainer}>
-                    <Image
-                        source={require("../../assets/profilePic.jpeg")}
-                        style={styles.postAvatar}
-                    />
-                    <View style={styles.userInfo}>
-                        <View>
-                            <Text style={styles.nameTxt}>{product.userName}</Text>
-                            <Text style={styles.emailTxt}>{product.userEmail}</Text>
-                        </View>
-                        <TouchableOpacity onPress={handleOpenLink}>
-                            <FontAwesome5 style={{marginRight: 20}} name="whatsapp" size={40} color="#529C4E" />
-                        </TouchableOpacity>
+        <ScrollView style={{flex:1}}>
+            <View>
+                <Image source={{uri:product.image}}
+                    style={styles.productImg}/>
+                    <View style={styles.detailsContainer}>
+                        <Text style={styles.titleTxt}>{product.title}</Text>
+                        <Text style={styles.priceTxt}>RM {product.price}</Text>
+                        <Text style={styles.catTxt}>{product.category}</Text>
+                        <Text style={styles.descHeader}>Description</Text>
+                        <Text style={styles.descTxt}>{product.desc}</Text>
                     </View>
+            </View>
+
+            <View style={styles.userContainer}>
+                <Image
+                    source={require("../../assets/profilePic.jpeg")}
+                    style={styles.postAvatar}
+                />
+                <View style={styles.userInfo}>
+                    <View>
+                        <Text style={styles.nameTxt}>{product.userName}</Text>
+                        <Text style={styles.emailTxt}>{product.userEmail}</Text>
+                    </View>
+                    <TouchableOpacity onPress={handleOpenLink}>
+                        <FontAwesome5 style={{marginRight: 20}} name="whatsapp" size={40} color="#529C4E" />
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
-        </View>
+            </View>
+        </ScrollView>
     </SafeAreaView>
   )
 }
@@ -343,6 +348,11 @@ const styles = StyleSheet.create({
     titleTxt:{
         fontSize: 24,
         fontWeight: '600'
+    },
+    priceTxt:{
+      fontSize: 24,
+      fontWeight: '700',
+      color: 'gray'
     },
     catTxt:{
         marginBottom: 10,

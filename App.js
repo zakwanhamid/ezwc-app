@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { User, onAuthStateChanged } from 'firebase/auth';
@@ -190,7 +190,7 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
+                <View style={styles.iconContainer}>
                   <Feather name="home" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, fontWeight: 700, color: focused ? "#529c4e" : "black", marginTop:2,}}>Home</Text>
                 </View>
@@ -203,7 +203,7 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
+                <View style={styles.iconContainer}>
                   <Feather name="book-open" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12, fontWeight: 700, color: focused ? "#529c4e" : "black", marginTop:2,}}>Module</Text>
                 </View>
@@ -246,7 +246,7 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
+                <View style={styles.iconContainer}>
                   <Ionicons name="shirt-outline" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12,fontWeight: 700, color:focused ? "#529c4e" : "black", marginTop:2,}}>Thrift</Text>
                 </View>
@@ -259,7 +259,7 @@ export default function App() {
           options={{
             tabBarIcon:({focused})=>{
               return(
-                <View style={{alignItems: "center", justifyContent: "center", marginTop:24}}>
+                <View style={styles.iconContainer}>
                   <Octicons name="person" size={24} color= {focused ? "#529c4e" : "black"} />
                   <Text style={{fontSize:12,fontWeight: 700, color:focused ? "#529c4e" : "black", marginTop:2,}}>Profile</Text>
                 </View>
@@ -277,3 +277,11 @@ export default function App() {
   
   );
 }
+
+const styles = StyleSheet.create({
+  iconContainer: {
+    alignItems: "center", 
+    justifyContent: "center", 
+    marginTop: Platform.OS === 'ios' ? 24 : 0,
+  },
+});

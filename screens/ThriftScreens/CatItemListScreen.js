@@ -1,10 +1,11 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestItemList from '../../components/ThriftScreen/LatestItemList';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CatItemListScreen = ({route}) => {
     const {categoryData} = route.params;
@@ -51,7 +52,7 @@ const CatItemListScreen = ({route}) => {
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>{categoryData.name} Items</Text>
@@ -59,9 +60,7 @@ const CatItemListScreen = ({route}) => {
         </View>
         {itemList.length? 
         <View style={{paddingBottom:110}}>
-            <ScrollView>
-                <LatestItemList latestItemList={itemList} heading = {''}/>
-            </ScrollView>
+            <LatestItemList latestItemList={itemList} heading = {''}/>
         </View>
 
         : <View style={styles.emptyContainer}>

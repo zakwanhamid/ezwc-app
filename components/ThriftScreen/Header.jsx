@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { collection, doc, getDocs, onSnapshot } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 
-export default function Header() {
+export default function Header({searchQuery, setSearchQuery, onSearch}) {
     const [currentUser, setCurrentUser] = useState([]);
     
 
@@ -25,7 +25,7 @@ export default function Header() {
           }
         });
         return () => unsubscribe();
-    }, []);  
+    }, []); 
   
   return (
     <View>
@@ -44,8 +44,9 @@ export default function Header() {
                 autoCapitalize='none'
                 style={styles.searchBar}
                 autoCorrect={false}
-                // value={searchQuery}
-                onChangeText={(value) => console.log(value)}
+                value={searchQuery}
+                onChangeText={(value) => setSearchQuery(value)}
+                onSubmitEditing={onSearch}
             />
         </View>
     </View>

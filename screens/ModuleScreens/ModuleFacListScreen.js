@@ -77,7 +77,7 @@ const ModuleFacListScreen = () => {
     <SafeAreaView>
       <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>10 Factors</Text>

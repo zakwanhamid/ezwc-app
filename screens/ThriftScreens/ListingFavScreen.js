@@ -1,10 +1,11 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { collection, doc, getDocs, onSnapshot, orderBy, query, where } from 'firebase/firestore';
 import { Ionicons } from '@expo/vector-icons';
 import LatestItemList from '../../components/ThriftScreen/LatestItemList';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ListingFavScreen = ({route}) => {
     const [itemList,setItemList] = useState([]);
@@ -57,7 +58,7 @@ const ListingFavScreen = ({route}) => {
     <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
-                <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
+                <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
             </TouchableOpacity>
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Favourite Items</Text>
@@ -69,7 +70,6 @@ const ListingFavScreen = ({route}) => {
             <Text style={styles.emptyText}>No item in your favourite...</Text>
         </View>
         }
-        
     </SafeAreaView>
   )
 }

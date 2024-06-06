@@ -116,10 +116,8 @@ const ProfileScreen = () => {
 
   const renderPostContent = () => {
       return (
-          <View style={{paddingBottom:670}}>
-            <ScrollView>
+          <View style={{paddingBottom:490}}>
               <PostList currentUser = {currentUser}/>
-            </ScrollView>
           </View>
           
       );
@@ -127,10 +125,8 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:670}}>
-            <ScrollView>
+          <View style={{paddingBottom:170}}>
               <ListingList currentUser = {currentUser}/>
-            </ScrollView>
           </View>
         );
       };
