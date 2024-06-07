@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestItemList from '../ThriftScreen/LatestItemList';
 
@@ -13,18 +13,55 @@ export default function ListingList({currentUser}) {
     },[])
 
     const getItemListByCurrentUser = async () => {
-        setItemList([]);
-        const q=query(collection(FIREBASE_DB, 'listings'),where('userId','==', currentUser.id));
-        const snapshot = await getDocs(q);
-        snapshot.forEach(doc => {
-            const itemData = {
-                id: doc.id, // Include the document ID in the data
-                ...doc.data(),
+        const listingsCollection = query(
+          collection(FIREBASE_DB, 'listings'),
+          where('userId', '==', currentUser.id)
+        );
+        const listingsSnapshot = await getDocs(listingsCollection);
+        const listingsList = await Promise.all(
+          listingsSnapshot.docs.map(async (listingDoc) => {
+            const listingData = {
+              id: listingDoc.id,
+              ...listingDoc.data(),
             };
-            console.log('doc:', itemData);
-            setItemList(itemList => [...itemList, itemData]);
-        });
-    }
+      
+            const userDocRef = doc(FIREBASE_DB, 'users', listingData.userId);
+            const userDocSnapshot = await getDoc(userDocRef);
+      
+            let userData = {};
+            if (userDocSnapshot.exists()) {
+              userData = {
+                userId: userDocSnapshot.id,
+                ...userDocSnapshot.data(),
+              };
+            } else {
+              userData = {
+                userId: listingData.userId,
+                name: 'Unknown',
+                email: 'Unknown',
+                userHP: 'Unknown',
+              };
+            }
+      
+            return {
+              id: listingData.id,
+              image: listingData.image,
+              title: listingData.title,
+              price: listingData.price,
+              category: listingData.category,
+              desc: listingData.desc,
+              time: listingData.timestamp,
+              userId: userData.userId, // Include userId here
+              userName: userData.name,
+              userEmail: userData.email,
+              userHP: userData.userHP,
+            };
+          })
+        );
+      
+        setItemList(listingsList);
+      };
+      
 
   return (
     <View >

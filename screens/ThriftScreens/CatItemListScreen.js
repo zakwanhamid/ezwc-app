@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestItemList from '../../components/ThriftScreen/LatestItemList';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,27 +26,50 @@ const CatItemListScreen = ({route}) => {
     },[])
 
     const getItemListByCategory = async () => {
-        setItemList([]);
-        try{
-        const q=query(
-            collection(FIREBASE_DB, 'listings'),
-            where('category','==', categoryData.name),
-            orderBy('timestamp','desc')
-            );
-        const snapshot = await getDocs(q);
-
-        snapshot.forEach(doc => {
-            const itemData = {
-                id: doc.id, // Include the document ID in the data
-                ...doc.data(),
+      const listingsCollection = query(collection(FIREBASE_DB, 'listings'),where('category','==', categoryData.name),orderBy('timestamp','desc'));
+      const listingsSnapshot = await getDocs(listingsCollection);
+      const listingsList = await Promise.all(
+        listingsSnapshot.docs.map(async (listingDoc) => {
+          const listingData = {
+            id: listingDoc.id,
+            ...listingDoc.data(),
+          };
+          const userDocRef = doc(FIREBASE_DB, 'users', listingData.userId);
+            const userDocSnapshot = await getDoc(userDocRef);
+      
+            let userData = {};
+            if (userDocSnapshot.exists()) {
+              userData = {
+                userId: userDocSnapshot.id,
+                ...userDocSnapshot.data(),
+              };
+            } else {
+              userData = {
+                userId: listingData.userId,
+                name: 'Unknown',
+                email: 'Unknown',
+                userHP: 'Unknown',
+              };
+            }
+      
+            return {
+              id: listingData.id,
+              image: listingData.image,
+              title: listingData.title,
+              price: listingData.price,
+              category: listingData.category,
+              desc: listingData.desc,
+              time: listingData.timestamp,
+              userId: userData.userId, // Include userId here
+              userName: userData.name,
+              userEmail: userData.email,
+              userHP: userData.userHP,
             };
-            console.log('doc:', itemData);
-            setItemList(itemList => [...itemList, itemData]);
-        });
-        } catch (error) {
-            console.error('Error fetching item list by IDs:', error);
-        }
-    }
+        })
+      );
+
+      setItemList(listingsList);
+    };
 
   return (
     <SafeAreaView style={styles.container}>

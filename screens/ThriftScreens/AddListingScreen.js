@@ -88,43 +88,43 @@ const AddListingScreen = () => {
         }
     };
 
-    const onSubmitMethod = async(value)=>{
-
-        setLoading(true);
-        //Convert uri to blob file
-        console.log('images:',image)
-
-        const resp = await fetch(image);
-        const blob = await resp.blob();
-        const storageRef = ref(FIREBASE_STORAGE, 'listing-imgs/'+Date.now()+".jpg");
-
-        uploadBytes(storageRef, blob).then((snapshot) => {
-            console.log('Uploaded a blob or file!')
-        }).then((resp)=>{
-            getDownloadURL(storageRef).then(async(downloadUrl)=>{
-                console.log(downloadUrl);
-                value.image = downloadUrl;
-                // value.userId = currentUser.id;
-                // value.userName = currentUser.name;
-                // value.userEmail = currentUser.email;
-                const docRef = await addDoc(collection(FIREBASE_DB, "listings"), value);
-                if(docRef.id)
-                {
-                    const updateRef = doc(FIREBASE_DB, 'listings', docRef.id);
-                        await updateDoc(updateRef, {
-                            userId: currentUser.id,
-                            userName: currentUser.name,
-                            userEmail: currentUser.email,
-                            userHP: currentUser.userHP
-                });
-                    setLoading(false);
-                    Alert.alert('Successfully Added',"Your listing is successfully added. This listing will be view by other users")
-                    handleThriftScreen();
-                }
-            })
-        });
-        setImage('');
+    const onSubmitMethod = async (value) => {
+        try {
+            setLoading(true);
+    
+            // Convert URI to blob file
+            console.log('images:', image);
+    
+            const resp = await fetch(image);
+            const blob = await resp.blob();
+            const storageRef = ref(FIREBASE_STORAGE, 'listing-imgs/' + Date.now() + ".jpg");
+    
+            const snapshot = await uploadBytes(storageRef, blob);
+            console.log('Uploaded a blob or file!', snapshot);
+    
+            const downloadUrl = await getDownloadURL(storageRef);
+            console.log(downloadUrl);
+    
+            // Add the image URL and userId to the value
+            value.image = downloadUrl;
+            value.userId = currentUser.id;
+    
+            const docRef = await addDoc(collection(FIREBASE_DB, "listings"), value);
+            if (docRef.id) {
+                console.log('Listing successfully added with ID:', docRef.id);
+                setLoading(false);
+                Alert.alert('Successfully Added', "Your listing is successfully added. This listing will be view by other users");
+                handleThriftScreen();
+            }
+        } catch (error) {
+            console.error('Error adding listing:', error);
+            setLoading(false);
+            Alert.alert('Error', 'There was an error adding your listing. Please try again.');
+        } finally {
+            setImage('');
+        }
     }
+    
 
   return (
     <SafeAreaView style={styles.container}>
@@ -143,7 +143,7 @@ const AddListingScreen = () => {
             </View>
             
             <Formik
-             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, userName:'', userEmail:'', userHP:'', timestamp:new Date()}}
+             initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, timestamp:new Date()}}
              onSubmit={value => {
                 // Handle form submission
                 setFormSubmitted(true);

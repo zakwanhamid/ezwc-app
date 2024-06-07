@@ -120,7 +120,7 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:1270}}>
+          <View style={{paddingBottom:710}}>
               <ListingList currentUser = {currentUser}/>
           </View>
         );

@@ -113,19 +113,15 @@ const UserProfileScreen = ({ route }) => {
     const renderPostContent = () => {   
         return (
             <View style={{paddingBottom:760}}>
-            <ScrollView>
-              <PostList currentUser = {user}/>
-            </ScrollView>
-          </View>   
+                <PostList currentUser = {user}/>
+            </View>
         );
     };
 
     const renderListingContent = () => {
         return (
           <View style={{paddingBottom:760}}>
-            <ScrollView>
               <ListingList currentUser = {user}/>
-            </ScrollView>
           </View>
         );
       };
