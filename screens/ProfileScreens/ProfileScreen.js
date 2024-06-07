@@ -88,7 +88,11 @@ const ProfileScreen = () => {
 
     const renderFollowerItem = ({ item }) => (
       <View style={styles.profiles}>
-          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          {item.profileImage?
+            <Image source={{uri:item.profileImage}} style={styles.profilesAvatar} />
+            :<Image source={require('../../assets/blankAvatar.webp')}
+            style={styles.profilesAvatar}
+          />}
           <View style={{marginVertical:14, marginLeft: 10,}}>
               <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
               <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
@@ -99,7 +103,11 @@ const ProfileScreen = () => {
 
   const renderFollowingItem = ({ item }) => (
       <View style={styles.profiles}>
-          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          {item.profileImage?
+            <Image source={{uri:item.profileImage}} style={styles.profilesAvatar} />
+            :<Image source={require('../../assets/blankAvatar.webp')}
+            style={styles.profilesAvatar}
+          />}
           <View style={{marginVertical:14, marginLeft: 10,}}>
               <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
               <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>

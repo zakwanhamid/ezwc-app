@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { collection, doc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
@@ -73,57 +73,67 @@ const ThriftScreen = () => {
     });
   };
 
+
   const getLatestItemList = async () => {
-    setLatestItemList([]);
-    const querySnapshot = query(
+    const listingsCollection = query(
       collection(FIREBASE_DB, 'listings'),
       orderBy('timestamp', 'desc'),
       limit(10)
     );
-    const snapshot = await getDocs(querySnapshot);
-    let lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    setLastVisible(lastVisible);
-
-    snapshot.forEach((doc) => {
-      const itemData = {
-        id: doc.id,
-        ...doc.data(),
-      };
-      setLatestItemList((latestItemList) => [...latestItemList, itemData]);
-    });
-  };
-
-  const getMoreItems = async () => {
-    if (!lastVisible) {
-      return;
-    }
-    
-    const nextSnapshot = query(
-      collection(FIREBASE_DB, 'listings'),
-      orderBy('timestamp', 'desc'),
-      startAfter(lastVisible),
-      limit(10)
+    const listingsSnapshot = await getDocs(listingsCollection);
+    const listingsList = await Promise.all(
+      listingsSnapshot.docs.map(async (listingDoc) => {
+        const listingData = {
+          id: listingDoc.id,
+          ...listingDoc.data(),
+        };
+  
+        const userDocRef = doc(FIREBASE_DB, 'users', listingData.userId);
+        const userDocSnapshot = await getDoc(userDocRef);
+  
+        let userData = {};
+        if (userDocSnapshot.exists()) {
+          userData = {
+            userId: userDocSnapshot.id,
+            ...userDocSnapshot.data(),
+          };
+        } else {
+          userData = {
+            userId: listingData.userId,
+            name: 'Unknown',
+            email: 'Unknown',
+            userHP: 'Unknown',
+          };
+        }
+  
+        return {
+          id: listingData.id,
+          image: listingData.image,
+          title: listingData.title,
+          price: listingData.price,
+          category: listingData.category,
+          desc: listingData.desc,
+          time: listingData.timestamp,
+          userId: userData.userId, // Include userId here
+          userName: userData.name,
+          userEmail: userData.email,
+          userHP: userData.userHP,
+          userProfileImage: userData.profileImage
+        };
+      })
     );
-    const snapshot = await getDocs(nextSnapshot);
-    let lastVisible = snapshot.docs[snapshot.docs.length - 1];
-    setLastVisible(lastVisible);
-
-    snapshot.forEach((doc) => {
-      const itemData = {
-        id: doc.id,
-        ...doc.data(),
-      };
-      setLatestItemList((latestItemList) => [...latestItemList, itemData]);
-    });
+  
+    setLatestItemList(listingsList);
   };
 
+  
   const handleSearch = async () => {
     setLatestItemList([]);
     const searchSnapshot = query(
       collection(FIREBASE_DB, 'listings'),
       orderBy('title'),
       // Use `where` clause if you want to filter based on title
-      // For partial matching, consider using a more complex query or a library like Algoli
+      // For partial matching, consider using a more complex query or a library like Algolia
     );
     const snapshot = await getDocs(searchSnapshot);
     snapshot.forEach((doc) => {
@@ -155,7 +165,7 @@ const ThriftScreen = () => {
           <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearch={handleSearch}/>
           <Slider sliderList={sliderList} />
           <Categories categoryList={categoryList} />
-          <LatestItemList latestItemList={latestItemList} getMoreItems={getMoreItems} heading={'Latest Items'} />
+          <LatestItemList latestItemList={latestItemList} heading={'Latest Items'} />
         </ScrollView>
       </View>
     </SafeAreaView>

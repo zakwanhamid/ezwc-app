@@ -78,6 +78,7 @@ const ListingFavScreen = ({route}) => {
                   userName: userData.name,
                   userEmail: userData.email,
                   userHP: userData.userHP,
+                  userProfileImage: userData.profileImage
                 };
               })
             );

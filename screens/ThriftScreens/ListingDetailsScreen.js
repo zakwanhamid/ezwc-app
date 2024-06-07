@@ -300,10 +300,11 @@ export default function ListingDetailsScreen() {
             </View>
 
             <View style={styles.userContainer}>
-                <Image
-                    source={require("../../assets/profilePic.jpeg")}
-                    style={styles.postAvatar}
-                />
+              {product.userProfileImage?
+                  <Image source={{uri:product.userProfileImage}} style={styles.postAvatar} />
+                  :<Image source={require('../../assets/blankAvatar.webp')}
+                  style={styles.postAvatar}
+              />}
                 <View style={styles.userInfo}>
                     <View>
                         <Text style={styles.nameTxt}>{product.userName}</Text>
