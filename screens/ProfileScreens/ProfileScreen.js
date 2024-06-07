@@ -149,12 +149,20 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView>
         <View style={{width:"100%"}}>
-            <Image source={require("../../assets/bg-image.jpeg")} style={styles.bgImage}></Image>
+        {currentUser.profileImage?
+            <Image source={{uri:currentUser.wallpaperImage}} style={styles.bgImage} />
+            :<Image source={require('../../assets/blankWallpaper.jpeg')}
+            style={styles.bgImage}
+            />}
         </View>
 
         {/* avatar and button */}
         <View style={styles.avatarBtn}>
-            <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+            {currentUser.profileImage?
+            <Image source={{uri:currentUser.profileImage}} style={styles.avatar} />
+            :<Image source={require('../../assets/blankAvatar.webp')}
+            style={styles.avatar}
+            />}
             <View style={{display: 'flex', flexDirection: 'row'}}>
               <TouchableOpacity style={styles.editBtn}>
                   <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>

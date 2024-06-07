@@ -264,12 +264,20 @@ const UserProfileScreen = ({ route }) => {
         </View>
 
         <View style={{width:"100%"}}>
-            <Image source={require("../../assets/bg-image.jpeg")} style={styles.bgImage}></Image>
+            {user.wallpaperImage?
+                <Image source={{uri:user.wallpaperImage}} style={styles.bgImage} />
+                :<Image source={require('../../assets/blankWallpaper.jpeg')}
+                style={styles.bgImage}
+            />}
         </View>
 
         {/* avatar and button */}
         <View style={styles.avatarBtn}>
-            <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+            {user.profileImage?
+            <Image source={{uri:user.profileImage}} style={styles.avatar} />
+            :<Image source={require('../../assets/blankAvatar.webp')}
+            style={styles.avatar}
+            />}
             <TouchableOpacity style={[styles.followBtn, {
                 backgroundColor: isFollowing ? 'white' : '#529C4E',
                 borderColor: isFollowing ? '#529C4E' : 'white',

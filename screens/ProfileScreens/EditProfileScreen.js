@@ -2,10 +2,11 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } fro
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
 import * as ImagePicker from 'expo-image-picker';
 import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 const EditProfileScreen = () => {
     const navigation = useNavigation();
@@ -70,6 +71,14 @@ const EditProfileScreen = () => {
         setCharCount(100 - text.length); // Update character count
     };
 
+    const uploadImage = async (uri, path) => {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        const storageRef = ref(FIREBASE_STORAGE, path);
+        await uploadBytes(storageRef, blob);
+        return getDownloadURL(storageRef);
+    };
+
     const handleSaveProfile = async () => {
         const { currentUser } = FIREBASE_AUTH;
         if (!currentUser) return;
@@ -77,14 +86,26 @@ const EditProfileScreen = () => {
         try {
             // Update user data in Firestore
             const userRef = doc(FIREBASE_DB, 'users', currentUser.uid);
-            await updateDoc(userRef, {
+            const updatedData = {
                 name: name,
                 bio: bio,
                 userHP: userHP,
-            });
-            Alert.alert('Profile Updated','Your profile has been updated successfully!');
-            navigation.navigate('ProfileScreen');
+            };
 
+            if (profileImage) {
+                const profileImageUrl = await uploadImage(profileImage, `profileImages/${currentUser.uid}.jpg`);
+                updatedData.profileImage = profileImageUrl;
+            }
+
+            if (wallpaperImage) {
+                const wallpaperImageUrl = await uploadImage(wallpaperImage, `wallpaperImages/${currentUser.uid}.jpg`);
+                updatedData.wallpaperImage = wallpaperImageUrl;
+            }
+
+            await updateDoc(userRef, updatedData);
+
+            Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
+            navigation.navigate('ProfileScreen');
         } catch (error) {
             console.error('Error updating profile:', error);
             alert('Failed to update profile. Please try again.');
@@ -110,7 +131,7 @@ const EditProfileScreen = () => {
         let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,
         allowsEditing: true,
-        aspect: [4, 4],
+        aspect: [5, 3],
         quality: 1,
         });
 
