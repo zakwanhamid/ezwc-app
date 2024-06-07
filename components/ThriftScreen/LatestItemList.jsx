@@ -7,7 +7,7 @@ export default function LatestItemList({latestItemList, heading, getMoreItems}) 
   const [refresh, setRefresh] = useState(false);
   return (
     <View style={styles.container}>
-      <Text style={styles.listingHeaderTxt}>{heading}</Text>
+      {heading !== ""? <Text style={styles.listingHeaderTxt}>{heading}</Text> : null }
       <FlatList
         data={latestItemList}
         numColumns={2}

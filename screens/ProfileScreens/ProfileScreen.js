@@ -13,7 +13,6 @@ import PostList from '../../components/ProfileScreen/PostList';
 const ProfileScreen = () => {
 
   const [currentUser ,setCurrentUser] = useState([]);
-  const [userPosts ,setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const [isFollowersModalVisible, setIsFollowersModalVisible] = useState(false);
@@ -33,10 +32,6 @@ const ProfileScreen = () => {
         headerShown: false,
     });
   }, [navigation]);
-
-  const goBack = () => {
-    navigation.goBack(); // Go back to the previous screen
-    };
 
     useEffect(() => {
       if (currentUser && currentUser.following) {
@@ -116,7 +111,7 @@ const ProfileScreen = () => {
 
   const renderPostContent = () => {
       return (
-          <View style={{paddingBottom:490}}>
+          <View style={{paddingBottom:550}}>
               <PostList currentUser = {currentUser}/>
           </View>
           
@@ -125,7 +120,7 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:170}}>
+          <View style={{paddingBottom:1270}}>
               <ListingList currentUser = {currentUser}/>
           </View>
         );
@@ -151,39 +146,8 @@ const ProfileScreen = () => {
         return () => unsubscribe();
       }, []);
 
-    useEffect(() => {
-        const currentUserUid = FIREBASE_AUTH.currentUser.uid;
-        const postsRef = collection(FIREBASE_DB, 'posts');
-        
-        const unsubscribe = onSnapshot(postsRef, querySnapshot => {
-          const userPosts = [];
-          querySnapshot.forEach(doc => {
-            const postData = doc.data();
-            // Check if the post belongs to the currentUser
-            if (postData.userId === currentUserUid) {
-              userPosts.push({
-                id: doc.id,
-                ...postData
-              });
-            }
-          });
-          setUserPosts(userPosts);
-          setLoading(false);
-        });
-        
-        return () => unsubscribe();
-    }, []);
-
-    //   console.log(userPosts[0].id);
-
   return (
     <SafeAreaView>
-        {/* <View style={styles.header}>
-            <View style={styles.titleContainer}>
-                <Text style={{ fontSize: 20, fontWeight:"600"}}>Profile</Text> 
-            </View>
-        </View> */}
-        {/* backgrounf image */}
         <View style={{width:"100%"}}>
             <Image source={require("../../assets/bg-image.jpeg")} style={styles.bgImage}></Image>
         </View>
@@ -191,14 +155,16 @@ const ProfileScreen = () => {
         {/* avatar and button */}
         <View style={styles.avatarBtn}>
             <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
-            <TouchableOpacity
-                onPress={() => FIREBASE_AUTH.signOut()} title="Logout"
-                style={styles.editBtn}>
-                <Text style={{ fontWeight:"500", fontSize:14, color:"black"}}>Log Out</Text>
-            </TouchableOpacity>     
-            <TouchableOpacity style={styles.editBtn}>
-                <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>
-            </TouchableOpacity>
+            <View style={{display: 'flex', flexDirection: 'row'}}>
+              <TouchableOpacity style={styles.editBtn}>
+                  <Text onPress={handleEditProfile} style={{ fontWeight:"700", fontSize:14}}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  onPress={() => FIREBASE_AUTH.signOut()} title="Logout"
+                  style={styles.editBtn}>
+                  <Text style={{ fontWeight:"700", fontSize:14, color:"black"}}>Log Out</Text>
+              </TouchableOpacity>     
+            </View>
         </View>
 
         {/* name, email, bio, following, followers */}
@@ -292,15 +258,6 @@ const ProfileScreen = () => {
             </View>
         </Modal>
     </SafeAreaView>
-    // <View style={styles.container}>
-    //   <Text className="text-xl">Hi, {userEmail} </Text>
-    //   <Text>this is your profile page</Text>
-    //   <TouchableOpacity 
-    //     className="rounded-lg bg-black px-4 py-1 mt-2 w-60"
-    //     onPress={() => FIREBASE_AUTH.signOut()} title="Logout">
-    //     <Text className="color-white text-lg font-bold text-center">Log Out</Text>
-    //   </TouchableOpacity>
-    // </View>
   )
 }
 
@@ -326,7 +283,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#529C4E",
     width: 70,
     height: 30,
-    borderRadius: 15,
+    marginLeft: 5,
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: "#000",
