@@ -1,4 +1,4 @@
-import { View, Text, FlatList, Image, Dimensions, StyleSheet, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, FlatList, Image, Dimensions, StyleSheet, TouchableOpacity, Linking, Platform } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';

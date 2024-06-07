@@ -88,7 +88,7 @@ const HomeScreen = () => {
         return userData; // Return the user document data
       } else {
         console.log("User document does not exist");
-        return null; // Handle case where user document doesn't exist 
+        return null; // Handle case where user document doesn't exist
       }
     } catch (error) {
       console.error("Error fetching user document:", error);

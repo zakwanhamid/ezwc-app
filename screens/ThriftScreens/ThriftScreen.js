@@ -123,7 +123,7 @@ const ThriftScreen = () => {
       collection(FIREBASE_DB, 'listings'),
       orderBy('title'),
       // Use `where` clause if you want to filter based on title
-      // For partial matching, consider using a more complex query or a library like Algolia
+      // For partial matching, consider using a more complex query or a library like Algoli
     );
     const snapshot = await getDocs(searchSnapshot);
     snapshot.forEach((doc) => {

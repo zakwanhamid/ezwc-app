@@ -62,7 +62,7 @@ export default function PostItem({item, updatePostList }) {
             item.likes = updatedLikes;
             updatePostList(item);
 
-            console.log("User removed from likes successfully.");
+            console.log("User removed from likes successfully.:",item.id);
 
             return;
           }
@@ -75,7 +75,7 @@ export default function PostItem({item, updatePostList }) {
           item.likes = updatedLikes;
           updatePostList(item);
     
-          console.log("User added to likes successfully.");
+          console.log("User added to likes successfully.",item.id);
         } else {
           console.log("Post document not found.");
         }

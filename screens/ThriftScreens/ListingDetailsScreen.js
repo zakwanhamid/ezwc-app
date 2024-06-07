@@ -20,7 +20,7 @@ export default function ListingDetailsScreen() {
         getCurrentUserDocument();
     },[params, reload])
 
-    console.log('product.id:',product.id)
+    console.log('product.id:',product)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -87,7 +87,7 @@ export default function ListingDetailsScreen() {
             return;
         }
 
-        const whatsappLink = 'https://www.wasap.my/6' + product.userHP;
+        const whatsappLink = 'https://www.wasap.my/60' + product.userHP;
         console.log('whatsppLink:',whatsappLink)
         const supported = await Linking.canOpenURL(whatsappLink);
         if (supported) {

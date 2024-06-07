@@ -1,9 +1,10 @@
-import { Dimensions, FlatList, Image, Linking, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, Linking, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
 import { collection, doc, getDoc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const BinFavScreen = () => {
   const navigation = useNavigation();
@@ -92,7 +93,7 @@ const BinFavScreen = () => {
       style={{
           backgroundColor: 'white',
           width: Dimensions.get('window').width,
-          margin: 5,
+          margin:5,
           borderRadius: 10
           }}>
       <TouchableOpacity style={styles.favBtn} onPress={() => handleFavoriteBin(item.id)}>
