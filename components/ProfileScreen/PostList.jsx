@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestPostList from '../HomeScreen/LatestPostList';
 
@@ -11,29 +11,56 @@ export default function PostList({ currentUser }) {
         if (currentUser?.id) {
             getItemListByCurrentUser();
         }
-    }, [currentUser]);
+    }, [currentUser]);//a
 
     const getItemListByCurrentUser = async () => {
-        try {
-            const q = query(
-                collection(FIREBASE_DB, 'posts'),
-                where('userId', '==', currentUser.id),
-                orderBy('timestamp', 'desc')
-            );
-            const snapshot = await getDocs(q);
-            const posts = [];
-            snapshot.forEach(doc => {
-                const postData = {
-                    id: doc.id, // Include the document ID in the data
-                    ...doc.data(),
+        const postsCollection = query(
+            collection(FIREBASE_DB, 'posts'),
+            where('userId', '==', currentUser.id),
+            orderBy('timestamp', 'desc')
+        );
+        const postsSnapshot = await getDocs(postsCollection);
+        const postsList = await Promise.all(
+          postsSnapshot.docs.map(async (postDoc) => {
+            const postData = {
+              id: postDoc.id,
+              ...postDoc.data(),
+            };
+            const userDocRef = doc(FIREBASE_DB, 'users', postData.userId);
+              const userDocSnapshot = await getDoc(userDocRef);
+        
+              let userData = {};
+              if (userDocSnapshot.exists()) {
+                userData = {
+                  userId: userDocSnapshot.id,
+                  ...userDocSnapshot.data(),
                 };
-                posts.push(postData);
-            });
-            setPostList(posts);
-        } catch (error) {
-            console.error('Error fetching posts:', error);
-        }
-    };
+              } else {
+                userData = {
+                  userId: postData.userId,
+                  name: 'Unknown',
+                  email: 'Unknown',
+                  userHP: 'Unknown',
+                };
+              }
+        
+              return {
+                id: postData.id,
+                userId: userData.userId,
+                userProfileImage: userData.profileImage,
+                userName: userData.name,
+                userEmail: userData.email,
+                timestamp: postData.timestamp,
+                text: postData.text,
+                images: postData.images,
+                comments: postData.comments,
+                likes: postData.likes
+              };
+          })
+        );
+    
+        setPostList(postsList);
+      };
 
     return (
         <View>

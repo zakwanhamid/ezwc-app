@@ -157,7 +157,7 @@ const ProfileScreen = () => {
   return (
     <SafeAreaView>
         <View style={{width:"100%"}}>
-        {currentUser.profileImage?
+        {currentUser.wallpaperImage?
             <Image source={{uri:currentUser.wallpaperImage}} style={styles.bgImage} />
             :<Image source={require('../../assets/blankWallpaper.jpeg')}
             style={styles.bgImage}

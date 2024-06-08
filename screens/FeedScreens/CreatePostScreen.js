@@ -136,7 +136,11 @@ const CreatePostScreen = ({ route }) => {
                             </TouchableOpacity>
                         </View>
                         <View style={styles.inputContainer}>
-                            <Image source={require("../../assets/profilePic.jpeg")} style={styles.avatar}></Image>
+                            {currentUser.profileImage?
+                            <Image source={{uri:currentUser.profileImage}} style={styles.avatar} />
+                            :<Image source={require('../../assets/blankAvatar.webp')}
+                            style={styles.avatar}
+                            />}
                             <TextInput
                                 autoFocus={true}
                                 multiline={true}

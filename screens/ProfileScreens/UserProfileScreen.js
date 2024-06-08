@@ -286,7 +286,8 @@ const UserProfileScreen = ({ route }) => {
             :<Image source={require('../../assets/blankAvatar.webp')}
             style={styles.avatar}
             />}
-            <TouchableOpacity style={[styles.followBtn, {
+
+            {user.email === currentUser.email ? (null) :(<TouchableOpacity style={[styles.followBtn, {
                 backgroundColor: isFollowing ? 'white' : '#529C4E',
                 borderColor: isFollowing ? '#529C4E' : 'white',
                 borderWidth: 1
@@ -296,7 +297,7 @@ const UserProfileScreen = ({ route }) => {
                 <Text style={{ fontWeight:"700", fontSize:14}}>
                     {isFollowing ? 'Following' : 'Follow'}
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity>)}
         </View>
 
         {/* name, email, bio, following, followers */}

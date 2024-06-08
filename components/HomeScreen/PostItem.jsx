@@ -113,10 +113,11 @@ export default function PostItem({item, updatePostList }) {
     const renderLikesModalContent = ({item}) => {
       return (
         <View style={styles.profiles}>
-          <Image
-            source={require("../../assets/profilePic.jpeg")}
-            style={styles.profilesAvatar}
-          ></Image>
+          {item.profileImage?
+                <Image source={{uri:item.profileImage}} style={styles.profilesAvatar} />
+                :<Image source={require('../../assets/blankAvatar.webp')}
+                style={styles.profilesAvatar}
+            />}
           <View style={{ marginVertical: 14, marginLeft: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: 600 }}>{item.name}</Text>
             <Text style={{ fontSize: 13, fontWeight: 300, marginTop: 2 }}>
@@ -131,20 +132,21 @@ export default function PostItem({item, updatePostList }) {
       return (
         <View style={styles.commentContainer}>
           <View style={{ width: "20%", marginRight: "5%" }}>
-            <Image
-              source={require("../../assets/profilePic.jpeg")}
-              style={styles.postAvatar}
-            ></Image>
+            {item.profileImage?
+                <Image source={{uri:item.profileImage}} style={styles.profilesAvatar} />
+                :<Image source={require('../../assets/blankAvatar.webp')}
+                style={styles.profilesAvatar}
+            />}
           </View>
           <View style={{ width: "80%", marginTop: 8 }}>
             <View>
-              <Text style={{ fontSize: 15, fontWeight: 600 }}>
+              <Text style={{ fontSize: 15, fontWeight: 600}}>
                 {item.commenterName}
               </Text>
-              <Text style={{ fontSize: 13, fontWeight: 200 }}>
+              <Text style={{ fontSize: 13, fontWeight: 200, color:'gray' }}>
                 {item.commenterEmail}
               </Text>
-              <Text>
+              <Text style={{ fontSize: 13, fontWeight: 200, color:'gray' }}>
                 {item.timestamp.toDate().toLocaleString('en-US', options)}
               </Text>
             </View>
@@ -162,47 +164,51 @@ export default function PostItem({item, updatePostList }) {
       setIsCommentInputModalVisible(true);
     };
 
-    const handleCommentSubmit = async (postId) => {
+    const handleCommentSubmit = async (item) => {
       if (!commentText.trim()) {
         // Handle empty comment input
         return;
       }
-  
-      const postRef = doc(collection(FIREBASE_DB, "posts"), postId);
+    
+      const postRef = doc(collection(FIREBASE_DB, "posts"), item.id);
       const commentsCollectionRef = collection(FIREBASE_DB, "comments");
-  
+    
       try {
         const commentData = {
           text: commentText,
           commenterId: currentUser.id,
-          commenterName: currentUser.name,
-          commenterEmail: currentUser.email,
           timestamp: serverTimestamp(),
-          postId: postId,
+          postId: item.id,
         };
-  
+    
         // Add comment data to the 'comments' collection
         const newCommentRef = await addDoc(commentsCollectionRef, commentData);
-  
-        // Update the post document's 'comments' array with the new comment ID
+        console.log('newcomendref:',newCommentRef.id)
+    
+        // Update the post document's 'comments' array with the new comment I
         await updateDoc(postRef, {
           comments: arrayUnion(newCommentRef.id),
         });
-        // Add the new comment ID to the comments array
+    
+        // // Ensure item.comments is an array before pushing
+        if (!item.comments) {
+          item.comments = [];
+        }
         item.comments.push(newCommentRef.id);
-
+    
         // Update local state
         updatePostList(item);
-  
+    
         setCommentText("");
         console.log("Comment added:", commentText);
-        console.log("to post id:", postId);
+        // console.log("to post id:", postId);
         setIsCommentInputModalVisible(false);
         Alert.alert('Comment submitted!','Your comment has been submitted under this post');
       } catch (error) {
         console.error("Error adding comment:", error);
       }
     };
+    
 
     const handleCommentsModalOpen = async (commentIds) => {
       if (!commentIds || commentIds.length === 0) {
@@ -213,26 +219,58 @@ export default function PostItem({item, updatePostList }) {
         const commentsPromises = commentIds.map(async (commentId) => {
           const commentDocRef = doc(FIREBASE_DB, "comments", commentId);
           const commentDocSnapshot = await getDoc(commentDocRef);
-  
+    
           if (commentDocSnapshot.exists()) {
-            return { id: commentDocSnapshot.id, ...commentDocSnapshot.data() };
+            const commentData = {
+              id: commentDocSnapshot.id,
+              ...commentDocSnapshot.data(),
+            };
+    
+            const userDocRef = doc(FIREBASE_DB, 'users', commentData.commenterId);
+            const userDocSnapshot = await getDoc(userDocRef);
+    
+            let userData = {};
+            if (userDocSnapshot.exists()) {
+              userData = {
+                userId: userDocSnapshot.id,
+                ...userDocSnapshot.data(),
+              };
+            } else {
+              userData = {
+                userId: commentData.userId,
+                name: 'Unknown',
+                email: 'Unknown',
+                profileImage: 'Unknown',
+              };
+            }
+    
+            return {
+              id: commentData.id,
+              userId: userData.userId,
+              profileImage: userData.profileImage,
+              commenterName: userData.name,
+              commenterEmail: userData.email,
+              timestamp: commentData.timestamp,
+              text: commentData.text,
+            };
           } else {
             return null;
           }
         });
-  
+    
         const commentsData = await Promise.all(commentsPromises);
         const filteredCommentsData = commentsData.filter((comment) => comment !== null);
-
+    
         // Sort the comments in descending order based on the timestamp
         const sortedCommentsData = filteredCommentsData.sort((a, b) => b.timestamp - a.timestamp);
-
+    
         setCommentsModalData(sortedCommentsData);
         setIsCommentsModalVisible(true);
       } catch (error) {
-        console.error("Error fetching comments dataa:", error);
+        console.error("Error fetching comments data:", error);
       }
     };
+    
 
     const handleImageModalOpen = (imageUri) => {
       setSelectedImage(imageUri);
@@ -368,7 +406,11 @@ export default function PostItem({item, updatePostList }) {
   return (
       <View style={styles.postItem}>
           <View style={{width:'15%', marginRight: '5%'}}>
-              <Image source={require("../../assets/profilePic.jpeg")} style={styles.postAvatar}></Image>
+            {item.userProfileImage?
+                <Image source={{uri:item.userProfileImage}} style={styles.postAvatar} />
+                :<Image source={require('../../assets/blankAvatar.webp')}
+                style={styles.postAvatar}
+            />}
           </View>
           <View style={{width:'80%', marginTop: 8}}>
               <View >
@@ -527,10 +569,11 @@ export default function PostItem({item, updatePostList }) {
                 </TouchableOpacity>
 
                 <View style={styles.inputContainer}>
-                  <Image
-                    source={require("../../assets/profilePic.jpeg")}
-                    style={styles.avatar}
-                  ></Image>
+                {currentUser.profileImage?
+                  <Image source={{uri:currentUser.profileImage}} style={styles.avatar} />
+                  :<Image source={require('../../assets/blankAvatar.webp')}
+                  style={styles.avatar}
+                  />}
                   <TextInput
                     autoFocus={true}
                     multiline={true}
@@ -546,7 +589,7 @@ export default function PostItem({item, updatePostList }) {
                 </View>
                 <TouchableOpacity
                   style={[styles.closeBtn, { marginTop: 20 }]}
-                  onPress={() => handleCommentSubmit(item.id)}
+                  onPress={() => handleCommentSubmit(item)}
                 >
                   <Text> Send </Text>
                 </TouchableOpacity>

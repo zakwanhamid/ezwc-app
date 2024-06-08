@@ -124,12 +124,7 @@ const Login = () => {
                         <Text className="color-black text-xl font-bold text-center">....</Text>
                     </TouchableOpacity>
                 </View>
-                
-
             </View>
-
-            
-            
         </SafeAreaView>
     );
 }

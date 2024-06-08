@@ -39,27 +39,35 @@ const ProfileSearchScreen = () => {
       try {
         const usersQuery = query(collection(FIREBASE_DB, 'users'));
         const querySnapshot = await getDocs(usersQuery);
-
+  
         const userData = [];
         querySnapshot.forEach((doc) => {
           userData.push({ id: doc.id, ...doc.data() });
         });
-
-        setUsers(userData);
+  
+        // Exclude users with the email "cgss@usm.my"
+        const filteredUsers = userData.filter(user => user.email !== "cgss@usm.my");
+  
+        setUsers(filteredUsers);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching users: ', error);
         setLoading(false);
       }
     };
-
+  
     fetchUsers();
   }, []);
+  
 
   const renderProfileItem =({item}) => (
     <TouchableOpacity onPress={() => handleUserProfile(item)}>
       <View style={styles.profiles}>
-          <Image source={require("../../assets/profilePic.jpeg")} style={styles.profilesAvatar}></Image>
+          {item.profileImage?
+                <Image source={{uri:item.profileImage}} style={styles.profilesAvatar} />
+                :<Image source={require('../../assets/blankAvatar.webp')}
+                style={styles.profilesAvatar}
+          />}
           <View style={{marginVertical:14, marginLeft: 10,}}>
               <Text style={{fontSize:16, fontWeight: 600,}}>{item.name}</Text>
               <Text style={{fontSize:13, fontWeight: 300, marginTop: 2}}>{item.email}</Text>
@@ -89,12 +97,14 @@ const ProfileSearchScreen = () => {
             onChangeText={(query) => handleSearch(query)}
             />
         </View>
-        <View style={{paddingBottom: 300,}}>
-            <FlatList 
-            data={filteredUsers} 
-            keyExtractor={(item) => item.id} 
-            renderItem={renderProfileItem}/>
+        {searchQuery.length > 0 && (
+        <View style={{ paddingBottom: 300, }}>
+          <FlatList
+            data={filteredUsers}
+            keyExtractor={(item) => item.id}
+            renderItem={renderProfileItem} />
         </View>
+        )}
     </SafeAreaView>
     
   )
