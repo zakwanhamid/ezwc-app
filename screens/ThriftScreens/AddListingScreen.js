@@ -1,23 +1,24 @@
-import { ActivityIndicator, Alert, Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Image, Modal,ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { addDoc, collection, doc, getDocs, onSnapshot, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot } from 'firebase/firestore';
 import { Formik } from 'formik';
+import * as Yup from 'yup'; // Import Yup for validation schema
 import { Picker } from '@react-native-picker/picker'
 import { FIREBASE_AUTH, FIREBASE_DB, FIREBASE_STORAGE } from '../../firebase';
-import { AntDesign, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AddListingScreen = () => {
-    const [image, setImage] = useState(null);
     const [categoryList, setCategoryList]= useState([{ name: 'Select Category' }]); 
     const [currentUser, setCurrentUser] = useState([]);
     const [loading, setLoading] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
-    const [formSubmitted, setFormSubmitted] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [priceInput, setPriceInput] = useState('');
+
     const navigation = useNavigation();
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -47,7 +48,7 @@ const AddListingScreen = () => {
               ...documentSnapshot.data(),
             }; // Include user ID in userData
             setCurrentUser(userData);
-            console.log(currentUser.email)
+            console.log(userData.email)
           } else {
             // Handle case where user document doesn't exist
             console.log("User document does not exist");
@@ -57,14 +58,16 @@ const AddListingScreen = () => {
     }, []);
 
     //used to get category list
-    const getCategoryList =  async() =>{
-        setCategoryList([{ name: 'Select Category' }])
+    const getCategoryList = async () => {
         const querySnapshot = await getDocs(collection(FIREBASE_DB, 'category'));
-        querySnapshot.forEach((doc)=>{
+        const categories = [];
+        querySnapshot.forEach((doc) => {
             console.log("Docs:", doc.data());
-            setCategoryList(categoryList=>[...categoryList,doc.data()])
-        })
-    }
+            categories.push(doc.data());
+        });
+        setCategoryList(categories);
+    };
+
 
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
@@ -72,7 +75,7 @@ const AddListingScreen = () => {
     }
 
     // Used to Pick Image from gallery
-    const pickImage = async () => {
+    const pickImage = async (setFieldValue) => {
         // No permissions request is necessary for launching the image library
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -84,18 +87,30 @@ const AddListingScreen = () => {
         console.log(result);
     
         if (!result.canceled) {
-          setImage(result.assets[0].uri);
+            setFieldValue('image', result.assets[0].uri);
         }
     };
 
-    const onSubmitMethod = async (value) => {
+    const formatPriceInput = (input) => {
+        // Remove non-digit characters
+        const cleanedInput = input.replace(/[^0-9]/g, '');
+    
+        // Convert to a number and divide by 100 to get the decimal format
+        const numericValue = Number(cleanedInput) / 100;
+    
+        // Return the value formatted to two decimal places
+        return numericValue.toFixed(2);
+    };
+    
+
+    const onSubmitMethod = async (values) => {
         try {
             setLoading(true);
     
             // Convert URI to blob file
-            console.log('images:', image);
+            console.log('images:', values.image);
     
-            const resp = await fetch(image);
+            const resp = await fetch(values.image);
             const blob = await resp.blob();
             const storageRef = ref(FIREBASE_STORAGE, 'listing-imgs/' + Date.now() + ".jpg");
     
@@ -106,10 +121,10 @@ const AddListingScreen = () => {
             console.log(downloadUrl);
     
             // Add the image URL and userId to the value
-            value.image = downloadUrl;
-            value.userId = currentUser.id;
+            values.image = downloadUrl;
+            values.userId = currentUser.id;
     
-            const docRef = await addDoc(collection(FIREBASE_DB, "listings"), value);
+            const docRef = await addDoc(collection(FIREBASE_DB, "listings"), values);
             if (docRef.id) {
                 console.log('Listing successfully added with ID:', docRef.id);
                 setLoading(false);
@@ -120,10 +135,17 @@ const AddListingScreen = () => {
             console.error('Error adding listing:', error);
             setLoading(false);
             Alert.alert('Error', 'There was an error adding your listing. Please try again.');
-        } finally {
-            setImage('');
         }
     }
+
+    const validationSchema = Yup.object().shape({
+        title: Yup.string().required('Title is required'),
+        desc: Yup.string().required('Description is required'),
+        category: Yup.string().required('Category is required'),
+        location: Yup.string().required('Location is required'),
+        price: Yup.string().required('Price is required'),
+        image: Yup.string().required('Image is required'),
+    });
     
 
   return (
@@ -136,7 +158,13 @@ const AddListingScreen = () => {
                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Add New Listing</Text>
             </View>
         </View>
-        <View style={styles.inputContainer}>
+        <KeyboardAvoidingView
+            
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+            >
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <View style={styles.inputContainer}>
             <View style={{marginVertical:15}}>
                 <Text style={{fontSize:26, fontWeight: '700'}}>Advertise Your Used Item!</Text>
                 <Text style={{fontSize:16, color: 'gray', fontWeight: '500' }}>Create New Post and Start Selling.</Text>
@@ -146,41 +174,27 @@ const AddListingScreen = () => {
              initialValues={{title:'', desc:'', category:'', location:'', price:'', image:'', userId: ``, timestamp:new Date()}}
              onSubmit={value => {
                 // Handle form submission
-                setFormSubmitted(true);
-                onSubmitMethod(value);
-                //convert
-            }}
-            validate={(values)=>{
-                const errors={}
-                if(!values.title)
-                {
-                  console.log("Title not Present");
-                  Alert.alert('Alert!', 'Please fill in all the fields...', [{ text: 'OK', onPress: () => {}, style: 'cancel' }], { cancelable: false });
-                  errors.name="Title Must be there"
+                if (!value.image) {
+                    Alert.alert('Alert!', 'Please select an image.', [{ text: 'OK', onPress: () => {}, style: 'cancel' }], { cancelable: false });
+                    return;
                 }
-                return errors
-              }}
-            //  validate={values=>{
-            //     const errors={}
-            //     if(formSubmitted &&(!values.title || !values.desc || !values.category || !values.location || !values.price || !values.image))
-            //     {
-            //         console.log("Title not present");
-            //         Alert.alert('Alert!', 'Please fill in all the fields...', [{ text: 'OK', onPress: () => {}, style: 'cancel' }], { cancelable: false });
-            //         errors.name='Please fill in the title'
-            //     }
-            //     return errors;
-            //  }}
-             >
-                {({handleChange, handleBlur, handleSubmit, values,setFieldValue, errors})=>(
+                onSubmitMethod(value);
+            }}
+            validationSchema={validationSchema}
+            >
+                {({handleChange, handleBlur, handleSubmit, values, setFieldValue, errors, touched})=>(
                     <View>
-                        <TouchableOpacity onPress={pickImage}>
-                        {image?
-                        <Image source={{uri:image}} style={{height: 100, width: 100, borderRadius:15 }} />
-                        :<Image source={require('../../assets/imgPlaceholder.jpeg')}
-                        style={{height: 100, width: 100, borderRadius:15 }}
-                        />}
+                        <TouchableOpacity onPress={() => pickImage(setFieldValue)}>
+                        {values.image ?
+                            <Image source={{ uri: values.image }} style={{ height: 100, width: 100, borderRadius: 15 }} />
+                            :
+                            <Image source={require('../../assets/imgPlaceholder.jpeg')}
+                                style={{ height: 100, width: 100, borderRadius: 15 }}
+                            />
+                        }
                             
                         </TouchableOpacity>
+                        {errors.image && touched.image && <Text style={styles.errorText}>{errors.image}</Text>}
                         <TextInput
                             style={styles.input}
                             placeholder='Title'
@@ -188,23 +202,29 @@ const AddListingScreen = () => {
                             onChangeText={handleChange('title')}
                             maxLength={30}
                         />
+                        {errors.title && touched.title && <Text style={styles.errorText}>{errors.title}</Text>}
                         <TextInput
                             style={[styles.input,{height: 100, paddingTop:15}]}
                             placeholder='Description'
                             value={values?.desc}
-                            // numberOfLines={}
                             onChangeText={handleChange('desc')}
                             maxLength={200}
                             multiline
                         />
+                        {errors.desc && touched.desc && <Text style={styles.errorText}>{errors.desc}</Text>}
                         <TextInput
                             style={styles.input}
                             placeholder='Price (RM)'
-                            value={values?.price}
+                            value={priceInput}
                             keyboardType='numeric'
-                            onChangeText={handleChange('price')}
-                            maxLength={5}
+                            onChangeText={(text) => {
+                                const formattedPrice = formatPriceInput(text);
+                                setPriceInput(formattedPrice);
+                                setFieldValue('price', formattedPrice);
+                            }}
+                            maxLength={7} // Adjust as needed
                         />
+                        {errors.price && touched.price && <Text style={styles.errorText}>{errors.price}</Text>}
                         <TextInput
                             style={styles.input}
                             placeholder='Location'
@@ -212,7 +232,7 @@ const AddListingScreen = () => {
                             onChangeText={handleChange('location')}
                             maxLength={50}
                         />
-                        {/* Category List Dropdown */}
+                        {errors.location && touched.location && <Text style={styles.errorText}>{errors.location}</Text>}
                         <View>
                             <TouchableOpacity
                                 style={styles.input}
@@ -223,6 +243,7 @@ const AddListingScreen = () => {
                                     fontSize: 17,
                                     }}>{selectedCategory || 'Select Category'}</Text>
                             </TouchableOpacity>
+                            {errors.category && touched.category && <Text style={styles.errorText}>{errors.category}</Text>}
                         </View>
 
                         <Modal
@@ -242,6 +263,7 @@ const AddListingScreen = () => {
                                         style={styles.picker}
                                         mode='dropdown'
                                     >
+                                        <Picker.Item label="Select Category" value="" color="#BFBFBF" />
                                         {categoryList && categoryList.map((item, index) => (
                                             <Picker.Item key={index} label={item.name} value={item.name} />
                                         ))}
@@ -249,6 +271,7 @@ const AddListingScreen = () => {
                                 </View>
                             </View>
                         </Modal>
+
                         
                         <View style={styles.btnContainer}>
                             <TouchableOpacity 
@@ -266,7 +289,9 @@ const AddListingScreen = () => {
                     </View>
                 )}
             </Formik>
-        </View>
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -293,6 +318,7 @@ const styles = StyleSheet.create({
         marginLeft: -18,
     },
     inputContainer:{
+        flex: 1,
         marginHorizontal: 20,
         padding:10,
     },
@@ -338,5 +364,12 @@ const styles = StyleSheet.create({
             width: 0,
             height: 2,
         }
+    },
+    errorText: {
+        fontSize: 14,
+        color: 'red',
+        marginTop: 5,
+        marginBottom: 10,
+        marginLeft: 5,
     },
 })

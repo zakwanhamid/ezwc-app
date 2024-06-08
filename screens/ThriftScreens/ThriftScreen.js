@@ -114,7 +114,7 @@ const ThriftScreen = () => {
           category: listingData.category,
           desc: listingData.desc,
           time: listingData.timestamp,
-          userId: userData.userId, // Include userId here
+          userId: userData.userId, // Include userId heree
           userName: userData.name,
           userEmail: userData.email,
           userHP: userData.userHP,
@@ -133,7 +133,7 @@ const ThriftScreen = () => {
       collection(FIREBASE_DB, 'listings'),
       orderBy('title'),
       // Use `where` clause if you want to filter based on title
-      // For partial matching, consider using a more complex query or a library like Algolia
+      // For partial matching, consider using a more complex query or a library like Algoli
     );
     const snapshot = await getDocs(searchSnapshot);
     snapshot.forEach((doc) => {
