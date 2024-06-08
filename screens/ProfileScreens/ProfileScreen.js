@@ -119,7 +119,7 @@ const ProfileScreen = () => {
 
   const renderPostContent = () => {
       return (
-          <View style={{paddingBottom:550}}>
+          <View style={{paddingBottom:0}}>
               <PostList currentUser = {currentUser}/>
           </View>
           
@@ -128,7 +128,7 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:710}}>
+          <View style={{paddingBottom:0}}>
               <ListingList currentUser = {currentUser}/>
           </View>
         );

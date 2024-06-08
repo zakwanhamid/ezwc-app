@@ -162,7 +162,7 @@ const CreatePostScreen = ({ route }) => {
                             </Text>
                         </View>
                         <Text style={{ marginLeft: 25, marginTop: 5, fontSize: 14, color: 'grey' }}>
-                            Total images allowed: 4 | Total size: 60MB
+                            Total images allowed: 4
                         </Text>
                         <TouchableOpacity style={styles.photo} onPress={pickImage}>
                             <Ionicons name="camera" size={32} color="#696969"> </Ionicons>

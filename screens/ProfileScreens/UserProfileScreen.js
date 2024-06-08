@@ -112,7 +112,7 @@ const UserProfileScreen = ({ route }) => {
     //renderpost content
     const renderPostContent = () => {   
         return (
-            <View style={{paddingBottom:760}}>
+            <View style={{paddingBottom: 0}}>
                 <PostList currentUser = {user}/>
             </View>
         );
@@ -120,7 +120,7 @@ const UserProfileScreen = ({ route }) => {
 
     const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:760}}>
+          <View style={{paddingBottom:0}}>
               <ListingList currentUser = {user}/>
           </View>
         );

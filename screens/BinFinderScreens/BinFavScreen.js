@@ -163,17 +163,20 @@ const BinFavScreen = () => {
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Favorite Bins</Text> 
             </View>
         </View>
-        {favBinsData.length > 0 ? (
-        <FlatList
+        {favBinsData.length ? (
+        <View style={{paddingBottom:200}}>
+          <FlatList
           data={favBinsData}
           keyExtractor={(item) => item.id}
           renderItem={renderFavBinList}
         />
-      ) : (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.emptyText}>You have not favored any bin yet.</Text>
         </View>
-      )}
+        
+        ) : (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>You have not favored any bin yet.</Text>
+          </View>
+        )}
     </SafeAreaView>
   )
 }
@@ -182,7 +185,6 @@ export default BinFavScreen
 
 const styles = StyleSheet.create({
   container:{
-    flex:1
 },
 header:{
     flexDirection:"row",
@@ -233,12 +235,12 @@ titleContainer:{
       zIndex: 1
   },
   emptyContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   emptyText: {
     fontSize: 18,
     color: 'gray',
+    margin: 50,
   },
 })

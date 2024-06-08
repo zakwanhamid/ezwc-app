@@ -78,7 +78,6 @@ export default function ListingList({currentUser}) {
 
 const styles = StyleSheet.create({
     emptyContainer: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
