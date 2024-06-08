@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, RefreshControl } from 'react-native'
 import React, { useState } from 'react'
 import ListingItem from './ListingItem'
 
-export default function LatestItemList({latestItemList, heading, getMoreItems}) {
+export default function LatestItemList({latestItemList, heading, getMoreItems, onRefresh, refreshing}) {
   console.log("latestItemList",latestItemList)
   const [refresh, setRefresh] = useState(false);
   return (

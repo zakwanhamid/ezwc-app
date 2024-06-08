@@ -114,7 +114,7 @@ const ThriftScreen = () => {
           category: listingData.category,
           desc: listingData.desc,
           time: listingData.timestamp,
-          userId: userData.userId, // Include userId heree
+          userId: userData.userId, // Include userId here
           userName: userData.name,
           userEmail: userData.email,
           userHP: userData.userHP,
