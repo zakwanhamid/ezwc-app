@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +17,7 @@ const ThriftScreen = () => {
   const [currentUser, setCurrentUser] = useState([]);
   const [lastVisible, setLastVisible] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -34,6 +35,17 @@ const ThriftScreen = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await getUserData();
+      await getSliders();
+      await getCategoryList();
+      await getLatestItemList();
+    };
+
+    fetchData();
+  }, []);
+
+  const getUserData = async () => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const userRef = doc(collection(FIREBASE_DB, 'users'), currentUserUid);
 
@@ -49,13 +61,7 @@ const ThriftScreen = () => {
       }
     });
     return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    getSliders();
-    getCategoryList();
-    getLatestItemList();
-  }, []);
+  };
 
   const getSliders = async () => {
     setSliderList([]);
@@ -147,6 +153,15 @@ const ThriftScreen = () => {
     });
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getUserData();
+    await getSliders();
+    await getCategoryList();
+    await getLatestItemList();
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -161,7 +176,9 @@ const ThriftScreen = () => {
         </TouchableOpacity>
       </View>
       <View style={{ paddingBottom: 110 }}>
-        <ScrollView>
+        <ScrollView refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearch={handleSearch}/>
           <Slider sliderList={sliderList} />
           <Categories categoryList={categoryList} />
