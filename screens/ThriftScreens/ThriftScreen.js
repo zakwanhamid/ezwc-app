@@ -26,7 +26,7 @@ const ThriftScreen = () => {
   }, [navigation]);
 
   const handleAddListScreen = () => {
-    navigation.navigate('AddListingScreen');
+    navigation.navigate('AddListingScreen',{ onUpdate: getLatestItemList });
   };
 
   const handleListingFav = (currentUser) => {

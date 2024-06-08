@@ -1,6 +1,6 @@
 import { ActivityIndicator, Alert, Image, Modal,ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { addDoc, collection, doc, getDocs, onSnapshot } from 'firebase/firestore';
 import { Formik } from 'formik';
 import * as Yup from 'yup'; // Import Yup for validation schema
@@ -20,6 +20,9 @@ const AddListingScreen = () => {
     const [priceInput, setPriceInput] = useState('');
 
     const navigation = useNavigation();
+    const route = useRoute();
+    const { onUpdate } = route.params;
+
     useLayoutEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -129,6 +132,10 @@ const AddListingScreen = () => {
                 console.log('Listing successfully added with ID:', docRef.id);
                 setLoading(false);
                 Alert.alert('Successfully Added', "Your listing is successfully added. This listing will be view by other users");
+                if (onUpdate) {
+                    onUpdate(); // Call the onUpdate function
+                }
+
                 handleThriftScreen();
             }
         } catch (error) {
