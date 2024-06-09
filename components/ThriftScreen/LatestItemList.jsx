@@ -13,6 +13,7 @@ export default function LatestItemList({latestItemList, heading, getMoreItems, o
         numColumns={2}
         onEndReached={getMoreItems}
         onEndReachedThreshold={0.5}
+        showsVerticalScrollIndicator={false}
         renderItem={({item,index})=>(
           <View style={{ width: '50%', padding: 0 }}>
             <ListingItem item={item}/>

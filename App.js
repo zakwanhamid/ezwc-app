@@ -45,6 +45,7 @@ import AddListingScreen from './screens/ThriftScreens/AddListingScreen';
 import CatItemListScreen from './screens/ThriftScreens/CatItemListScreen';
 import ListingDetailsScreen from './screens/ThriftScreens/ListingDetailsScreen';
 import ListingFavScreen from './screens/ThriftScreens/ListingFavScreen';
+import ListingSearchScreen from './screens/ThriftScreens/ListingSearchScreen';
 
 
 
@@ -134,6 +135,7 @@ function ThriftLayout(){
       <InsideStack.Screen name="CatItemListScreen" component={CatItemListScreen}/>
       <InsideStack.Screen name="ListingDetailsScreen" component={ListingDetailsScreen}/>
       <InsideStack.Screen name="ListingFavScreen" component={ListingFavScreen}/>
+      <InsideStack.Screen name="ListingSearchScreen" component={ListingSearchScreen}/>
     </InsideStack.Navigator>
   );
 }

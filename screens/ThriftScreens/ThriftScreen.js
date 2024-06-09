@@ -179,7 +179,7 @@ const ThriftScreen = () => {
         <ScrollView refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>
-          <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearch={handleSearch}/>
+          <Header/>
           <Slider sliderList={sliderList} />
           <Categories categoryList={categoryList} />
           <LatestItemList latestItemList={latestItemList} heading={'Latest Items'} />
