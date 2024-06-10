@@ -106,6 +106,7 @@ export default function Header() {
                     value={searchQuery}
                     onChangeText={setSearchQuery}
                     onSubmitEditing={handleSearch}
+                    autoCapitalize='none'
                 />
                 <TouchableOpacity style={{padding: 8}} onPress={handleSearch}>
                     <FontAwesome name="search" size={23} color="#529C4E" />
