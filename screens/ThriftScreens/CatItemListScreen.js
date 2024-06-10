@@ -116,7 +116,7 @@ const CatItemListScreen = ({ route }) => {
 
   const handleMaxPriceChange = (text) => {
     const value = parseFloat(text);
-    setTempPriceRange([tempPriceRange[0], isNaN(value) ? 5000 : value]);
+    setTempPriceRange([tempPriceRange[0], isNaN(value) ? 0 : value]);
   };
 
   return (

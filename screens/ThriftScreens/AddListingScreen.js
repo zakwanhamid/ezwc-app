@@ -168,6 +168,10 @@ const AddListingScreen = () => {
           <Text style={{ fontSize: 20, fontWeight: "600" }}>Add New Listing</Text>
         </View>
       </View>
+      {currentUser.userHP ? null : 
+      <View style={{backgroundColor: '#ff4545', padding: 10}}>
+        <Text>Edit phone number before creating new listing</Text>
+      </View>}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
@@ -282,15 +286,16 @@ const AddListingScreen = () => {
 
                   <View style={styles.btnContainer}>
                     <TouchableOpacity
-                      style={[styles.btn, { backgroundColor: loading ? '#ccc' : '#529C4E' }]}
+                      style={[styles.btn, { backgroundColor: loading || !currentUser.userHP ? '#ccc' : '#529C4E' }]}
                       onPress={handleSubmit}
-                      disabled={loading}
+                      disabled={loading || !currentUser.userHP}
                     >
                       {loading ?
                         <ActivityIndicator color='white' /> :
-                        <Text style={{ fontWeight: '600', fontSize: 15, }}>Submit</Text>
+                        <Text style={{ fontWeight: '600', fontSize: 15, color: !currentUser.userHP ? '#999' : 'white' }}>
+                          Submit
+                        </Text>
                       }
-
                     </TouchableOpacity>
                   </View>
                 </View>

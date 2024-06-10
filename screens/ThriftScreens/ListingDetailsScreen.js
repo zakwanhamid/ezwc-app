@@ -87,7 +87,7 @@ export default function ListingDetailsScreen() {
             return;
         }
 
-        const whatsappLink = 'https://www.wasap.my/60' + product.userHP;
+        const whatsappLink = 'https://www.wasap.my/6' + product.userHP;
         console.log('whatsppLink:',whatsappLink)
         const supported = await Linking.canOpenURL(whatsappLink);
         if (supported) {
