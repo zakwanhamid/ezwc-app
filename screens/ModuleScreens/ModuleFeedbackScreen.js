@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -27,7 +27,7 @@ const ModuleFeedbackScreen = () => {
         timestamp: new Date(),
       });
       console.log('Feedback added with ID: ', docRef.id);
-      alert('Thank you for your feedback, we really appreciate it. We will try to improve this module so everyone else including you will get the best learning experience!')
+      Alert.alert('Feedback Sent!', "Thank you for your feedback, we really appreciate it. We will try to improve this module so everyone else including you will get the best learning experience!");
       navigation.navigate('ModuleScreen');
     } catch (error) {
       console.error('Error adding feedback: ', error);

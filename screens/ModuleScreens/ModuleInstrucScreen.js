@@ -109,7 +109,8 @@ export default ModuleInstrucScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        marginBottom: 50,
     },
     header:{
         flexDirection:"row",
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
       },
     textBg:{
         fontSize: 15, 
-        fontWeight: 400, 
+        // fontWeight: 400, 
         textAlign: "left", 
         marginHorizontal: 20,
         marginTop: 10

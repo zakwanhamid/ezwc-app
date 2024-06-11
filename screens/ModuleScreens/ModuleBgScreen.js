@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
       },
     textBg:{
         fontSize: 15, 
-        fontWeight: 400, 
+        // fontWeight: 400, 
         textAlign: "center", 
         marginHorizontal: 20,
         marginTop: 10

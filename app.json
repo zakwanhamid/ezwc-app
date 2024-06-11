@@ -15,14 +15,25 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ezwc"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package":"com.ezwc"
+      "package": "com.ezwc",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAbc7N_0cbUVuLRD0_RPoMfE8Kkl1GrrZc"
+        }
+      },
+      "permissions": [
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,14 +42,21 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow eZWC to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow eZWC to use your location.",
+          "isAndroidBackgroundLocationEnabled": true
         }
-      ],[
+      ],
+      [
         "expo-image-picker",
         {
           "photosPermission": "The ezwc accesses your photos to let you share."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cb23293b-d724-4dfd-9174-03ecdde3db0c"
+      }
+    }
   }
 }

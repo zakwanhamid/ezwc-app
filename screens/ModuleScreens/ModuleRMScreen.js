@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
         fontWeight: 500,
     },
     CPDisabledTitle:{
-        color:'grey',
+        // color:'grey',
         fontSize:20,
         fontWeight: 500,
     },

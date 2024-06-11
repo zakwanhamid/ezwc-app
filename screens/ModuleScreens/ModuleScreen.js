@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     },
     progressBarContainer:{
       alignItems: 'center',
+      marginTop:20,
     },
     progressBar:{
       position: 'absolute',
