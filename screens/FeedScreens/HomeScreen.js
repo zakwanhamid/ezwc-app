@@ -165,7 +165,7 @@ const HomeScreen = () => {
           <AntDesign name="pluscircleo" size={24} color="#529C4E" />
         </TouchableOpacity>
       </View>
-      <View>{renderPostContent()}</View>
+      <View >{renderPostContent()}</View>
     </SafeAreaView>
   );
 };
@@ -173,6 +173,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     flexDirection: "row",
@@ -182,12 +183,18 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#D8D9DB",
+    backgroundColor: 'white',
+
   },
   titleContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 10,
+  },
+  contentContainer: {
+    flex: 1,
+    marginBottom: 80, // Adjust this value if necessary
   },
 });
 

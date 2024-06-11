@@ -188,7 +188,7 @@ const CatItemListScreen = ({ route }) => {
       </View>
 
       {filteredItemList.length ?
-        <View style={{ paddingBottom: 190 }}>
+        <View>
           <LatestItemList latestItemList={filteredItemList} heading={''} />
         </View>
         : <View style={styles.emptyContainer}>

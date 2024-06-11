@@ -520,6 +520,7 @@ export default function PostItem({item, updatePostList }) {
                 >
                   <Text style={styles.buttonText}>Comment</Text>
                 </TouchableOpacity>
+
               </View> ) 
               }
               
@@ -669,6 +670,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     borderBottomWidth: 1,
     borderBottomColor: "#D8D9DB",
+    backgroundColor: 'white',
+
   },
   postAvatar: {
     width: 60,

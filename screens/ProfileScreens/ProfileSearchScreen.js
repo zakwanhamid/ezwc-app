@@ -77,7 +77,7 @@ const ProfileSearchScreen = () => {
   );
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'white', flex: 1}}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>

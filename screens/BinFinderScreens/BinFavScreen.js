@@ -164,11 +164,12 @@ const BinFavScreen = () => {
             </View>
         </View>
         {favBinsData.length ? (
-        <View style={{paddingBottom:200}}>
+        <View >
           <FlatList
           data={favBinsData}
           keyExtractor={(item) => item.id}
           renderItem={renderFavBinList}
+          contentContainerStyle={{ paddingBottom: 200 }}
         />
         </View>
         

@@ -7,6 +7,7 @@ export default function LatestPostList({latestPostList, heading, updatePostList}
     <View style={styles.container}>
       <FlatList
         data={latestPostList}
+        contentContainerStyle={{ paddingBottom: 780 }}
         renderItem={({item,index})=>(
             <PostItem item={item} updatePostList={updatePostList}/>
         )}
@@ -17,6 +18,5 @@ export default function LatestPostList({latestPostList, heading, updatePostList}
 
 const styles = StyleSheet.create({
     container:{
-      paddingBottom: 150,
     },
 })

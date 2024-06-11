@@ -175,7 +175,7 @@ const ThriftScreen = () => {
           <MaterialIcons name="add-business" size={25} color="#529C4E" />
         </TouchableOpacity>
       </View>
-      <View style={{ paddingBottom: 110 }}>
+      <View>
         <ScrollView refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }>

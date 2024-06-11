@@ -14,6 +14,7 @@ export default function LatestItemList({latestItemList, heading, getMoreItems, o
         onEndReached={getMoreItems}
         onEndReachedThreshold={0.5}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 190 }}
         renderItem={({item,index})=>(
           <View style={{ width: '50%', padding: 0 }}>
             <ListingItem item={item}/>

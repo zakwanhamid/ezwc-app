@@ -261,7 +261,7 @@ const UserProfileScreen = ({ route }) => {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'white'}}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>

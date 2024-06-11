@@ -119,7 +119,7 @@ const ProfileScreen = () => {
 
   const renderPostContent = () => {
       return (
-          <View style={{paddingBottom:0}}>
+          <View>
               <PostList currentUser = {currentUser}/>
           </View>
           
@@ -128,7 +128,7 @@ const ProfileScreen = () => {
       
       const renderListingContent = () => {
         return (
-          <View style={{paddingBottom:0}}>
+          <View>
               <ListingList currentUser = {currentUser}/>
           </View>
         );
@@ -155,7 +155,7 @@ const ProfileScreen = () => {
       }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'white'}}>
         <View style={{width:"100%"}}>
         {currentUser.wallpaperImage?
             <Image source={{uri:currentUser.wallpaperImage}} style={styles.bgImage} />
