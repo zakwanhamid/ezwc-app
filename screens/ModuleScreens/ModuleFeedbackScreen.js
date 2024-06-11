@@ -41,7 +41,7 @@ const ModuleFeedbackScreen = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         {/* <TouchableOpacity onPress={goBack}>
             <Ionicons name='md-arrow-back' size={24} color="black"></Ionicons>
@@ -89,7 +89,8 @@ export default ModuleFeedbackScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: "white"
     },
     header:{
         flexDirection:"row",

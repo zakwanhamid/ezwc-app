@@ -74,7 +74,7 @@ const ModuleFacListScreen = () => {
   }, []);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
@@ -139,14 +139,14 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={[styles.factorBox, currentUser.module < 6 && styles.disabledFactorBox]} 
+          <TouchableOpacity style={currentUser.module < 6 ? styles.disabledFactorBox : styles.factorBox} 
           onPress={handleModuleF7} disabled={currentUser.module < 6}>
             <Text style={styles.factorTitle}>Factor 7</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Examplary Leadership
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.factorBox, currentUser.module < 7 && styles.disabledFactorBox]}  
+          <TouchableOpacity style={currentUser.module < 7 ? styles.disabledFactorBox : styles.factorBox}  
           onPress={handleModuleF8} disabled={currentUser.module < 7}>
             <Text style={styles.factorTitle}>Factor 8</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
@@ -156,14 +156,14 @@ const ModuleFacListScreen = () => {
         </View>
 
         <View style={styles.row}>
-          <TouchableOpacity style={[styles.factorBox, currentUser.module < 8 && styles.disabledFactorBox]} 
+          <TouchableOpacity style={currentUser.module < 8 ? styles.disabledFactorBox : styles.factorBox}
           onPress={handleModuleF9} disabled={currentUser.module < 8}>
             <Text style={styles.factorTitle}>Factor 9</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
               Community Engagement
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.factorBox, currentUser.module < 9 && styles.disabledFactorBox]}  
+          <TouchableOpacity style={currentUser.module < 9 ? styles.disabledFactorBox : styles.factorBox}  
           onPress={handleModuleF10} disabled={currentUser.module < 9}>
             <Text style={styles.factorTitle}>Factor 10</Text>
             <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
@@ -189,7 +189,8 @@ export default ModuleFacListScreen
 
 const styles = StyleSheet.create({
   container:{
-      flex:1
+      flex:1,
+      backgroundColor:'white'
   },
   header:{
       flexDirection:"row",
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 15,
       paddingVertical: 12,
       borderBottomWidth:1,
-      borderBottomColor: "#D8D9DB"
+      borderBottomColor: "#D8D9DB",
     },
   titleContainer:{
       flex:1,
@@ -213,6 +214,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 5,
     shadowColor: "#000",
     shadowOpacity: 0.5,
     shadowOffset:{
@@ -238,13 +240,14 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius:10,
     borderWidth: 1,
-      borderColor: 'white',
-      shadowColor: "#000",
-      shadowOpacity: 0.5,
-      shadowOffset:{
-          width: 0,
-          height: 2,
-      }
+    elevation: 5,
+    borderColor: 'white',
+    shadowColor: "#000",
+    shadowOpacity: 0.5,
+    shadowOffset:{
+        width: 0,
+        height: 2,
+    }
   },
   disabledFactorBox: {
     width: 150,

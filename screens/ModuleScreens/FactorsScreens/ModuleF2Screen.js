@@ -114,10 +114,7 @@ const ModuleF2Screen = () => {
 
         <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
             <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
+                <Text style={styles.btnFont}>
                     Next Factor
                 </Text>
             </TouchableOpacity>
@@ -156,7 +153,7 @@ const ModuleF2Screen = () => {
               </View>
           ))}
               <TouchableOpacity style={[styles.NextBtn, {width: 200}]} onPress= {() => {handleCheckAnswers(); setIsModalVisibleCP(false);}}>
-                <Text> Check Answer </Text>
+                <Text style={styles.btnFont}> Check Answer </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -177,7 +174,7 @@ const ModuleF2Screen = () => {
               Your answer is not correct, Review the factor and answer the question again.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20, width: 200}]} onPress= {() =>  setIsModalVisibleNotCorrect(false)}>
-              <Text> Try Again </Text>
+              <Text style={styles.btnFont}> Try Again </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -193,7 +190,8 @@ export default ModuleF2Screen
 
 const styles = StyleSheet.create({
   container:{
-    flex:1
+    flex:1,
+    backgroundColor:'white'
 },
 header:{
     flexDirection:"row",
@@ -279,4 +277,8 @@ modalContainer:{
   elevation: 20,
   alignItems:'center'
 },
+btnFont:{
+  fontSize: 15,
+  fontWeight: '600',
+}
 })

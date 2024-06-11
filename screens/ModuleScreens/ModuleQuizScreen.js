@@ -148,7 +148,7 @@ const ModuleQuizScreen = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView >
+    <SafeAreaView style={styles.container} >
       <View style={styles.header}>
         <TouchableOpacity onPress={goBack}>
             <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
@@ -183,7 +183,6 @@ const ModuleQuizScreen = () => {
           style={styles.checkButton}
           onPress= {() => handleCheckAnswers() 
             }
-          
         >
           <Text style={styles.checkButtonText}>Check Answers</Text>
         </TouchableOpacity>
@@ -213,7 +212,7 @@ const ModuleQuizScreen = () => {
             </Text>
             
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20}]} onPress={() => {setIsModalVisibleFullMark(false); handleModuleFeedback()}}>
-              <Text> Feedback </Text>
+              <Text style={styles.btnFont}> Feedback </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -236,7 +235,7 @@ const ModuleQuizScreen = () => {
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20, width: 200}]} onPress= {() => {handleCheckAnswers(); setIsModalVisibleNotFullMark(false); handleModuleSumm()}}>
             
-              <Text> Summary Page </Text>
+              <Text style={styles.btnFont}> Summary Page </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -249,7 +248,8 @@ export default ModuleQuizScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: "white",
     },
     header:{
         flexDirection:"row",
@@ -316,13 +316,13 @@ const styles = StyleSheet.create({
       marginVertical: 5,
     },
     selectedOption: {
-      backgroundColor: 'lightblue',
+      backgroundColor: '#98FB98',
     },
     optionText: {
       fontSize: 16,
     },
     checkButton: {
-      backgroundColor: 'blue',
+      backgroundColor: '#529C4E',
       padding: 10,
       borderRadius: 10,
       alignItems: 'center',
@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     resetButton: {
-      backgroundColor: 'red',
+      backgroundColor: 'gray',
       padding: 10,
       borderRadius: 10,
       alignItems: 'center',
@@ -346,7 +346,6 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     scoreText: {
-      marginTop: 20,
       fontSize: 18,
       fontWeight: 'bold',
     },
@@ -365,4 +364,8 @@ const styles = StyleSheet.create({
       elevation: 20,
       alignItems:'center'
     },
+    btnFont:{
+      fontSize: 15,
+      fontWeight: '600',
+    }
 })

@@ -158,7 +158,7 @@ const ModuleF10Screen = () => {
               </View>
           ))}
               <TouchableOpacity style={[styles.NextBtn, {width: 200}]} onPress= {() => {handleCheckAnswers(); setIsModalVisibleCP(false);}}>
-                <Text> Check Answer </Text>
+                <Text style={styles.btnFont}> Check Answer </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -179,7 +179,7 @@ const ModuleF10Screen = () => {
               Your answer is not correct, Review the factor and answer the question again.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20, width: 200}]} onPress= {() =>  setIsModalVisibleNotCorrect(false)}>
-              <Text> Try Again </Text>
+              <Text style={styles.btnFont}> Try Again </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -192,7 +192,8 @@ export default ModuleF10Screen
 
 const styles = StyleSheet.create({
   container:{
-    flex:1
+    flex:1,
+    backgroundColor: 'white',
   },
   header:{
       flexDirection:"row",
@@ -278,4 +279,8 @@ const styles = StyleSheet.create({
     elevation: 20,
     alignItems:'center'
   },
+  btnFont:{
+    fontSize: 15,
+    fontWeight: '600',
+  }
 })

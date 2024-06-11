@@ -33,7 +33,7 @@ const ModuleFacSummScreen = () => {
   }, [navigation]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
@@ -47,7 +47,7 @@ const ModuleFacSummScreen = () => {
       </View>
 
       <View style={styles.factorContainer}>
-        <View style={styles.row} >
+        <View style={styles.row}>
           <TouchableOpacity style={styles.factorBox} onPress={() => setIsModalVisible(true)}>
             <Text style={styles.factorTitle}>Factor 1</Text>
             {/* <Text style={{fontSize: 13, fontWeight: 600, textAlign:'center', marginTop: 5}}>
@@ -150,7 +150,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -172,7 +172,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -194,7 +194,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible3(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -216,7 +216,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible4(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -238,7 +238,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible5(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -260,7 +260,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible6(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -282,7 +282,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible7(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -304,7 +304,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible8(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -326,7 +326,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible9(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -348,7 +348,7 @@ const ModuleFacSummScreen = () => {
               environment to gain a better understanding of the issues and make more informed decisions.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible10(false)}>
-              <Text> Close </Text>
+              <Text style={styles.btnFont}> Close </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -363,7 +363,8 @@ export default ModuleFacSummScreen
 
 const styles = StyleSheet.create({
   container:{
-      flex:1
+      flex:1,
+      backgroundColor: 'white',
   },
   header:{
       flexDirection:"row",
@@ -407,7 +408,9 @@ const styles = StyleSheet.create({
     width: 150,
     // height: 100,
     backgroundColor: 'lightblue',
+    borderColor: 'white',
     marginHorizontal: 5,
+    elevation: 5,
     alignItems: 'center',
     padding: 15,
     borderRadius:10,
@@ -463,4 +466,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 20,
   },
+  btnFont:{
+    fontSize: 15,
+    fontWeight: '600',
+  }
 })

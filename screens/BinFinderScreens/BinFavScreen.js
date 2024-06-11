@@ -92,9 +92,12 @@ const BinFavScreen = () => {
     <View
       style={{
           backgroundColor: 'white',
-          width: Dimensions.get('window').width,
-          margin:5,
-          borderRadius: 10
+          // width: Dimensions.get('window').width,
+
+          marginHorizontal:20,
+          marginVertical: 5,
+          borderRadius: 10,
+          elevation: 5,
           }}>
       <TouchableOpacity style={styles.favBtn} onPress={() => handleFavoriteBin(item.id)}>
           {currentUser.favBin.includes(item.id) ? (
@@ -186,6 +189,8 @@ export default BinFavScreen
 
 const styles = StyleSheet.create({
   container:{
+    flex: 1,
+    backgroundColor: 'white',
 },
 header:{
     flexDirection:"row",
@@ -195,6 +200,7 @@ header:{
     paddingVertical: 12,
     borderBottomWidth:1,
     borderBottomColor: "#D8D9DB",
+    marginBottom:5,
   },
 titleContainer:{
     flex:1,

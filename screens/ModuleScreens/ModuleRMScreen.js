@@ -1,7 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome, Ionicons } from '@expo/vector-icons';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import { collection, doc, onSnapshot } from 'firebase/firestore';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -76,57 +76,71 @@ const ModuleRMScreen = () => {
 
         <View style={{alignItems:'center'}}>
             <TouchableOpacity onPress={handleModuleMP}>
-                <View style={styles.CPContainer}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                <View style={[styles.CPContainer, {marginTop:20}]}>
+                    <Text style={{...styles.CPTitle, fontWeight:600}}>
                         Main Page
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleBg}>
                 <View style={styles.CPContainer}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPTitle, fontWeight:600}}>
                         Module Background
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleObj}>
                 <View style={styles.CPContainer}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPTitle, fontWeight:600}}>
                         Module Objectives
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleInstruc}>
                 <View style={styles.CPContainer}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPTitle, fontWeight:600}}>
                         Instructions
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleFactorList}>
                 <View style={styles.CPContainer}>
-                    <Text style={{...styles.CPTitle, fontWeight:500}}>
+                    <Text style={{...styles.CPTitle, fontWeight:600}}>
                         10 Factors
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleFacSumm} disabled={currentUser.module < 10}>
-                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
+                <View style={currentUser.module < 10 ? styles.disabledCP : styles.CPContainer}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:600}}>
                         Summary
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+
             <TouchableOpacity onPress={handleModuleQuiz} disabled={currentUser.module < 10}>
-                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
+                <View style={currentUser.module < 10 ? styles.disabledCP : styles.CPContainer}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:600}}>
                         Quiz
                     </Text>
                 </View>
             </TouchableOpacity>
+            <AntDesign name="arrowdown" size={24} color="black" style={{margin:5}} />
+            
             <TouchableOpacity onPress={handleModuleFeeback} disabled={currentUser.module < 10}>
-                <View style={[styles.CPContainer, currentUser.module < 10 && styles.disabledCP]}>
-                    <Text style={{...styles.CPDisabledTitle, fontWeight:500}}>
+                <View style={currentUser.module < 10 ? styles.disabledCP : styles.CPContainer}>
+                    <Text style={{...styles.CPDisabledTitle, fontWeight:600}}>
                         Feedback
                     </Text>
                 </View>
@@ -141,7 +155,9 @@ export default ModuleRMScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+      backgroundColor:'white'
+
     },
     header:{
         flexDirection:"row",
@@ -175,26 +191,19 @@ const styles = StyleSheet.create({
     CPContainer:{
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20,
         backgroundColor: "#529C4E",
-        height: 50,
+        height: 40,
         width: 300,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: 'white',
-        shadowColor: "#000",
-        shadowOpacity: 0.5,
-        shadowOffset:{
-            width: 0,
-            height: 2,
-        }
+        borderColor: 'transparent',
+        elevation: 5,
     },
     disabledCP:{
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 20,
         backgroundColor: "white",
-        height: 50,
+        height: 40,
         width: 300,
         borderRadius: 10,
         borderWidth: 2,
@@ -205,7 +214,6 @@ const styles = StyleSheet.create({
         fontWeight: 500,
     },
     CPDisabledTitle:{
-        // color:'grey',
         fontSize:20,
         fontWeight: 500,
     },
