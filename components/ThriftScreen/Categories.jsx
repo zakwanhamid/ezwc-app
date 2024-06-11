@@ -24,7 +24,6 @@ export default function Categories({categoryList}) {
                 />
                 <Text>{item.name}</Text>
             </TouchableOpacity>
-            
         )}
       />
     </View>
@@ -46,12 +45,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 20,
+        // padding: 20,
         borderWidth:1,
+        backgroundColor: 'white',
         borderColor:'#ccc',
         borderRadius: 10,
         margin: 5,
         height: 75,
+        elevation: 5,
+
         
     },
     catImage:{

@@ -286,7 +286,7 @@ export default function ListingDetailsScreen() {
                     )
             }
         </View>
-        <ScrollView style={{flex:1}}>
+        <View style={{flex:1}}>
             <View>
                 <Image source={{uri:product.image}}
                     style={styles.productImg}/>
@@ -315,7 +315,7 @@ export default function ListingDetailsScreen() {
                     </TouchableOpacity>
                 </View>
             </View>
-        </ScrollView>
+        </View>
     </SafeAreaView>
   )
 }
@@ -323,6 +323,7 @@ export default function ListingDetailsScreen() {
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+        backgroundColor: 'white',
     },
     header: {
         flexDirection: "row",
@@ -384,7 +385,8 @@ const styles = StyleSheet.create({
         marginHorizontal:20,
         borderColor: 'gray',
         borderRadius: 10,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        elevation: 5,
     },
     userInfo: {
         paddingLeft: 10,

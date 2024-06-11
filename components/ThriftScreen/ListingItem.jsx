@@ -30,10 +30,12 @@ const styles = StyleSheet.create({
     listContainer:{
         margin:5,
         flex:1,
-        padding:2,
+        padding:1,
         borderRadius: 5,
         borderWidth:1,
-        borderColor: '#ccc'
+        borderColor: '#ccc',
+        backgroundColor: 'white',
+        elevation:2,
     },
     postImg:{
         width: '100%',

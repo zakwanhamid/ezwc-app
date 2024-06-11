@@ -184,7 +184,7 @@ const CatItemListScreen = ({ route }) => {
       </Modal>
 
       <View style={styles.priceRangeDisplay}>
-        <Text style={styles.priceRangeText}>Price Range: {displayPriceRange[0]} - {displayPriceRange[1]}</Text>
+        <Text style={styles.priceRangeText}>Price Range: RM {displayPriceRange[0]} - RM {displayPriceRange[1]}</Text>
       </View>
 
       {filteredItemList.length ?
@@ -204,6 +204,7 @@ export default CatItemListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     flexDirection: "row",
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
   priceRangeDisplay: {
     paddingHorizontal: 15,
     paddingVertical: 10,
-    backgroundColor: '#F1F1F1',
+    backgroundColor: 'white',
   },
   priceRangeText: {
     fontSize: 16,

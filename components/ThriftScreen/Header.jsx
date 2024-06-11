@@ -143,6 +143,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginHorizontal:20,
         marginTop:20,
+        marginBottom: 10,
     },
     searchBar:{
         paddingHorizontal: 20,
@@ -151,6 +152,8 @@ const styles = StyleSheet.create({
         borderWidth:1,
         borderRadius:8,
         fontSize: 17,
-        width: '91%'
+        width: '91%',
+        backgroundColor: 'white',
+        elevation: 3,
     },
 });

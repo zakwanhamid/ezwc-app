@@ -24,7 +24,7 @@ const ListingSearchScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
@@ -37,7 +37,7 @@ const ListingSearchScreen = () => {
             <Text style={{fontSize:16}}>Search results for item '{searchQuery}'</Text>
         </View>
         {postsList.length? 
-        <View style={{paddingBottom: 300}}>
+        <View >
             <LatestItemList latestItemList={postsList} heading = {''}/>
         </View>       
         : <View style={styles.emptyContainer}>
@@ -52,7 +52,8 @@ export default ListingSearchScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex:1
+        flex:1,
+        backgroundColor: 'white',
     },
     header:{
         flexDirection:"row",

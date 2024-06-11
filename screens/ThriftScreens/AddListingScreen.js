@@ -292,7 +292,7 @@ const AddListingScreen = () => {
                     >
                       {loading ?
                         <ActivityIndicator color='white' /> :
-                        <Text style={{ fontWeight: '600', fontSize: 15, color: !currentUser.userHP ? '#999' : 'white' }}>
+                        <Text style={{ fontWeight: '600', fontSize: 15, color: !currentUser.userHP ? 'white' : 'black' }}>
                           Submit
                         </Text>
                       }
@@ -313,6 +313,7 @@ export default AddListingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     flexDirection: "row",
