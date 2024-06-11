@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestPostList from '../HomeScreen/LatestPostList';
+import LatestPostListPro from '../HomeScreen/LatestPostListPro';
 
 export default function PostList({ currentUser }) {
     const [postList, setPostList] = useState([]);
@@ -65,7 +66,7 @@ export default function PostList({ currentUser }) {
     return (
         <View>
             {postList.length ? (
-                <LatestPostList latestPostList={postList} heading={''} />
+                <LatestPostListPro latestPostList={postList} heading={''} />
             ) : (
                 <View style={styles.emptyContainer}>
                     <Text style={styles.emptyText}>No post available...</Text>

@@ -2,12 +2,12 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import React from 'react'
 import PostItem from './PostItem'
 
-export default function LatestPostList({latestPostList, heading, updatePostList}) {
+export default function LatestPostListPro({latestPostList, heading, updatePostList}) {
   return (
     <View style={styles.container}>
       <FlatList
         data={latestPostList}
-        contentContainerStyle={{ paddingBottom: 150 }}
+        contentContainerStyle={{ paddingBottom: 840 }}
         renderItem={({item,index})=>(
             <PostItem item={item} updatePostList={updatePostList}/>
         )}

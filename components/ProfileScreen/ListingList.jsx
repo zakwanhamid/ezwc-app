@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
 import { FIREBASE_DB } from '../../firebase';
 import LatestItemList from '../ThriftScreen/LatestItemList';
+import LatestItemListPro from '../ThriftScreen/LatestItemListPro';
 
 export default function ListingList({currentUser}) {
     const [itemList,setItemList] = useState([]);
@@ -66,7 +67,7 @@ export default function ListingList({currentUser}) {
 
   return (
     <View >
-      {itemList.length? <LatestItemList latestItemList={itemList} 
+      {itemList.length? <LatestItemListPro latestItemList={itemList} 
         heading = {''}/>
         : <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>No listing available...</Text>

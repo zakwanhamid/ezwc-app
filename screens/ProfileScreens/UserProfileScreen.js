@@ -390,10 +390,6 @@ const UserProfileScreen = ({ route }) => {
             </View>
             </View>
         </Modal>
-        
-                
-
-        
     </SafeAreaView>
   )
 }

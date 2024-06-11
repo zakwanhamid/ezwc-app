@@ -46,13 +46,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         // padding: 20,
-        borderWidth:1,
+        // borderWidth:1,
         backgroundColor: 'white',
         borderColor:'#ccc',
         borderRadius: 10,
         margin: 5,
         height: 75,
-        elevation: 5,
+        elevation: 3,
 
         
     },

@@ -280,7 +280,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    marginTop:80,
+    // marginTop:80,
   },
   avatarBtn:{
     flexDirection:"row",
