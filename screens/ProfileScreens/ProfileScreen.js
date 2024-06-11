@@ -384,11 +384,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "#D8D9DB",
   },
   profilesAvatar:{
-        width: 60,
-        height:60,
-        borderRadius: 50,
-        borderColor: "white",
-        borderWidth: 2,
+    width: 60,
+    height:60,
+    borderRadius: 50,
+    borderColor: "white",
+    borderWidth: 2,
   },
   
 })

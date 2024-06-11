@@ -356,7 +356,7 @@ const UserProfileScreen = ({ route }) => {
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Followers</Text>
                 <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20}]}>Below are your followers</Text>
                 <FlatList
-                style={{width: '90%'}}
+                style={{width: '90%', height: 200}}
                 data={followersData}
                 keyExtractor={(item) => item.id}
                 renderItem={renderFollowerItem}
@@ -379,7 +379,7 @@ const UserProfileScreen = ({ route }) => {
                 <Text style={[styles.modalHeader, {fontWeight: 700}]}>Following</Text>
                 <Text style={[styles.modalTitle, {fontWeight: 500, marginBottom: 20}]}>Below are your following</Text>
                 <FlatList
-                style={{width: '90%'}}
+                style={{width: '90%', height: 200}}
                 data={followingData}
                 keyExtractor={(item) => item.id}
                 renderItem={renderFollowingItem}
