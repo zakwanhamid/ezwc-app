@@ -1,4 +1,4 @@
-import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
@@ -9,6 +9,7 @@ import { addDoc, collection } from 'firebase/firestore';
 const ModuleFeedbackScreen = () => {
   const navigation = useNavigation();
   const [feedback, setFeedback] = useState('');
+  const [loading, setLoading] = useState(false);
   // const goBack = () => {
   //   navigation.goBack(); // Go back to the previous screen
   // };
@@ -17,6 +18,7 @@ const ModuleFeedbackScreen = () => {
   };
 
   const handleSendFeedback = async () => {
+    setLoading(true);
     const user = FIREBASE_AUTH.currentUser;
     const userId = user.uid;
     try {
@@ -27,9 +29,11 @@ const ModuleFeedbackScreen = () => {
         timestamp: new Date(),
       });
       console.log('Feedback added with ID: ', docRef.id);
+      setLoading(false);
       Alert.alert('Feedback Sent!', "Thank you for your feedback, we really appreciate it. We will try to improve this module so everyone else including you will get the best learning experience!");
       navigation.navigate('ModuleScreen');
     } catch (error) {
+      setLoading(false);
       console.error('Error adding feedback: ', error);
     }
   };
@@ -72,13 +76,21 @@ const ModuleFeedbackScreen = () => {
 
 
       <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-        <TouchableOpacity style={styles.NextBtn} onPress={handleSendFeedback}>
-            <Text style={{
-                fontSize: 15,
-                fontWeight: 600,
-            }}>
-                Send 
-            </Text>
+        <TouchableOpacity
+          style={[styles.NextBtn, { backgroundColor: loading ? '#ccc' : '#529C4E' }]}
+          onPress={handleSendFeedback}
+          disabled={loading}
+        >
+        {loading ?
+          <ActivityIndicator color='white' /> :
+          <Text style={{
+              fontSize: 15,
+              fontWeight: '600',
+              color: 'black',
+          }}>
+            Send
+          </Text>
+        }
         </TouchableOpacity>
       </View>
     </SafeAreaView>

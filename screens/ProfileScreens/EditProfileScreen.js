@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -18,6 +18,8 @@ const EditProfileScreen = () => {
     const [currentUser, setCurrentUser] = useState([]);
     const [profileImage, setProfileImage] = useState(null);
     const [wallpaperImage, setWallpaperImage] = useState(null);
+    const [loading, setLoading] = useState(false);
+
 
     const goBack = () => {
         navigation.goBack()
@@ -80,6 +82,7 @@ const EditProfileScreen = () => {
     };
 
     const handleSaveProfile = async () => {
+        setLoading(true);
         const { currentUser } = FIREBASE_AUTH;
         if (!currentUser) return;
 
@@ -103,10 +106,11 @@ const EditProfileScreen = () => {
             }
 
             await updateDoc(userRef, updatedData);
-
+            setLoading(false);
             Alert.alert('Profile Updated', 'Your profile has been updated successfully!');
             navigation.navigate('ProfileScreen');
         } catch (error) {
+            setLoading(false);
             console.error('Error updating profile:', error);
             alert('Failed to update profile. Please try again.');
         }
@@ -152,8 +156,17 @@ const EditProfileScreen = () => {
             <View style={styles.titleContainer}>
                 <Text style={{ fontSize: 20, fontWeight:"600"}}>Edit Profile</Text> 
             </View>
-            <TouchableOpacity style={styles.postBtn} onPress={handleSaveProfile}>
-                <Text style={{ fontWeight:"700", fontSize:14}}>Save</Text>
+            <TouchableOpacity
+                style={[styles.postBtn, { backgroundColor: loading ? '#ccc' : '#529C4E' }]}
+                onPress={handleSaveProfile}
+                disabled={loading}
+                >
+                {loading ?
+                <ActivityIndicator color='white' /> :
+                <Text style={{ fontWeight: "700", fontSize: 14, color: 'black' }}>
+                    Save
+                </Text>
+                }
             </TouchableOpacity>
         </View>
 

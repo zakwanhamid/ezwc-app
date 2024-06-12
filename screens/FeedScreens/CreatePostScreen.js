@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ActivityIndicator } from 'react-native';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +16,7 @@ const CreatePostScreen = ({ route }) => {
     const navigation = useNavigation();
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [charCount, setCharCount] = useState(280);
+    const [loading, setLoading] = useState(false);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -63,6 +64,7 @@ const CreatePostScreen = ({ route }) => {
     const onSubmitMethod = async (value) => {
         try {
             console.log('images:', images);
+            setLoading(true);
 
             // Handle uploading multiple images
             const uploadTasks = images.map(async (image) => {
@@ -89,11 +91,13 @@ const CreatePostScreen = ({ route }) => {
                     userName: currentUser.name,
                     userEmail: currentUser.email
                 });
+                setLoading(false);
                 console.log('post successfully added:', docRef.id);
                 Alert.alert('Successfully Added', "Your post is successfully added. This post will be view by other users");
                 handleHomeScreen();
             }
         } catch (error) {
+            setLoading(false);
             console.error('Error adding post:', error);
         } finally {
             setImages([]);
@@ -131,8 +135,17 @@ const CreatePostScreen = ({ route }) => {
                             <View style={styles.titleContainer}>
                                 <Text style={{ fontSize: 20, fontWeight: "600" }}>Create Post</Text>
                             </View>
-                            <TouchableOpacity style={styles.postBtn} onPress={handleSubmit}>
-                                <Text style={{ fontWeight: "700", fontSize: 14 }}>Post</Text>
+                            <TouchableOpacity
+                                style={[styles.postBtn, { backgroundColor: loading ? '#ccc' : '#529C4E' }]}
+                                onPress={handleSubmit}
+                                disabled={loading}
+                            >
+                            {loading ?
+                                <ActivityIndicator color='white' /> :
+                                <Text style={{ fontWeight: "700", fontSize: 14, color: 'black' }}>
+                                Post
+                                </Text>
+                            }
                             </TouchableOpacity>
                         </View>
                         <View style={styles.inputContainer}>
