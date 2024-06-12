@@ -1,22 +1,24 @@
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
-import PostItem from './PostItem'
+import { View, Text, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import React from 'react';
+import PostItem from './PostItem';
 
-export default function LatestPostList({latestPostList, heading, updatePostList}) {
+export default function LatestPostList({ latestPostList, heading, updatePostList, refreshing, onRefresh }) {
   return (
     <View style={styles.container}>
       <FlatList
         data={latestPostList}
-        contentContainerStyle={{ paddingBottom: 150 }}
-        renderItem={({item,index})=>(
-            <PostItem item={item} updatePostList={updatePostList}/>
+        contentContainerStyle={{ paddingBottom: 100 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        renderItem={({ item, index }) => (
+          <PostItem item={item} updatePostList={updatePostList} />
         )}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-    container:{
-    },
-})
+  container: {},
+});

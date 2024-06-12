@@ -3,9 +3,11 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
+  FlatList,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { FIREBASE_AUTH, FIREBASE_DB } from "../../firebase";
 import { AntDesign, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,15 +22,16 @@ import {
 } from "firebase/firestore";
 import LatestPostList from "../../components/HomeScreen/LatestPostList";
 
-//this is the feed screen that will show all posts
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useState([]);
-  const [postList,setPostList] = useState([]);
+  const [postList, setPostList] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const handleCreatePost = (currentUser) => {
-    navigation.navigate('CreatePostScreen',{currentUser});
+    navigation.navigate('CreatePostScreen', { currentUser });
   };
+
   const handleProfileSearch = () => {
     navigation.navigate("ProfileSearchScreen");
   };
@@ -41,38 +44,15 @@ const HomeScreen = () => {
 
   useEffect(() => {
     getCurrentUserDocument();
-  },[]);
-
-  // const  = async (followingIds) => {
-  //     setPostList([]);
-  //     try {
-  //         const q = query(
-  //           collection(FIREBASE_DB, 'posts'), 
-  //           where('userId', 'in', followingIds),
-  //           where('status', '==', 'active'),
-  //           orderBy('timestamp','desc')
-  //           );
-  //         const snapshot = await getDocs(q);
-          
-  //         snapshot.forEach(doc => {
-  //             const postData = {
-  //                 id: doc.id, // Include the docume ID in the data
-  //                 ...doc.data(),
-  //             };
-  //             console.log('doc:', postData);
-  //             setPostList(postList => [...postList, postData]);
-  //         });
-  //     } catch (error) {
-  //         console.error('Error fetching item list by IDs:', error);
-  //     }
-  // };
+  }, []);
 
   const getPostListByFollowing = async (followingIds) => {
     const postsCollection = query(
       collection(FIREBASE_DB, 'posts'),
       where('userId', 'in', followingIds),
       where('status', '==', 'active'),
-      orderBy('timestamp','desc'));
+      orderBy('timestamp', 'desc')
+    );
     const postsSnapshot = await getDocs(postsCollection);
     const postsList = await Promise.all(
       postsSnapshot.docs.map(async (postDoc) => {
@@ -81,41 +61,40 @@ const HomeScreen = () => {
           ...postDoc.data(),
         };
         const userDocRef = doc(FIREBASE_DB, 'users', postData.userId);
-          const userDocSnapshot = await getDoc(userDocRef);
-    
-          let userData = {};
-          if (userDocSnapshot.exists()) {
-            userData = {
-              userId: userDocSnapshot.id,
-              ...userDocSnapshot.data(),
-            };
-          } else {
-            userData = {
-              userId: postData.userId,
-              name: 'Unknown',
-              email: 'Unknown',
-              userHP: 'Unknown',
-            };
-          }
-    
-          return {
-            id: postData.id,
-            userId: userData.userId,
-            userProfileImage: userData.profileImage,
-            userName: userData.name,
-            userEmail: userData.email,
-            timestamp: postData.timestamp,
-            text: postData.text,
-            images: postData.images,
-            comments: postData.comments,
-            likes: postData.likes
+        const userDocSnapshot = await getDoc(userDocRef);
+
+        let userData = {};
+        if (userDocSnapshot.exists()) {
+          userData = {
+            userId: userDocSnapshot.id,
+            ...userDocSnapshot.data(),
           };
+        } else {
+          userData = {
+            userId: postData.userId,
+            name: 'Unknown',
+            email: 'Unknown',
+            userHP: 'Unknown',
+          };
+        }
+
+        return {
+          id: postData.id,
+          userId: userData.userId,
+          userProfileImage: userData.profileImage,
+          userName: userData.name,
+          userEmail: userData.email,
+          timestamp: postData.timestamp,
+          text: postData.text,
+          images: postData.images,
+          comments: postData.comments,
+          likes: postData.likes,
+        };
       })
     );
 
     setPostList(postsList);
   };
-
 
   const updatePostList = (updatedPost) => {
     setPostList(postList.map(post => post.id === updatedPost.id ? updatedPost : post));
@@ -124,7 +103,7 @@ const HomeScreen = () => {
   const getCurrentUserDocument = async () => {
     const currentUserUid = FIREBASE_AUTH.currentUser.uid;
     const userRef = doc(collection(FIREBASE_DB, "users"), currentUserUid);
-  
+
     try {
       const userDocSnapshot = await getDoc(userRef);
       if (userDocSnapshot.exists()) {
@@ -135,20 +114,31 @@ const HomeScreen = () => {
         console.log("User document:", userData);
         setCurrentUser(userData);
         getPostListByFollowing(userData.following);
-        return userData; // Return the user document data
+        return userData;
       } else {
         console.log("User document does not exist");
-        return null; // Handle case where user document doesn't exist
+        return null;
       }
     } catch (error) {
       console.error("Error fetching user document:", error);
-      return null; // Handle error fetching user document
+      return null;
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getCurrentUserDocument();
+    setRefreshing(false);
   };
 
   const renderPostContent = () => {
     return (
-      <LatestPostList latestPostList={postList} updatePostList={updatePostList} />
+      <LatestPostList
+        latestPostList={postList}
+        updatePostList={updatePostList}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
     );
   };
 
@@ -165,7 +155,7 @@ const HomeScreen = () => {
           <AntDesign name="pluscircleo" size={24} color="#529C4E" />
         </TouchableOpacity>
       </View>
-      <View >{renderPostContent()}</View>
+      <View style={styles.contentContainer}>{renderPostContent()}</View>
     </SafeAreaView>
   );
 };
@@ -184,7 +174,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#D8D9DB",
     backgroundColor: 'white',
-
   },
   titleContainer: {
     flex: 1,
@@ -194,7 +183,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    marginBottom: 80, // Adjust this value if necessary
   },
 });
 

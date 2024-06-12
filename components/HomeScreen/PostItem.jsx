@@ -416,8 +416,8 @@ export default function PostItem({item, updatePostList }) {
           <View style={{width:'80%', marginTop: 8}}>
               <View >
                   <Text style={{fontSize: 15, fontWeight: 600}}>{item.userName}</Text>
-                  <Text style={{fontSize: 13, fontWeight: 200}}>{item.userEmail}</Text>
-                  <Text style={{fontSize: 13, fontWeight: 200}}>{item.timestamp.toDate().toLocaleString('en-US', options)}</Text>
+                  <Text style={{fontSize: 13, fontWeight: 200, color: 'gray'}}>{item.userEmail}</Text>
+                  <Text style={{fontSize: 13, fontWeight: 200, color: 'gray'}}>{item.timestamp.toDate().toLocaleString('en-US', options)}</Text>
                   
               </View>
               <View style={{marginTop:5}}>
