@@ -42,7 +42,7 @@ const ListingFavScreen = () => {
               if (userData.favListing && userData.favListing.length > 0) {
                   getItemListByListingIds(userData.favListing);
               } else {
-                  setItemList([]); // Clear the item list if there are no favorite listings
+                  setItemList([]); // Clear the item list if there are no favorite listing
               }
           } else {
               // Handle case where user document doesn't exist
@@ -56,6 +56,7 @@ const ListingFavScreen = () => {
       try {
           const listingsCollection = query(
               collection(FIREBASE_DB, 'listings'),
+              where('status', '==', 'active'),
               where('__name__', 'in', listingIdsArray),
               orderBy('timestamp', 'desc')
           );

@@ -18,6 +18,7 @@ export default function PostList({ currentUser }) {
         const postsCollection = query(
             collection(FIREBASE_DB, 'posts'),
             where('userId', '==', currentUser.id),
+            where('status', '==', 'active'),
             orderBy('timestamp', 'desc')
         );
         const postsSnapshot = await getDocs(postsCollection);

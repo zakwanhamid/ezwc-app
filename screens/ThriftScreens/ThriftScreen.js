@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, RefreshControl } 
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, startAfter, where } from 'firebase/firestore';
 import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebase';
 import Header from '../../components/ThriftScreen/Header';
 import Slider from '../../components/ThriftScreen/Slider';
@@ -83,6 +83,7 @@ const ThriftScreen = () => {
   const getLatestItemList = async () => {
     const listingsCollection = query(
       collection(FIREBASE_DB, 'listings'),
+      where('status', '==', 'active'),
       orderBy('timestamp', 'desc'),
       limit(10)
     );
@@ -120,7 +121,7 @@ const ThriftScreen = () => {
           category: listingData.category,
           desc: listingData.desc,
           time: listingData.timestamp,
-          userId: userData.userId, // Include userId here
+          userId: userData.userId, // Include userId heree
           userName: userData.name,
           userEmail: userData.email,
           userHP: userData.userHP,

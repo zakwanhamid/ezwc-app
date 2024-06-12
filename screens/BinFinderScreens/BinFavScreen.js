@@ -223,7 +223,7 @@ titleContainer:{
       paddingHorizontal: 16,
       width: 55,
       position: 'absolute',
-      bottom: 0,
+      bottom: 18,
       right: 0,
       margin: 10,
   },

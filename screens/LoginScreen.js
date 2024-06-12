@@ -110,7 +110,6 @@ const Login = () => {
                         secureTextEntry
                     />
                 </View>
-                <Text className="text-l mt-3 font-bold">Forgot Password ? </Text>
                 
                 <View className="items-center mt-2">
                     <TouchableOpacity 

@@ -16,7 +16,9 @@ export default function ListingList({currentUser}) {
     const getItemListByCurrentUser = async () => {
         const listingsCollection = query(
           collection(FIREBASE_DB, 'listings'),
-          where('userId', '==', currentUser.id)
+          where('userId', '==', currentUser.id),
+          where('status', '==', 'active')
+
         );
         const listingsSnapshot = await getDocs(listingsCollection);
         const listingsList = await Promise.all(

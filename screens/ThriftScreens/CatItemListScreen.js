@@ -36,6 +36,7 @@ const CatItemListScreen = ({ route }) => {
     const listingsCollection = query(
       collection(FIREBASE_DB, 'listings'),
       where('category', '==', categoryData.name),
+      where('status', '==', 'active'),
       orderBy('timestamp', 'desc')
     );
     const listingsSnapshot = await getDocs(listingsCollection);

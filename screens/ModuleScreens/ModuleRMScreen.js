@@ -75,8 +75,12 @@ const ModuleRMScreen = () => {
         </View>
 
         <View style={{alignItems:'center'}}>
+            <View>
+                <Text style={{fontSize:14, fontWeight:500, marginHorizontal:10, marginBottom: 10}}>Continue to 10 Factors page to start learning! Summary, Quiz 
+                and Feedback button will appear after you completed all the 10 Factors. Happy Learning!!</Text>
+            </View>
             <TouchableOpacity onPress={handleModuleMP}>
-                <View style={[styles.CPContainer, {marginTop:20}]}>
+                <View style={[styles.CPContainer, {marginTop:0}]}>
                     <Text style={{...styles.CPTitle, fontWeight:600}}>
                         Main Page
                     </Text>

@@ -37,7 +37,10 @@ export default function Header() {
                 console.log("Normalized Search Query:", normalizedSearchQuery);
                 
                 // Fetch all listings
-                const listingsCollection = collection(FIREBASE_DB, 'listings');
+                const listingsCollection = query(
+                    collection(FIREBASE_DB, 'listings'), 
+                    where('status', '==', 'active')
+                );
                 const querySnapshot = await getDocs(listingsCollection);
                 console.log("Query Snapshot Size:", querySnapshot.size);
     
