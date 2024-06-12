@@ -147,7 +147,7 @@ const ProfileScreen = () => {
             }; // Include user ID in userData
             setCurrentUser(userData);
           } else {
-            // Handle case where user document doesn't exist
+            // Handle case where user document doesn't exists
             console.log("User document does not exist");
           }
         });
