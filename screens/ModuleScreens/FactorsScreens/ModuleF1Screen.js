@@ -123,7 +123,7 @@ const ModuleF1Screen = () => {
         everyday items that are discarded by the public. 
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F1Img1.png')}
             style={{height: 150, width: '80%', borderRadius: 10}}
         />
         </View>
@@ -131,7 +131,7 @@ const ModuleF1Screen = () => {
         equivalent to about 1.17kg per person, says the Solid Waste Management and Public Cleansing Corporation (SWCorp).
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F1Img2.png')}
             style={{height: 150, width: '80%',  borderRadius: 10}}
         />
         </View>
@@ -142,12 +142,12 @@ const ModuleF1Screen = () => {
         This included academic institutions like universities!
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F1Img3.webp')}
             style={{height: 150, width: '80%',  borderRadius: 10}}
         />
         </View>
         <Text style={{fontSize: 14, margin:20}}>
-        Zaro Waste by definition is the conservation of all resources by means of responsible production, 
+        Zero Waste by definition is the conservation of all resources by means of responsible production, 
         consumption, reuse, and recovery of products, packaging, and materials without 
         burning and with no discharges to land, water, or air that threaten the environment 
         or human health (ZWIA, 2022)

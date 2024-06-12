@@ -41,13 +41,13 @@ const ModuleF2Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'The SMART Goal to promote zero waste is important. The goal must be spcific, measurable, achievable _______ and timely.',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+        'Simple', 
+        'Complex', 
+        'Realistic-', 
+        'Big'],
+      correctAnswer: 'Realistic-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -122,11 +122,11 @@ const ModuleF2Screen = () => {
         and enhance resilience to climate-related disasters.
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
-            style={{height: 150, width: '80%', borderRadius: 10}}
+            <Image source={require('../../../assets/F2Img1.png')}
+            style={{height: 180, width: '80%', borderRadius: 10}}
         />
         </View>
-        <Text style={{fontSize: 14, margin:20}}> Additionally, SDG 13 highlights the importance of financial support for
+        <Text style={{fontSize: 14, margin:20}}>Additionally, SDG 13 highlights the importance of financial support for
         developing countries to help them mitigate and adapt to climate change. This includes 
         providing resources for sustainable practices and technologies, and strengthening
         institutional capacity to address climate challenges.

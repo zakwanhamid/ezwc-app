@@ -41,13 +41,11 @@ const ModuleF8Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'Negative reinforcement increases the likelihood of a specific response by removing an unfavourable consequence',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+      'True-', 
+      'False'],
+      correctAnswer: 'True-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -120,12 +118,12 @@ const ModuleF8Screen = () => {
         Reinforcement contingencies for zero waste involve creating a system of rewards and 
         consequences to encourage sustainable behaviors and discourage wasteful practices. 
         Positive reinforcement, such as recognition, incentives, or financial rewards, can be 
-        used to motivate individuals and organizations to adopt zero waste habits. 
+        used to motivate individuals and organizations to adopt zero waste habits.
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
-            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
+            <Image source={require('../../../assets/F8Img1.png')}
+            style={{height: 180, width: '80%', borderRadius: 10, marginVertical: 20}}
         />
         </View>
         

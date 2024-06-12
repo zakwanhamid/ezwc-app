@@ -41,13 +41,13 @@ const ModuleF6Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'USM policy includes a whole system approach which involves four major domains of ______.',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+        'Teaching, research, community engagement and institutional arrangement-',
+        'Teaching, learning, community engagement and institutional arrangement', 
+        'Teaching, learning, public relationship, and institutional arrangement', 
+        'Teaching, research, public relationship and institutional arrangement'],
+      correctAnswer: 'Teaching, research, community engagement and institutional arrangement-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -123,15 +123,15 @@ const ModuleF6Screen = () => {
         natural resources, reduce pollution, and promote sustainable development.
         </Text>
         
-        <Text style={{fontSize: 14, marginHorizontal:20}}> They encompass a wide range of issues, including air and water quality, waste management, 
+        <Text style={{fontSize: 14, marginHorizontal:20}}>They encompass a wide range of issues, including air and water quality, waste management, 
         biodiversity conservation, and climate change mitigation. By establishing clear rules 
         and standards, environmental policies help ensure that economic growth and development 
         do not come at the expense of environmental health and sustainability.
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
-            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
+            <Image source={require('../../../assets/F6Img1.jpeg')}
+            style={{height: 180, width: '80%', borderRadius: 10, marginVertical: 20}}
         />
         </View>
 

@@ -41,13 +41,9 @@ const ModuleF5Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
-      options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+      question: 'Individuals are responsible towards their impact on the environment and, if feasible, minimising the harm they cause to the environment.',
+      options: [ 'True-', 'False'],
+      correctAnswer: 'True-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -116,7 +112,7 @@ const ModuleF5Screen = () => {
         <View style={{paddingBottom: 120}}>
         <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Social Responsibilities</Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F5Img1.webp')}
             style={{height: 150, width: '80%', borderRadius: 10, marginTop: 10}}
         />
         </View>
@@ -126,7 +122,7 @@ const ModuleF5Screen = () => {
          reusing, and recycling materials to create a more sustainable and eco-friendly society.
         </Text>
         
-        <Text style={{fontSize: 14, marginHorizontal:20}}> By adopting zero waste practices, individuals and communities can 
+        <Text style={{fontSize: 14, marginHorizontal:20}}>By adopting zero waste practices, individuals and communities can 
         significantly decrease the strain on landfills, reduce pollution, and conserve natural resources, 
         ultimately contributing to a healthier environment.
         </Text>

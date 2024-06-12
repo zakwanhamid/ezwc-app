@@ -41,13 +41,13 @@ const ModuleF7Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'The five practices of exemplary leadership include the following, except ______?',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+      'Model the way', 
+      'Inspire a shared vision', 
+      'Encourage the heart', 
+      'Challenge the people-'],
+      correctAnswer: 'Challenge the people-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -124,7 +124,7 @@ const ModuleF7Screen = () => {
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F7Img1.webp')}
             style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
         />
         </View>
@@ -136,7 +136,7 @@ const ModuleF7Screen = () => {
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F7Img2.jpeg')}
             style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
         />
         </View>

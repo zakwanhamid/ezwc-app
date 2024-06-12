@@ -41,13 +41,13 @@ const ModuleF4Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'Being environmentally self aware is chareacterised by the following:',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+        'Being aware of environmental issues', 
+        'Determining which actions can have an impact on the environment',
+        'Being self-aware of the personal environmental philosophies', 
+        'All of above-'],
+      correctAnswer: 'All of above-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -123,12 +123,12 @@ const ModuleF4Screen = () => {
          our behavior on the natural world and taking responsibility for reducing our ecological footprint.
         </Text>
         
-        <Text style={{fontSize: 14, margin:20}}> This awareness encourages us to make more sustainable choices in our daily lives, such as c
+        <Text style={{fontSize: 14, marginHorizontal:20, marginBottom:10}}>This awareness encourages us to make more sustainable choices in our daily lives, such as c
         onserving energy, reducing waste, and supporting eco-friendly products and practices.
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
-            style={{height: 150, width: '80%', borderRadius: 10}}
+            <Image source={require('../../../assets/F4Img1.jpeg')}
+            style={{height: 190, width: '80%', borderRadius: 10}}
         />
         </View>
         <Text style={{fontSize: 14, margin:20}}>  

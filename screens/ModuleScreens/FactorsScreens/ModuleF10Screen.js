@@ -43,13 +43,13 @@ const ModuleF10Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'Which of the following is not a social media benefit?',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+      'Spreading unfolded information-', 
+      'Entertainment', 
+      'Connecting with people', 
+      'Source of inspiration'],
+      correctAnswer: 'Spreading unfolded information-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -119,7 +119,7 @@ const ModuleF10Screen = () => {
         <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Social Technology (Social Media)</Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F10Img1.webp')}
             style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
         />
         </View>
@@ -130,7 +130,7 @@ const ModuleF10Screen = () => {
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F10Img2.jpg')}
             style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
         />
         </View>

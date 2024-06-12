@@ -41,13 +41,13 @@ const ModuleF9Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'Community engagement is the process of working collaboratively with groups of people who are affiliated by',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+        'Different interest-', 
+        'A common interest', 
+        'Similar circumstances', 
+        'Geograpghic proximity'],
+      correctAnswer: 'Different interest-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -121,8 +121,8 @@ const ModuleF9Screen = () => {
         </Text>
 
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
-            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
+            <Image source={require('../../../assets/F9Img1.jpeg')}
+            style={{height: 180, width: '80%', borderRadius: 10, marginVertical: 10}}
         />
         </View>
         

@@ -41,13 +41,11 @@ const ModuleF3Screen = () => {
 
   const questions = [
     {
-      question: 'Which of the following does not describe zero-waste?',
+      question: 'Participating in zero-waste pro environmental activities can provide the community with a personal experience that allows us to better realte our experiences to zero waste and environmental information.',
       options: [
-        'The conservation of all resources', 
-        'Encourage waste-to-energy coversion-', 
-        'To maximize recycling', 
-        'To minimize production of waste'],
-      correctAnswer: 'Encourage waste-to-energy coversion-',
+       'True-', 
+       'False'],
+      correctAnswer: 'True-',
     },]
 
   const handleAnswerSelection = (questionIndex, answer) => {
@@ -121,11 +119,11 @@ const ModuleF3Screen = () => {
         We gain a better understanding when we relate our personal experiences to the information.
         </Text>
         <View style={{alignItems: 'center'}}>
-            <Image source={require('../../../assets/topModuleImage.png')}
+            <Image source={require('../../../assets/F3Img1.webp')}
             style={{height: 150, width: '80%', borderRadius: 10}}
         />
         </View>
-        <Text style={{fontSize: 14, margin:20}}> Additionally, adults tend to be more self-directed in their learning. Unlike children or teenagers, 
+        <Text style={{fontSize: 14, margin:20}}>Additionally, adults tend to be more self-directed in their learning. Unlike children or teenagers, 
         who often rely on structured environments and guidance from teachers, adults prefer to take control of their learning journey.
         </Text>
         <Text style={{fontSize: 14, margin:20}}>  

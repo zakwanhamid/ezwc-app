@@ -165,11 +165,12 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 2</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Evironmental Goal</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            SDG 13 highlights the importance of financial support for
+            developing countries to help them mitigate and adapt to climate change. This includes 
+            providing resources for sustainable practices and technologies, and strengthening
+            institutional capacity to address climate challenges.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible2(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -187,11 +188,10 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 3</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Personal Experience on Waste Managements</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            They set their own goals, seek out resources that best suit their needs, and apply new knowledge directly to solve real-life problems. This practical, 
+        hands-on approach not only enhances their understanding but also makes the learning process more relevant and engaging, fostering a deeper commitment to their educational pursuits.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible3(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -209,11 +209,11 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 4</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Self-Awareness</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            Environmental self-awareness fosters 
+        a deeper connection to nature and a greater appreciation for the planet's resources. 
+        It motivates individuals to advocate for environmental protection and engage in community efforts to promote sustainability.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible4(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -231,11 +231,11 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 5</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Social Responsibilities</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            Zero waste practices foster a sense of community and collective responsibility. 
+            When individuals and organizations commit to reducing waste, they often collaborate on 
+            initiatives such as community clean-ups, educational programs, and sustainable business practices.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible5(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -253,11 +253,12 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 6</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Policy</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            They encompass a wide range of issues, including air and water quality, waste management, 
+            biodiversity conservation, and climate change mitigation. By establishing clear rules 
+            and standards, environmental policies help ensure that economic growth and development 
+            do not come at the expense of environmental health and sustainability.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible6(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -275,11 +276,12 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 7</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Examplary Leadership</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            Exemplary leaders also foster an environment of trust and mutual respect, 
+            where individuals feel valued and heard. They actively listen to their team members, provide constructive feedback, 
+            and recognize their achievements. By creating a supportive and inclusive atmosphere, these leaders inspire loyalty 
+            and dedication.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible7(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -297,11 +299,12 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 8</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Reinforcement Contigencies</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            Businesses might receive tax breaks or certifications for 
+            implementing waste reduction programs, while individuals could be rewarded with discounts or loyalty 
+            points for using reusable products and participating in recycling programs. By consistently acknowledging
+            and rewarding sustainable actions, these contingencies help reinforce the desired behavior, making it more likely to be repeated over time.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible8(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -311,7 +314,7 @@ const ModuleFacSummScreen = () => {
       </Modal>
 
       <Modal 
-        visible={isModalVisible9} 
+        visible={isModalVisible9}
         onRequestClose={() => setIsModalVisible9(false)}
         animationType='fade'
         transparent={true}
@@ -319,11 +322,11 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 9</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Community Engagement</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            The association of the terms 'community' and 'engagement' broadens the scope, shifting the focus
+            from the individual to the collective, with the implications for inclusiveness 
+            to ensure that the diversity within any community is taken into account.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible9(false)}>
               <Text style={styles.btnFont}> Close </Text>
@@ -341,11 +344,11 @@ const ModuleFacSummScreen = () => {
         <View style={styles.modalBg}>
           <View style = {styles.modalContainer}>
             <Text style={[styles.modalHeader, {fontWeight: 700}]}>Factor 10</Text>
-            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Environmental Education</Text>
+            <Text style={[styles.modalTitle, {fontWeight: 500}]}>Social Technology (Social Media)</Text>
             <Text style={[styles.modalSumm, {textAlign:'center'}]}>
-              Environmental education is a process that allows individuals to explore
-              environmental issues, engage in problem-solving, and take steps to protect the 
-              environment to gain a better understanding of the issues and make more informed decisions.
+            Social technology and social media together have revolutionized the way people connect,
+            share information, and collaborate across the globe. Social technology provides the infrastructure that enables real-time communication, 
+            breaking down geographical barriers and making it possible for individuals to interact regardless of their physical location.
             </Text>
             <TouchableOpacity style={[styles.NextBtn, {marginTop: 20,}]} onPress={() => setIsModalVisible10(false)}>
               <Text style={styles.btnFont}> Close </Text>
