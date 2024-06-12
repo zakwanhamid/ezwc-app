@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Image, TextInput, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -144,7 +144,7 @@ const EditProfileScreen = () => {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
         <View style={styles.header}>
             <TouchableOpacity onPress={goBack}>
                 <Ionicons name='arrow-back' size={24} color="black"></Ionicons>
@@ -156,6 +156,12 @@ const EditProfileScreen = () => {
                 <Text style={{ fontWeight:"700", fontSize:14}}>Save</Text>
             </TouchableOpacity>
         </View>
+
+        <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+      >
+        <ScrollView contentContainerStyle={styles.scrollViewContent}>
 
         <View style={styles.content}>
             {/* Touchable opacity for image */}
@@ -224,10 +230,9 @@ const EditProfileScreen = () => {
                 />}
                 <Text style={styles.replaceText}>Replace</Text>
             </TouchableOpacity>
-        </View>
-        
-
-
+            </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
@@ -235,6 +240,7 @@ const EditProfileScreen = () => {
 const styles = StyleSheet.create({
     container:{
       flex:1,
+      backgroundColor: 'white',
     },
     header:{
       flexDirection:"row",
