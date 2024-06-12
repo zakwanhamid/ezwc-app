@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, FlatList, Alert, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, Image, StyleSheet, Modal, FlatList, Alert, TextInput, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AntDesign, Entypo, FontAwesome, MaterialIcons, Octicons } from '@expo/vector-icons';
@@ -17,6 +17,7 @@ export default function PostItem({item, updatePostList }) {
   const [isCommentsModalVisible, setIsCommentsModalVisible] = useState(false);
   const [isImageModalVisible, setIsImageModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [imageLoadingStatus, setImageLoadingStatus] = useState({});
 
 
     useEffect(() => {
@@ -424,8 +425,21 @@ export default function PostItem({item, updatePostList }) {
               </View>
               <View style={styles.postImagesContainer}>
                   {item.images.map((imageUri, index) => (
-                      <TouchableOpacity key={index} onPress={() => handleImageModalOpen(imageUri)}>
-                        <Image source={{ uri: imageUri }} style={styles.postImages} />
+                      <TouchableOpacity onPress={() => handleImageModalOpen(imageUri)}>
+                        <View key={index} >
+                          <Image
+                            source={{ uri: imageUri }}
+                            style={styles.postImages}
+                            onLoadStart={() => setImageLoadingStatus({ ...imageLoadingStatus, [imageUri]: true })}
+                            onLoad={() => setImageLoadingStatus({ ...imageLoadingStatus, [imageUri]: false })}
+                            onError={() => setImageLoadingStatus({ ...imageLoadingStatus, [imageUri]: false })}
+                          />
+                          {imageLoadingStatus[imageUri] && (
+                            <View style={styles.loadingIndicator}>
+                              <ActivityIndicator size="small" color="#529C4E" />
+                            </View>
+                          )}
+                        </View>
                       </TouchableOpacity>
                   ))}
               </View>
@@ -690,7 +704,7 @@ const styles = StyleSheet.create({
     width:150,
     height:100,
     borderRadius: 8,
-    marginBottom:10
+    marginBottom:5
   },
   interactionCount: {
     flexDirection: "row",
@@ -784,6 +798,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#D8D9DB",
+  },
+  loadingIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Optional: add a semi-transparent background
   },
 
 })
