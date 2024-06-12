@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,39 @@ const ModuleF3Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Personal Experience on Waste Managements</Text>
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Adults learn differently than children or teenagers because we can apply our 
+        experiences to what we learn to understand the information better. 
+        We gain a better understanding when we relate our personal experiences to the information.
+        </Text>
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10}}
+        />
         </View>
+        <Text style={{fontSize: 14, margin:20}}> Additionally, adults tend to be more self-directed in their learning. Unlike children or teenagers, 
+        who often rely on structured environments and guidance from teachers, adults prefer to take control of their learning journey.
+        </Text>
+        <Text style={{fontSize: 14, margin:20}}>  
+        They set their own goals, seek out resources that best suit their needs, and apply new knowledge directly to solve real-life problems. This practical, 
+        hands-on approach not only enhances their understanding but also makes the learning process more relevant and engaging, fostering a deeper commitment to their educational pursuits.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

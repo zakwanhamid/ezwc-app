@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,41 @@ const ModuleF6Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Environmental Policy</Text>
+        
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Environmental policy refers to the set of laws, regulations,
+        and guidelines created by governments and organizations to manage human 
+        activities that impact the environment. These policies aim to protect 
+        natural resources, reduce pollution, and promote sustainable development.
+        </Text>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20}}> They encompass a wide range of issues, including air and water quality, waste management, 
+        biodiversity conservation, and climate change mitigation. By establishing clear rules 
+        and standards, environmental policies help ensure that economic growth and development 
+        do not come at the expense of environmental health and sustainability.
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
+        />
         </View>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

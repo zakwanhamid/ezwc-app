@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -114,6 +114,32 @@ const ModuleF10Screen = () => {
             </TouchableOpacity>
         </View>
 
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Social Technology (Social Media)</Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
+        />
+        </View>
+        
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Social technology is any communication-enabled technology that facilitates social interactions, such as the Internet or a mobile phone. 
+        While social media is an internet-based form of communication that influence how custom learners communicate and interact.
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
+        />
+        </View>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20, marginVertical: 10}}>Social technology and social media together have revolutionized the way people connect,
+         share information, and collaborate across the globe. Social technology provides the infrastructure that enables real-time communication, 
+         breaking down geographical barriers and making it possible for individuals to interact regardless of their physical location.
+        </Text>
+
         <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
             <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
                 <Text style={{
@@ -124,6 +150,10 @@ const ModuleF10Screen = () => {
                 </Text>
             </TouchableOpacity>
         </View>
+        </View>
+      </ScrollView>
+
+        
 
         <Modal
           visible={isModalVisibleCP} 

@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,41 @@ const ModuleF8Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Reinforcement Contigencies</Text>
+        
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Reinforcement contingencies for zero waste involve creating a system of rewards and 
+        consequences to encourage sustainable behaviors and discourage wasteful practices. 
+        Positive reinforcement, such as recognition, incentives, or financial rewards, can be 
+        used to motivate individuals and organizations to adopt zero waste habits. 
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
+        />
         </View>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20}}>For instance, businesses might receive tax breaks or certifications for 
+        implementing waste reduction programs, while individuals could be rewarded with discounts or loyalty 
+        points for using reusable products and participating in recycling programs. By consistently acknowledging
+         and rewarding sustainable actions, these contingencies help reinforce the desired behavior, making it more likely to be repeated over time.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -114,16 +114,41 @@ const ModuleF4Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Environmental Self-Awareness</Text>
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Environmental self-awareness is the ability to focus on ourselves and understand how our actions,
+         thoughts, or emotions impact the environment. It involves recognizing the consequences of 
+         our behavior on the natural world and taking responsibility for reducing our ecological footprint.
+        </Text>
+        
+        <Text style={{fontSize: 14, margin:20}}> This awareness encourages us to make more sustainable choices in our daily lives, such as c
+        onserving energy, reducing waste, and supporting eco-friendly products and practices.
+        </Text>
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10}}
+        />
         </View>
+        <Text style={{fontSize: 14, margin:20}}>  
+        Furthermore, environmental self-awareness fosters 
+        a deeper connection to nature and a greater appreciation for the planet's resources. 
+        It motivates individuals to advocate for environmental protection and engage in community efforts to promote sustainability.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

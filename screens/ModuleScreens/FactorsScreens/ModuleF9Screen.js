@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,37 @@ const ModuleF9Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Community Engagement</Text>
+        
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Community engagement seeks to better engage the community to achieve long-term and sustainable outcomes, processes, relationships, discourse, decision-making, or implementation.
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
+        />
         </View>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20, marginVertical: 10}}>The association of the terms 'community' and 'engagement' broadens the scope, shifting the focus
+         from the individual to the collective, with the implications for inclusiveness 
+         to ensure that the diversity within any community is taken into account.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

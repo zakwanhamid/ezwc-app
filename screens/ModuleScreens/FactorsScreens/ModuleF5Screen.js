@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,43 @@ const ModuleF5Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Social Responsibilities</Text>
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginTop: 10}}
+        />
         </View>
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Social responsibilities of zero waste involve the commitment to reducing the amount of waste generated and minimizing the environmental
+         impact of our consumption patterns. This approach emphasizes the importance of rethinking, reducing, 
+         reusing, and recycling materials to create a more sustainable and eco-friendly society.
+        </Text>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20}}> By adopting zero waste practices, individuals and communities can 
+        significantly decrease the strain on landfills, reduce pollution, and conserve natural resources, 
+        ultimately contributing to a healthier environment.
+        </Text>
+        
+        <Text style={{fontSize: 14, margin:20}}>  
+        Moreover, zero waste practices foster a sense of community and collective responsibility. 
+        When individuals and organizations commit to reducing waste, they often collaborate on 
+        initiatives such as community clean-ups, educational programs, and sustainable business practices.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

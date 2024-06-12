@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,16 +112,47 @@ const ModuleF7Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={{
-                    fontSize: 15,
-                    fontWeight: 600,
-                }}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView>
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Examplary Leadership</Text>
+        
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        Exemplary leaders strengthen everyone's capacity to deliver on the promises they make. 
+        They work to make people feel strong, capable and committed. 
+        When leaders make people feel powerful and confident, 
+        they'll give their all and exceed expectations. 
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 10}}
+        />
         </View>
+        
+        <Text style={{fontSize: 14, marginHorizontal:20}}>Exemplary leaders also foster an environment of trust and mutual respect, 
+        where individuals feel valued and heard. They actively listen to their team members, provide constructive feedback, 
+        and recognize their achievements. By creating a supportive and inclusive atmosphere, these leaders inspire loyalty 
+        and dedication.
+        </Text>
+
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10, marginVertical: 20}}
+        />
+        </View>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 

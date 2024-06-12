@@ -1,4 +1,4 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Entypo, FontAwesome, Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -112,13 +112,38 @@ const ModuleF2Screen = () => {
             </TouchableOpacity>
         </View>
 
-        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 20}}>
-            <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
-                <Text style={styles.btnFont}>
-                    Next Factor
-                </Text>
-            </TouchableOpacity>
+        <ScrollView >
+        <View style={{paddingBottom: 120}}>
+        <Text style={{textAlign:'center', fontSize: 20, fontWeight: 'bold', marginTop: 20}}>Evironmental Goal</Text>
+        <Text style={{fontSize: 14, marginTop: 10, margin:20}}> 
+        The Environmental Goal of the Sustainable Development Goals (SDGs), specifically SDG 13, 
+        is about taking urgent action to combat climate change and its impacts.
+        This goal emphasizes the need to reduce greenhouse gas emissions, promote renewable energy, 
+        and enhance resilience to climate-related disasters.
+        </Text>
+        <View style={{alignItems: 'center'}}>
+            <Image source={require('../../../assets/topModuleImage.png')}
+            style={{height: 150, width: '80%', borderRadius: 10}}
+        />
         </View>
+        <Text style={{fontSize: 14, margin:20}}> Additionally, SDG 13 highlights the importance of financial support for
+        developing countries to help them mitigate and adapt to climate change. This includes 
+        providing resources for sustainable practices and technologies, and strengthening
+        institutional capacity to address climate challenges.
+        </Text>
+
+        <View style={{alignItems:'center', justifyContent: 'center', marginTop: 0}}>
+          <TouchableOpacity style={styles.NextBtn} onPress={() => setIsModalVisibleCP(true)}>
+              <Text style={{
+                  fontSize: 15,
+                  fontWeight: 600,
+              }}>
+                  Next Factor
+              </Text>
+          </TouchableOpacity>
+        </View>
+        </View>
+      </ScrollView>
 
         <Modal
           visible={isModalVisibleCP} 
